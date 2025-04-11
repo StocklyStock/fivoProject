@@ -1,0 +1,33 @@
+# 🔧 패키징 도구
+wheel
+
+# 🔧 FastAPI 웹 프레임워크
+fastapi==0.115.12
+uvicorn==0.34.0
+
+# 🔌 비동기 네트워크 & 내부 종속성
+anyio==4.9.0
+h11==0.14.0
+sniffio==1.3.1
+
+# 📦 데이터 모델링 (향후 Pydantic 기반 모델 추가 시 사용)
+pydantic==2.10.6
+pydantic_core==2.27.2
+typing_extensions==4.12.2
+annotated-types==0.7.0
+
+# 🌐 환경변수 및 API 호출
+requests==2.32.3
+python-dotenv==1.0.1
+python-decouple==3.8
+
+# 📊 데이터 처리 및 크롤링
+pandas==2.2.3
+beautifulsoup4==4.13.3
+selenium==4.29.0
+webdriver-manager==4.0.2
+fake-useragent==1.5.1
+user-agents==2.2.0
+tqdm==4.67.1
+regex==2024.11.6
+# undetected-chromedriver==3.5.4

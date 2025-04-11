@@ -1,0 +1,25 @@
+# Django & DRF
+Django==4.2.7
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+django-cors-headers==4.3.1
+gunicorn==21.2.0
+psycopg2-binary==2.9.9
+dj-database-url==2.1.0
+whitenoise==6.6.0
+python-dotenv==1.0.1
+
+# FastAPI
+fastapi==0.115.12
+uvicorn==0.34.0
+
+# HTTP/네트워크
+requests==2.32.3
+urllib3==2.3.0
+certifi==2025.1.31
+charset-normalizer==3.4.1
+idna==3.10
+
+# 기타
+click==8.1.8
+python-decouple==3.8

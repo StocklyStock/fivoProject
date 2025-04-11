@@ -1,0 +1,403 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.zen-dots-regular {
+  font-family: "Zen Dots", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+/* root는 중앙 정렬 제거 (레이아웃 max-width로 충분) */
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 기본 body 설정 */
+body {
+  background-color: #fff;
+  font-size: 16px;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  margin: auto;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.13);
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  padding: 12px 0;
+}
+
+header nav {
+  width: 100%;
+  max-width: 1630px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+header nav ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header nav ul.nav-left {
+  gap: 91px;
+}
+
+header nav ul.nav-right {
+  gap: 50px;
+}
+
+header nav ul.nav-left li.header-logo a {
+  color: #FA7260;
+  font-size: 24px;
+}
+
+header nav ul.nav-right li.search {
+  background-color: #EFEFEF;
+  border-radius: 2px;
+  display: flex;
+}
+
+header nav ul.nav-right {}
+
+header nav ul.nav-right svg {
+  color: #484848;
+}
+
+header nav ul.nav-right select.lang {
+  border-radius: 2px;
+  background-color: #fff;
+  cursor: pointer;
+  padding: 8px 10px;
+  border: 1px solid #E9E9E9;
+  background-color: #fff;
+}
+
+header nav ul.nav-right select.lang option {
+  width: 100%;
+  background-color: #fff;
+  cursor: pointer;
+  border: none;
+  border-radius: 2px;
+  font-size: 14px;
+}
+
+header nav ul a {
+  color: #333;
+  font-size: 15px;
+}
+
+header nav ul .login-btn {
+  border: 1px solid #FA7260;
+  color: #FA7260;
+  border-radius: 4px;
+  font-size: 15px;
+  padding: 8px 16px;
+  transition: 0.2s;
+}
+
+header nav ul .login-btn:hover {
+  background-color: #FA7260;
+  color: #fff;
+}
+
+
+
+
+.main-banne {
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+  background-color: #fff;
+}
+
+.main-banner,
+.main-banner .swiper,
+.main-banner .swiper .swiper-wrapper,
+.main-banner .swiper .swiper-wrapper .swiper-slide,
+.main-banner .swiper .swiper-wrapper .swiper-slide img {
+  width: 100%;
+  margin: auto;
+}
+
+.main-banner .swiper {
+  overflow: hidden;
+  border-radius: 0 0 150px 150px;
+  height: 796px;
+}
+
+.main-banner .swiper .swiper-wrapper .swiper-slide img {}
+
+.chart-realtime {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  background-color: #fff;
+  border-radius: 14px;
+  box-shadow: 0 0 6px rgba(100, 100, 100, 0.21);
+  padding: 30px 34px;
+  z-index: 1;
+  position: relative;
+  bottom: 140px;
+  height: 577px;
+}
+
+.chart-realtime h2 {
+  text-align: center;
+  font-size: 21px;
+  color: #1F1F1F;
+  font-weight: bold;
+  word-spacing: -3px;
+}
+
+.main-listings {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+  gap: 40px;
+}
+
+.main-listings>div {
+  background-color: #fff;
+  box-shadow: 0 0 6px rgba(100, 100, 100, 0.21);
+  max-width: 580px;
+  width: 100%;
+  border-radius: 14px;
+}
+
+.main-listings>div .headline-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-listings>div .headline-wrap h2 {
+  width: fit-content;
+  margin-top: 13px;
+}
+
+.main-listings>div .headline-wrap h2:before {
+  content: "";
+  display: block;
+  background-color: #FF9987;
+  height: 5px;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.main-listings>div .headline-wrap h2 span {
+  display: block;
+  background-color: #FF9987;
+  color: #fff;
+  font-size: 21px;
+  word-spacing: -3px;
+  font-weight: bold;
+  padding: 5px 36px;
+}
+
+.main-listings>div .headline-wrap button {
+  border-radius: 20px;
+  color: #fff;
+  background-color: #FF9987;
+}
+
+.main-listings>div .list-wrap {
+  padding: 34px;
+}
+
+.main-listings>div .list-wrap ul {
+  height: 210px;
+  ;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.main-listings>div .list-wrap ul li {
+  color: #333333;
+  font-size: 18px;
+  ;
+}
+
+
+.main-listings>div .list-wrap ul {
+  height: 210px;
+  overflow-y: auto;
+  /* ✅ 요기만 scroll -> auto 로 변경 */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  /* Firefox 스타일 */
+  scrollbar-width: thin;
+  scrollbar-color: #FEC5C6 #F6F6F6;
+}
+
+/* WebKit 스크롤 커스터마이징 */
+.main-listings>div .list-wrap ul::-webkit-scrollbar {
+  width: 10px;
+}
+
+.main-listings>div .list-wrap ul::-webkit-scrollbar-track {
+  background: #F6F6F6;
+  border-radius: 10px;
+}
+
+.main-listings>div .list-wrap ul::-webkit-scrollbar-thumb {
+  background: #FEC5C6;
+  border-radius: 10px;
+}
+
+.main-listings>div .list-wrap ul::-webkit-scrollbar-thumb:hover {
+  background: #FEC5C6;
+}
+
+
+
+footer {
+  background-color: #AAAAAA;
+  width: 100%;
+  margin: auto;
+}
+
+footer>div {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 0;
+  gap: 50px;
+}
+
+.footer-logo {
+  font-size: 40px;
+  color: #fff;
+}
+
+footer>div>div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 90px;
+}
+
+footer>div>div>h1 {}
+
+footer>div>div>ul {
+  color: #fff;
+}
+
+footer>div>div>ul li {
+  word-break: keep-all;
+  margin-bottom: 18px;
+  line-height: 1.3;
+}
+
+footer>div>div>ul li:last-child {
+  margin-bottom: 0;
+}
+
+footer>div>div>ul li svg {
+  margin-right: 10px;
+}
+
+footer>div>nav {
+  display: flex;
+  gap: 235px;
+  width: 50%;
+  justify-content: flex-end;
+}
+
+footer>div>nav>div>a {
+  display: block;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+footer>div>nav>div>a:last-child {
+  margin-bottom: 0;
+}
+
+footer address {
+  background-color: #8F8F8F;
+  color: #fff;
+  text-align: center;
+  font-style: normal;
+  padding: 15px 0;
+  font-size: 14px;
+  border-top: 1px solid #DBDBDB;
+  line-height: 1.2;
+}
+
+
+
+
+
+.w1200 {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.brand-bg-color {
+  background-color: #FDFBF9;
+}
+
+/* 애니메이션 로고 등은 그대로 유지 */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}

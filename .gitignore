@@ -1,0 +1,126 @@
+# ===============================
+# 💻 Python (Django)
+# ===============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pid
+*.db
+*.sqlite3
+db.sqlite3
+.venv/
+# Django 환경변수 (민감정보 제외)
+.env
+.env.*
+!*.env.sample
+!*.env.example
+
+# Django static/media (빌드 결과물)
+staticfiles/
+media/
+
+# Django Migrations (init만 추적)
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Django 패키지 빌드
+*.egg-info/
+.eggs/
+
+# ===============================
+# ⚡️ FastAPI
+# ===============================
+# 환경파일은 Django와 통합 처리
+# 추가적으로 캐시 생기는 경우 추가 가능
+
+# ===============================
+# 🌐 Node.js (React + Vite)
+# ===============================
+node_modules/
+dist/
+.vite/
+.env.local
+*.tsbuildinfo
+
+# 프론트 빌드 결과물
+frontend/fivo-client/dist/
+frontend_build/
+
+# ===============================
+# 🐳 Docker & 컨테이너 환경
+# ===============================
+.docker/
+# ❗ Dockerfile은 추적해야 하므로 제외하지 않음
+
+# Docker 볼륨/DB 데이터
+pgdata/
+pgdata_dev/
+pgdata_prod/
+
+# ===============================
+# ⚙️ 시스템/IDE 관련
+# ===============================
+.DS_Store
+.vscode/
+.idea/
+*.bak
+*.tmp
+*.swp
+*.swo
+
+# OS 임시 파일
+Thumbs.db
+Desktop.ini
+__MACOSX/
+.Trash-*
+
+# ===============================
+# 🔧 로그
+# ===============================
+*.log
+*.out
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===============================
+# 🧪 테스트/커버리지
+# ===============================
+coverage/
+*.coverage
+htmlcov/
+.nyc_output/
+
+# ===============================
+# 📦 패키지 락 파일 (✅ 포함 권장!)
+# => 팀원 간 의존성 일치 유지
+# package-lock.json
+# yarn.lock
+
+# ===============================
+# 🚀 CI/CD & 민감정보
+# ===============================
+secrets/
+.github/secrets/
+*.pem
+*.key
+*.crt
+
+# ===============================
+# ☁️ EC2 / Nginx / 기타 임시파일
+# ===============================
+*.sock
+*.pid.lock
+
+# ===============================
+# 💥 빌드시 남는 잡다한 캐시/로그 (정리용)
+# ===============================
+deploy/dev/=
+deploy/dev/CACHED
+deploy/dev/[*/
+deploy/dev/exporting
+deploy/dev/naming
+deploy/dev/transferring
+deploy/dev/writing
+*.zip

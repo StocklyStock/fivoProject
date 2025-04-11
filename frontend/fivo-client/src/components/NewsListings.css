@@ -1,0 +1,20 @@
+.headline-wrap h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.list-wrap ul {
+    padding: 0;
+    list-style: none;
+}
+
+.list-wrap li {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
+}
+
+.list-wrap li:hover {
+    background: #f8f8f8;
+}

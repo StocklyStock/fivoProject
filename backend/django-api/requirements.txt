@@ -1,0 +1,47 @@
+# ✅ 필수 패키지
+wheel  # 패키징 도구
+
+# ✅ Django 기반 API
+Django==4.2.7                     # 웹 프레임워크
+djangorestframework==3.14.0      # REST API 구현
+djangorestframework-simplejwt==5.3.1  # JWT 인증
+django-cors-headers==4.3.1       # CORS 설정
+gunicorn==21.2.0                 # WSGI 서버 (배포용)
+
+# ✅ DB 관련
+psycopg2-binary==2.9.9           # PostgreSQL 드라이버
+dj-database-url==2.1.0           # DATABASE_URL 파싱
+
+# ✅ 정적 파일 서빙 (Production)
+whitenoise==6.6.0                # Django에서 정적 파일 서빙
+
+# ✅ 환경변수 관리
+python-dotenv==1.0.1             # .env 로딩
+python-decouple==3.8             # 환경변수와 설정 분리
+
+# ✅ HTTP 요청 유틸 (크롤링 등)
+requests==2.32.3
+urllib3==2.3.0
+certifi==2025.1.31
+charset-normalizer==3.4.1
+idna==3.10
+click==8.1.8
+
+# ✅ 크롤링 관련
+beautifulsoup4==4.13.3           # HTML 파싱
+selenium==4.20.0                 # 브라우저 자동화
+
+# ✅ 종목명 오타 교정
+symspellpy==6.7.7                # 종목 유사도 기반 추천
+
+# ✅ AI 모델 추론 및 분석
+torch==2.2.2                     # PyTorch 딥러닝 프레임워크
+transformers==4.40.1             # HuggingFace 사전학습 모델
+joblib==1.4.2                    # 모델/토크나이저 저장 및 로딩
+numpy==1.26.4                    # 수치 계산
+pandas==2.2.1                    # 데이터 처리
+scikit-learn==1.4.2              # 모델 평가 (classification_report 등)
+tqdm==4.66.2                     # Progress bar 출력
+
+# ✅ Swagger 문서 자동화
+drf-yasg==1.21.7                 # API 문서 자동 생성 도구
