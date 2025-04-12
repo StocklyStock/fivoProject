@@ -7,6 +7,25 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+_cached_results = {}
+_CACHE_TTL = 60  # 1분 캐시
+
+def cache_theme_news(theme_code: str) -> pd.DataFrame:
+    now = time.time()
+
+    if theme_code in _cached_results:
+        cached_time, result = _cached_results[theme_code]
+        if now - cached_time < _CACHE_TTL:
+            print(f"📦 [캐시 HIT] theme_code: {theme_code}")
+            return result
+        else:
+            print(f"🗑️ [캐시 만료] theme_code: {theme_code}")
+            del _cached_results[theme_code]
+
+    print(f"🌐 [크롤링 요청] theme_code: {theme_code}")
+    df = fetch_theme_news(theme_code)
+    _cached_results[theme_code] = (now, df)
+    return df
 
 def calculate_date(days_ago: int) -> str:
     today = datetime.today()

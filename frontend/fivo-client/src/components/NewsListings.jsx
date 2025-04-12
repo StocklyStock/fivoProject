@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import "./NewsListings.css"; // 선택사항: 스타일 분리 시
+import "./NewsListings.css"; // 필요시
 
 const NewsListings = ({ news = [] }) => {
-  console.log("🧪 NewsListings에 전달된 뉴스:", news);
   const [selectedUrl, setSelectedUrl] = useState(null);
+
+  console.log("🧪 NewsListings에 전달된 뉴스:", news); // 확인용
 
   return (
     <div>
@@ -12,13 +13,26 @@ const NewsListings = ({ news = [] }) => {
       </div>
 
       <div className="list-wrap">
-        <ul>
+        <ul style={{ listStyle: "none", padding: 0 }}>
           {news.length === 0 ? (
             <li>관련 뉴스를 불러오는 중이거나 없습니다.</li>
           ) : (
             news.map((item, idx) => (
-              <li key={idx} onClick={() => setSelectedUrl(item.url)} style={{ cursor: "pointer" }}>
-                {item.title}
+              <li
+                key={idx}
+                onClick={() => setSelectedUrl(item.url)}
+                style={{
+                  cursor: "pointer",
+                  padding: "0.75rem",
+                  borderBottom: "1px solid #eee",
+                }}
+              >
+                <div style={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
+                  {item.title}
+                </div>
+                <div style={{ color: "#666", fontSize: "0.9rem" }}>
+                  {item.summary?.slice(0, 100)}...
+                </div>
               </li>
             ))
           )}
@@ -29,7 +43,8 @@ const NewsListings = ({ news = [] }) => {
         <div
           style={{
             position: "fixed",
-            top: 0, left: 0,
+            top: 0,
+            left: 0,
             width: "100vw",
             height: "100vh",
             backgroundColor: "rgba(0,0,0,0.6)",
@@ -57,7 +72,7 @@ const NewsListings = ({ news = [] }) => {
                 textAlign: "right",
                 padding: "0.5rem 1rem",
                 borderBottom: "1px solid #eee",
-                backgroundColor: "#f5f5f5"
+                backgroundColor: "#f5f5f5",
               }}
             >
               <button onClick={() => setSelectedUrl(null)}>✖️ 닫기</button>
@@ -75,6 +90,5 @@ const NewsListings = ({ news = [] }) => {
     </div>
   );
 };
-
 
 export default NewsListings;
