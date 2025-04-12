@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Treemap from "./Treemap";
-import NewsListings from "./NewsListings";
 
-const ChartRealtime = () => {
+const ChartRealtime = ({ onThemeChange, onNewsFetched }) => {
   const [data, setData] = useState({ name: "테마주", children: [] });
   const [selectedThemeCode, setSelectedThemeCode] = useState(null);
   const [selectedThemeName, setSelectedThemeName] = useState(""); // ✅ 테마 이름 저장
   const [newsData, setNewsData] = useState([]);
 
   useEffect(() => {
+    // 처음에 실패 대비용으로 저장된 데이터 불러오기
+    const savedData = localStorage.getItem("lastTreemapData");
+    if (savedData) {
+      setData(JSON.parse(savedData));
+    }
+  
     let socket;
     const connectWebSocket = () => {
       socket = new WebSocket("ws://localhost:8000/ws/theme");
-
+  
       socket.onopen = () => console.log("✅ WebSocket 연결됨");
+  
       socket.onmessage = (event) => {
         const received = JSON.parse(event.data);
         const converted = {
@@ -21,32 +27,52 @@ const ChartRealtime = () => {
           children: received.children.map((c) => ({
             ...c,
             value: parseFloat(c.value),
+            theme_code: c.code,
           })),
         };
+  
         setData(converted);
+        localStorage.setItem("lastTreemapData", JSON.stringify(converted));
       };
-      socket.onerror = (err) => console.error("❌ WebSocket 오류", err);
-      socket.onclose = () => setTimeout(connectWebSocket, 3000);
+  
+      socket.onerror = (err) => {
+        console.error("❌ WebSocket 오류", err);
+      };
+  
+      socket.onclose = () => {
+        console.warn("📴 WebSocket 연결 종료, 3초 후 재연결 시도");
+        setTimeout(connectWebSocket, 3000);
+      };
     };
-
+  
     connectWebSocket();
     return () => socket && socket.close();
   }, []);
 
   const handleThemeClick = async (themeCode) => {
-    const matched = data.children.find((item) => item.theme_code === themeCode);
-    setSelectedThemeCode(themeCode);
-    setSelectedThemeName(matched?.name ?? ""); // ✅ 테마명 저장
-
     try {
-      const res = await fetch(`http://fastapi:8001/theme/news?theme_code=${themeCode}`);
+      // console.log("🚀 handleThemeClick 진입:", themeCode);
+  
+      const matched = data.children.find((item) => item.theme_code === themeCode);
+      // console.log("🔍 matched 데이터:", matched);
+  
+      // ✅ 부모(HomePage)에게 선택 테마 전달
+      onThemeChange?.(themeCode, matched?.name ?? "");
+  
+      const res = await fetch(`http://localhost:8000/theme/news?theme_code=${themeCode}`);
+      // console.log("📡 응답 상태 코드:", res.status);
+  
       const json = await res.json();
-      setNewsData(json);
-      console.log("📰 받은 뉴스 데이터:", json); 
+      // console.log("📰 받은 뉴스 데이터:", json);
+  
+      // ✅ 부모(HomePage)에게 뉴스 데이터 전달
+      onNewsFetched?.(json);
     } catch (e) {
-      console.error("뉴스 불러오기 실패:", e);
+      console.error("❌ 뉴스 요청 중 예외 발생:", e);
+      onNewsFetched?.([]); // 실패 시에도 빈 배열 전달
     }
   };
+  
 
   return (
     <div
@@ -65,15 +91,6 @@ const ChartRealtime = () => {
       <div style={{ width: "100%", overflowX: "auto" }}>
         <Treemap data={data} onThemeClick={handleThemeClick} />
       </div>
-
-      {selectedThemeCode && (
-        <div style={{ marginTop: "2rem" }}>
-          <h3 className="text-lg font-semibold mb-2">
-            📰 {selectedThemeName} 관련 뉴스
-          </h3>
-          <NewsListings news={newsData} />
-        </div>
-      )}
     </div>
   );
 };

@@ -1,47 +1,37 @@
-import os
-import platform
-import undetected_chromedriver as uc
 from fake_useragent import UserAgent
-import warnings
-
-warnings.filterwarnings("ignore") 
-
+from bs4 import BeautifulSoup as parse
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from user_agent import generate_user_agent
 
 def driver():
-    ua = UserAgent()
-    user_agent = ua.random
+   userAgent = generate_user_agent()
+   user_agent = parse(userAgent)
+   # 옵션 설정
+   chrome_options = webdriver.ChromeOptions()
+   chrome_options.add_argument("--disable-extensions")
+   chrome_options.add_argument("disable-infobars")
+   chrome_options.page_load_strategy = 'normal'
+   chrome_options.add_argument('--enable-automation')
+   chrome_options.add_argument('disable-infobars')
+   chrome_options.add_argument('disable-gpu')
+   chrome_options.add_argument('--no-sandbox')
+   chrome_options.add_argument('user-agent={}'.format(user_agent))
+   chrome_options.add_argument('--lang=ko_KR')
+   chrome_options.add_argument('--ignore-certificate-errors')
+   chrome_options.add_argument('--allow-insecure-localhost')
+   chrome_options.add_argument('--allow-running-insecure-content')
+   chrome_options.add_argument('--disable-notifications')
+   chrome_options.add_argument('--disable-dev-shm-usage')
+   chrome_options.add_argument('--disable-browser-side-navigation')
+   chrome_options.add_argument('--mute-audio')
+   chrome_options.add_argument('--headless')  # 이 옵션을 추가하여 헤드리스 모드로 실행
 
-    options = uc.ChromeOptions()
-    options.add_argument("--headless=new")  # 최신 크롬용 headless
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--disable-notifications")
-    options.add_argument("--lang=ko_KR")
-    options.add_argument(f"user-agent={user_agent}")
+   # 브라우저 열기
+   driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+   driver.implicitly_wait(3)
+   return driver
 
-    # ✨ 브라우저 경로 자동 분기
-    system = platform.system()
-    chrome_path = None
-
-    if system == "Darwin":
-        chrome_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-    elif system == "Windows":
-        chrome_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
-    elif system == "Linux":
-        # 도커에선 일반적으로 이 경로로 설치됨
-        chrome_path = "/usr/bin/google-chrome"
-
-    if not os.path.exists(chrome_path):
-        raise RuntimeError(
-            f"❌ Chrome 실행 파일을 찾을 수 없습니다: {chrome_path}\n"
-            f"👉 로컬이면 크롬이 설치돼 있는지 확인하고, 필요 시 직접 경로를 수정하세요."
-        )
-
-    driver = uc.Chrome(
-        options=options,
-        browser_executable_path=chrome_path,
-        use_subprocess=True,
-    )
-    driver.implicitly_wait(3)
-    return driver
+if __name__ == "__main__":
+   driver = driver()

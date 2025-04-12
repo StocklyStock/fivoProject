@@ -72,6 +72,7 @@ const Treemap = ({ data, onThemeClick }) => {
         .attr("class", className)
         .attr("transform", (d) => `translate(${d.x0}, ${d.y0})`)
         .on("click", (event, d) => {
+          console.log("🖱️ 클릭된 테마:", d.data); // 👉 디버깅에 유용
           if (onThemeClick && d.data.theme_code) {
             onThemeClick(d.data.theme_code);
           }
