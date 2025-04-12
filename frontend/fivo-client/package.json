@@ -29,7 +29,9 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
     "swiper": "^11.0.0", 
-    "d3": "^7.9.0"
+    "d3": "^7.9.0",
+    "@headlessui/react": "^2.2.1",
+    "framer-motion": "^12.6.5"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
