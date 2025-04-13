@@ -103,3 +103,28 @@ def fetch_theme_news(theme_code: str):
         return pd.DataFrame(news_data)
     finally:
         browser.quit()
+
+def fetch_theme_stock(theme_code: str):
+    browser = driver()
+    try:
+        url = f"https://finance.finup.co.kr/Theme/{theme_code}"
+        browser.get(url)
+        time.sleep(1)
+        soup = BeautifulSoup(browser.page_source, "html.parser")
+        table = soup.find('table', id='tRelationStock')
+
+        stocks = []
+        if table:
+            rows = table.find_all('tr')
+            for row in rows:
+                columns = row.find_all('td')
+                if columns:
+                    stock_name = columns[0].get_text(strip=True)
+                    stock_link = row.get('onclick').replace("javascript:location.href='", "").replace("'", "")
+                    # full_link 부분은 우리가 만든 종목 상세 링크로 수정하면됨
+                    full_link = f"https://finance.finup.co.kr{stock_link}" 
+                    stocks.append({'name': stock_name, 'link': full_link})
+
+        return pd.DataFrame(stocks)
+    finally:
+        browser.quit()

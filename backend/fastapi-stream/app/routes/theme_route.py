@@ -3,7 +3,7 @@ from fastapi import APIRouter, WebSocket, HTTPException
 from fastapi.responses import JSONResponse
 from starlette.websockets import WebSocketState
 from datetime import datetime
-from app.services.theme_service import fetch_theme_data, fetch_theme_news
+from app.services.theme_service import fetch_theme_data, fetch_theme_news,fetch_theme_stock
 
 router = APIRouter()
 LAST_TREEMAP_DATA = {}
@@ -68,3 +68,11 @@ def get_news(theme_code: str):
         return JSONResponse(content=news_df.to_dict(orient="records"))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"뉴스 크롤링 오류: {e}")
+
+@router.get("/theme/stock_list")
+def get_stock_list(theme_code:str):
+    try:
+        stock_list_df = fetch_theme_stock(theme_code)
+        return JSONResponse(content=stock_list_df.to_dict(orient="records"))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"종목 크롤링 오류: {e}")
