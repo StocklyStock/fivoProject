@@ -20,6 +20,7 @@ import RequireAuth from './components/RequireAuth';
 import AdminLayout from './components/AdminLayout';
 import MainLayout from './layouts/MainLayout';
 
+// 라우터 설정
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
@@ -30,7 +31,7 @@ const router = createBrowserRouter(
       <Route path="verify" element={<VerifyEmailPage />} />
 
       {/* ✅ 종목 상세 페이지 - 로그인/비로그인 모두 접근 가능 */}
-      <Route path="stock/:stockCode" element={<StockDetailPage />} />
+      <Route path="stock/:stockId" element={<StockDetailPage />} />
 
       {/* ✅ 일반 사용자 대시보드 */}
       <Route

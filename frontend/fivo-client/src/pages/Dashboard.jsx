@@ -1,7 +1,7 @@
 // 📄 src/pages/Dashboard.jsx
 
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../auth/authSlice';
+import { logout } from '../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Card, CardContent, Grid } from '@mui/material';
 import { BarChart2, Bell, UserCheck } from 'lucide-react';
