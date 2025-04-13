@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { loginSuccess } from '../auth/authSlice';
+import { loginSuccess } from '../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../assets/fivo_logo.png'; // 로고 경로
 

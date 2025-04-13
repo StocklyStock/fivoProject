@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { IconButton, InputBase, Tooltip, Button, Drawer, Box, List, ListItem, ListItemText } from '@mui/material';
 import { Brightness4, Search, Menu as MenuIcon } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../auth/authSlice';
+import { logout } from '../slices/authSlice';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { fetchStockSearch } from '../services/stockapi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
