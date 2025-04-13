@@ -93,7 +93,7 @@ const StockSummaryCard = ({ data }) => {
         style={{
           position: 'absolute',
           right: 16,
-          bottom: 12,
+          bottom: 1,  // 기존 값에서 간격을 늘려줍니다
           fontSize: 12,
           color: '#888',
         }}
