@@ -43,8 +43,9 @@ const router = createBrowserRouter(
         }
       />
 
-      {/* ✅ 관리자 진입 시 /admin → /admin/stats 로 리디렉션 */}
-      <Route path="admin" element={<Navigate to="admin/stats" replace />} />
+      {/* ✅ 관리자 진입 시 /admin → /admin/stats 로 리디렉션
+      뺸 이유 : 이러면 관리자 전용 섹션으로 진입불가라서
+      <Route path="admin" element={<Navigate to="admin/stats" replace />} /> */}
 
       {/* ✅ 관리자 전용 섹션 */}
       <Route

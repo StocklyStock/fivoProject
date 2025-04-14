@@ -58,7 +58,7 @@ const RegisterPage = () => {
   const handleSendCode = async () => {
     setEmailError('')
     try {
-      const response = await api.post('/accounts/register/', {
+      const response = await api.post('/api/accounts/register/', {
         email: form.email,
         nickname: form.nickname,
         phone: form.phone,
@@ -79,7 +79,7 @@ const RegisterPage = () => {
 
   const handleVerifyCode = async () => {
     try {
-      await api.post('/accounts/verify-code/', {
+      await api.post('/api/accounts/verify-code/', {
         email: form.email,
         code,
       })

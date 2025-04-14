@@ -45,7 +45,8 @@ class RegisterView(APIView):
             except Exception as e:
                 logger.error(f"Register Error: {str(e)}")
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        print("🛑 serializer errors:", serializer.errors)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # ✔️ 이메일 인증
@@ -81,6 +82,9 @@ class VerifyCodeView(APIView):
         return Response({"message": "✅ 이메일 인증이 완료되었습니다."}, status=status.HTTP_200_OK)
 
 # ✔️ 로그인
+from rest_framework_simplejwt.tokens import RefreshToken
+import traceback
+
 class LoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -99,7 +103,13 @@ class LoginView(APIView):
         if not user.is_verified:
             return Response({"error": "이메일 인증이 완료되지 않았습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
-        refresh = RefreshToken.for_user(user)
+        try:
+            refresh = RefreshToken.for_user(user)
+        except Exception as e:
+            print("🔥 토큰 생성 중 오류:", str(e))
+            print(traceback.format_exc())
+            return Response({"error": "토큰 생성 실패"}, status=500)
+
         return Response({
             "message": "로그인 성공",
             "access": str(refresh.access_token),
@@ -110,6 +120,7 @@ class LoginView(APIView):
                 "role": "admin" if user.is_staff else "user"
             }
         }, status=status.HTTP_200_OK)
+
 
 # ✔️ 관리자 전용 - 유저 목록 조회
 @api_view(['GET'])

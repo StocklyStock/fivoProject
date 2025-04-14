@@ -1,5 +1,6 @@
 // 📄 src/pages/AdminUsers.jsx
 import { useEffect, useState } from 'react';
+import { FormControlLabel, Checkbox } from '@mui/material';
 import axios from 'axios';
 import {
   Typography,
@@ -27,6 +28,8 @@ const AdminUsers = () => {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [editedNickname, setEditedNickname] = useState('');
+  const [editedIsStaff, setEditedIsStaff] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -38,7 +41,7 @@ const AdminUsers = () => {
       }
 
       try {
-        const response = await axios.get('/api/accounts/all/', {
+        const response = await axios.get('/api/accounts/users/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -66,6 +69,31 @@ const AdminUsers = () => {
     );
     setFilteredUsers(filtered);
   }, [search, users]);
+
+  const handleDeleteUser = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+  
+    try {
+      await axios.delete(`/api/accounts/users/${selectedUser.id}/delete/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      alert('🗑️ 삭제 완료');
+      setSelectedUser(null);
+  
+      // ✅ fetchUsers 자체는 예외가 생길 수 있으니까 따로 try-catch 처리
+      try {
+        await fetchUsers();
+      } catch (e) {
+        console.warn("삭제 후 fetchUsers 중 에러 발생:", e);
+      }
+  
+    } catch (err) {
+      alert('❌ 삭제 실패');
+      console.error(err);
+    }
+  };
 
   return (
     <Box mt={4}>
@@ -149,17 +177,17 @@ const AdminUsers = () => {
         <DialogTitle>사용자 상세 정보</DialogTitle>
         <DialogContent dividers>
           {selectedUser && (
-            <Box>
+            <Box display="flex" flexDirection="column" gap={2}>
               <Typography>Email: {selectedUser.email}</Typography>
               <Typography>닉네임: {selectedUser.nickname}</Typography>
               <Typography>전화번호: {selectedUser.phone}</Typography>
               <Typography>인증 여부: {selectedUser.is_verified ? '✅' : '❌'}</Typography>
-              <Typography>관리자 여부: {selectedUser.is_staff ? '✅' : '❌'}</Typography>
               <Typography>가입일: {new Date(selectedUser.date_joined).toLocaleString()}</Typography>
             </Box>
           )}
         </DialogContent>
         <DialogActions>
+          <Button onClick={handleDeleteUser} color="error">삭제</Button>
           <Button onClick={() => setSelectedUser(null)}>닫기</Button>
         </DialogActions>
       </Dialog>
