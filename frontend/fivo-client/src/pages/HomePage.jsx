@@ -22,10 +22,10 @@ const HomePage = () => {
         <ChatBotModal />
         <div className='brand-bg-color main-listings'>
           <ThemeListings
+            themeName={selectedThemeName}
             stock_list={stocks}
           />
           <NewsListings
-            themeCode={selectedThemeCode}
             themeName={selectedThemeName}
             news={news}
           />

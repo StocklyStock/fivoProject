@@ -1,22 +1,21 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Treemap from "./Treemap";
 import {
   setTreemapData,
   setSelectedTheme,
-  fetchThemeNews,
-  fetchThemeStocks,
+  fetchThemeData,
 } from "../slices/themeSlice";
+import Treemap from "./Treemap";
 
 const ChartRealtime = () => {
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.theme);
+  const { data, selectedThemeCode } = useSelector((state) => state.theme);
 
   useEffect(() => {
-    // 처음 마운트될 때: 로컬 저장된 트리맵 데이터 불러오기
     const savedData = localStorage.getItem("lastTreemapData");
     if (savedData) {
-      dispatch(setTreemapData(JSON.parse(savedData)));
+      const parsed = JSON.parse(savedData);
+      dispatch(setTreemapData(parsed));
     }
 
     let socket;
@@ -25,7 +24,7 @@ const ChartRealtime = () => {
       socket = new WebSocket("ws://localhost:8000/ws/theme");
 
       socket.onopen = () => {
-        console.log("✅ WebSocket 연결됨");
+        console.log("✅ WebSocket 연결");
       };
 
       socket.onmessage = (event) => {
@@ -41,33 +40,44 @@ const ChartRealtime = () => {
 
         dispatch(setTreemapData(converted));
         localStorage.setItem("lastTreemapData", JSON.stringify(converted));
+
+        // ✅ selectedThemeCode가 없을 때만 자동 선택
+        if (!selectedThemeCode && converted.children.length > 0) {
+          const maxItem = converted.children.reduce((prev, curr) =>
+            curr.value > prev.value ? curr : prev
+          );
+
+          dispatch(
+            setSelectedTheme({
+              themeCode: maxItem.theme_code,
+              themeName: maxItem.name,
+            })
+          );
+          dispatch(fetchThemeData(maxItem.theme_code));
+        }
       };
 
       socket.onclose = () => {
-        console.warn("📴 WebSocket 연결 종료됨. 3초 후 재연결 시도...");
+        console.warn("📴 WebSocket 종료됨. 3초 후 재연결 시도...");
         setTimeout(connectWebSocket, 3000);
       };
 
       socket.onerror = (err) => {
-        console.error("❌ WebSocket 오류 발생:", err);
+        console.error("❌ WebSocket 오류:", err);
       };
     };
 
     connectWebSocket();
 
     return () => socket && socket.close();
-  }, [dispatch]);
+  }, [dispatch, selectedThemeCode]);
 
   const handleThemeClick = (themeCode) => {
     const matched = data.children.find((item) => item.theme_code === themeCode);
     const themeName = matched?.name ?? "";
 
-    // 선택한 테마 상태 저장
     dispatch(setSelectedTheme({ themeCode, themeName }));
-
-    // 뉴스 & 종목 비동기 fetch
-    dispatch(fetchThemeNews(themeCode));
-    dispatch(fetchThemeStocks(themeCode));
+    dispatch(fetchThemeData(themeCode));
   };
 
   return (

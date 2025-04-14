@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./NewsListings.css"; // 필요시
 
-const NewsListings = ({ news = [] }) => {
+const NewsListings = ({ news = [] ,themeName}) => {
   const [selectedUrl, setSelectedUrl] = useState(null);
 
   console.log("🧪 NewsListings에 전달된 뉴스:", news); // 확인용
@@ -9,7 +9,7 @@ const NewsListings = ({ news = [] }) => {
   return (
     <div>
       <div className="headline-wrap">
-        <h2><span>관련 뉴스</span></h2>
+        <h2><span>{themeName} 관련 뉴스</span></h2>
       </div>
 
       <div className="list-wrap">

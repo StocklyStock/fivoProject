@@ -3,11 +3,13 @@ from fastapi import APIRouter, WebSocket, HTTPException
 from fastapi.responses import JSONResponse
 from starlette.websockets import WebSocketState
 from datetime import datetime
-from app.services.theme_service import fetch_theme_data, fetch_theme_news,fetch_theme_stock
+from app.services.theme_service import fetch_theme_data, fetch_theme_all_cached
 
 router = APIRouter()
 LAST_TREEMAP_DATA = {}
 
+
+from starlette.websockets import WebSocketState
 
 @router.websocket("/ws/theme")
 async def websocket_endpoint(websocket: WebSocket):
@@ -45,34 +47,31 @@ async def websocket_endpoint(websocket: WebSocket):
                     ],
                 }
                 LAST_TREEMAP_DATA.update(data)
-                await websocket.send_text(json.dumps(data, ensure_ascii=False))
+
+                if websocket.application_state == WebSocketState.CONNECTED:
+                    await websocket.send_text(json.dumps(data, ensure_ascii=False))
+
             else:
-                await websocket.send_text(
-                    json.dumps(LAST_TREEMAP_DATA, ensure_ascii=False)
-                )
+                if websocket.application_state == WebSocketState.CONNECTED:
+                    await websocket.send_text(json.dumps(LAST_TREEMAP_DATA, ensure_ascii=False))
 
             await asyncio.sleep(60)
+
     except Exception as e:
         print(f"❌ WebSocket 오류: {e}")
+
     finally:
-        if websocket.client_state != WebSocketState.DISCONNECTED:
+        if websocket.application_state == WebSocketState.CONNECTED:
             await websocket.close()
-        await asyncio.sleep(3)
-        asyncio.create_task(websocket_endpoint(websocket))
+        print("📴 WebSocket 연결 종료")
 
-
-@router.get("/theme/news")
-def get_news(theme_code: str):
+@router.get("/theme/data")
+def get_theme_data(theme_code: str):
     try:
-        news_df = fetch_theme_news(theme_code)
-        return JSONResponse(content=news_df.to_dict(orient="records"))
+        news_df, stock_df = fetch_theme_all_cached(theme_code)
+        return {
+            "news": news_df.to_dict(orient="records"),
+            "stocks": stock_df.to_dict(orient="records"),
+        }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"뉴스 크롤링 오류: {e}")
-
-@router.get("/theme/stock_list")
-def get_stock_list(theme_code:str):
-    try:
-        stock_list_df = fetch_theme_stock(theme_code)
-        return JSONResponse(content=stock_list_df.to_dict(orient="records"))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"종목 크롤링 오류: {e}")
+        raise HTTPException(status_code=500, detail=f"크롤링 오류: {e}")
