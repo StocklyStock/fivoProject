@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector } from 'react-redux';
 import Slider from '../components/Slider';
 import ChartRealtime from '../components/ChartRealtime';
 import ThemeListings from '../components/ThemeListings';
@@ -7,35 +8,26 @@ import ChatBotModal from '../components/ChatbotModal';
 
 // 📄 src/pages/HomePage.jsx
 const HomePage = () => {
-  const [selectedThemeCode, setSelectedThemeCode] = useState(null);
-  const [selectedThemeName, setSelectedThemeName] = useState("");
-  const [newsData, setNewsData] = useState([]);
-  const [stockList, setStockList] = useState([]);
+  const {
+    selectedThemeCode,
+    selectedThemeName,
+    news,
+    stocks,
+  } = useSelector((state) => state.theme);
     return (
       <main>
         {/* <h1 className="text-2xl p-10">🏠 홈 화면 - 누구나 접근 가능</h1> */}
         <Slider />
-        <ChartRealtime
-        onThemeChange={(code, name) => {
-          setSelectedThemeCode(code);
-          setSelectedThemeName(name);
-        }}
-        onNewsFetched={(news) => {
-          setNewsData(news)
-        }}
-        onStocksFetched={(stock_list) =>{
-          setStockList(stock_list)
-        }}
-      />
+        <ChartRealtime/>
         <ChatBotModal />
         <div className='brand-bg-color main-listings'>
           <ThemeListings
-            stock_list={stockList}
+            stock_list={stocks}
           />
           <NewsListings
             themeCode={selectedThemeCode}
             themeName={selectedThemeName}
-            news={newsData}
+            news={news}
           />
         </div>
       </main>
