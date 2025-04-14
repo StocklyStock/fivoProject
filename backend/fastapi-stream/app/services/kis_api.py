@@ -39,8 +39,8 @@ def fetch_candles(symbol: str, timeframe: str = "daily"):
         response = requests.get(url, headers=headers, params=params)
         res_json = response.json()
 
-        print("🔗 요청 URL:", response.url)
-        print("📦 응답 데이터:", res_json)
+        # print("🔗 요청 URL:", response.url)
+        # print("📦 응답 데이터:", res_json)
 
         if res_json.get("rt_cd") == "0":
             return res_json.get("output", [])
