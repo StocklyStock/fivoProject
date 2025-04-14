@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IconButton, InputBase, Tooltip, Button, Drawer, Box, List, ListItem, ListItemText } from '@mui/material';
 import { Brightness4, Search, Menu as MenuIcon } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -55,8 +55,15 @@ const Header = () => {
   const handleSelectStock = (stock) => {
     if (!stock.종목코드) return;
     navigate(`/stock/${stock.종목코드}`);
-    setInputValue('');
-    setSearchResults([]);
+    setInputValue(''); // 검색 완료 후 입력값 초기화
+    setSearchResults([]); // 검색 결과 초기화
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && searchResults.length > 0) {
+      // `Enter` 키를 누르면 첫 번째 종목 선택
+      handleSelectStock(searchResults[0]);
+    }
   };
 
   useEffect(() => {
@@ -92,7 +99,7 @@ const Header = () => {
                   placeholder="삼성전자 또는 005930"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  onKeyDown={handleKeyDown}  // Enter 키 처리
                   style={{
                     marginRight: '10px',
                     flex: 1,
