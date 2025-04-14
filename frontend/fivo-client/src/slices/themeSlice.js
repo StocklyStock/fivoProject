@@ -1,17 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getThemeNews, getThemeStocks } from "../services/themeService";
+import { getThemeData } from "../services/themeService";
 
-export const fetchThemeNews = createAsyncThunk(
-  "theme/fetchNews",
+export const fetchThemeData = createAsyncThunk(
+  "theme/fetchThemeData",
   async (themeCode) => {
-    return await getThemeNews(themeCode);
-  }
-);
-
-export const fetchThemeStocks = createAsyncThunk(
-  "theme/fetchStocks",
-  async (themeCode) => {
-    return await getThemeStocks(themeCode);
+    const response = await getThemeData(themeCode);
+    return response; // { news: [...], stocks: [...] }
   }
 );
 
@@ -35,13 +29,10 @@ const themeSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchThemeNews.fulfilled, (state, action) => {
-        state.news = action.payload;
-      })
-      .addCase(fetchThemeStocks.fulfilled, (state, action) => {
-        state.stocks = action.payload;
-      });
+    builder.addCase(fetchThemeData.fulfilled, (state, action) => {
+      state.news = action.payload.news;
+      state.stocks = action.payload.stocks;
+    });
   },
 });
 
