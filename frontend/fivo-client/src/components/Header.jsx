@@ -11,6 +11,7 @@ import './Header.css';
 
 const Header = () => {
   const user = useSelector((state) => state.auth.user);
+  const accessToken = useSelector((state) => state.auth.accessToken)
   const [language, setLanguage] = useState('ko');
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -153,7 +154,16 @@ const Header = () => {
               <option value="en">영어</option>
             </select>
           </li>
-          <li><Button className="login-btn" onClick={handleLogout}>로그인</Button></li>
+          {/* {!accessToken && (
+            <li>
+              <Button className="login-btn" onClick={() => navigate('/login')}>
+                로그인
+              </Button>
+            </li>
+          )} */}
+          <Button className="login-btn" onClick={() => navigate('/login')}>
+                로그인
+          </Button>
         </ul>
 
         <Drawer anchor="left" open={menuOpen} onClose={toggleMenu}>

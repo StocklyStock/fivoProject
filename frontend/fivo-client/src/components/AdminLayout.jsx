@@ -14,7 +14,7 @@ const AdminLayout = () => {
 
   return (
     <>
-      <Header /> {/* ✅ 헤더 추가 */}
+      {/* <Header /> ✅ 헤더 추가 */}
 
       <Box className="p-6">
         <Box className="flex justify-between items-center mb-4">

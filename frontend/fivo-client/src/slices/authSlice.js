@@ -18,8 +18,12 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       state.user = null;
+      state.isAuthenticated = false;
       state.accessToken = null;
       state.refreshToken = null;
+
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     },
   },
 });
