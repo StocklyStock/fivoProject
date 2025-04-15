@@ -35,3 +35,34 @@ class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'nickname', 'phone', 'is_verified', 'is_staff', 'date_joined']
+
+# 유저 정보 수정
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['nickname', 'phone']  # 수정 허용 필드만!
+
+    def validate_nickname(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("닉네임은 공백일 수 없습니다.")
+        return value
+
+# 비밀번호 찾기 >> 비밀번호 변경
+class PasswordChangeSerializer(serializers.Serializer):
+    current_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+    new_password2 = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        user = self.context['request'].user
+        if not user.check_password(data['current_password']):
+            raise serializers.ValidationError({"current_password": "현재 비밀번호가 일치하지 않습니다."})
+        if data['new_password'] != data['new_password2']:
+            raise serializers.ValidationError({"new_password2": "비밀번호가 일치하지 않습니다."})
+        return data
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        user.set_password(self.validated_data['new_password'])
+        user.save()
+        return user
