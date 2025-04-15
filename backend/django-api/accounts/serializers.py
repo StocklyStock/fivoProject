@@ -46,23 +46,32 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         if not value.strip():
             raise serializers.ValidationError("닉네임은 공백일 수 없습니다.")
         return value
+    
+class PasswordResetCodeRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
 
-# 비밀번호 찾기 >> 비밀번호 변경
-class PasswordChangeSerializer(serializers.Serializer):
-    current_password = serializers.CharField(write_only=True)
+    def validate_email(self, value):
+        try:
+            user = CustomUser.objects.get(email=value)
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError("해당 이메일로 가입된 계정이 없습니다.")
+        return value
+    
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
     new_password = serializers.CharField(write_only=True)
     new_password2 = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        user = self.context['request'].user
-        if not user.check_password(data['current_password']):
-            raise serializers.ValidationError({"current_password": "현재 비밀번호가 일치하지 않습니다."})
         if data['new_password'] != data['new_password2']:
             raise serializers.ValidationError({"new_password2": "비밀번호가 일치하지 않습니다."})
         return data
 
-    def save(self, **kwargs):
-        user = self.context['request'].user
-        user.set_password(self.validated_data['new_password'])
+    def save(self):
+        email = self.validated_data['email']
+        new_password = self.validated_data['new_password']
+        user = CustomUser.objects.get(email=email)
+
+        user.set_password(new_password)
         user.save()
         return user

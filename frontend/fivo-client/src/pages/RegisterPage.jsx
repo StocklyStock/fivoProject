@@ -50,7 +50,6 @@ const RegisterPage = () => {
       form.nickname &&
       form.password &&
       form.confirmPassword &&
-      form.phone &&
       codeVerified
     )
   }
@@ -110,7 +109,7 @@ const RegisterPage = () => {
      
       <h2 className="text-2xl font-bold mb-6 text-center">회원가입</h2>
 
-      {/* SNS 로그인 */}
+      {/* SNS 로그인
       <div className="sns">
         <h2>간편 회원가입</h2>
         <ul>
@@ -118,7 +117,7 @@ const RegisterPage = () => {
           <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={naverLogo} alt="네이버 회원가입" /></a></li>
           <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={kakaoLogo} alt="카카오 회원가입" /></a></li>
         </ul>
-      </div>
+      </div> */}
       <div className='border-wrap'>
           <form className="">
             <label htmlFor="nickname" className={`floating-label ${form.nickname ? 'active':''}`}>
@@ -204,7 +203,7 @@ const RegisterPage = () => {
             </div>// .verify-wrap 닫음
             )}
             <label htmlFor='phone' className={`floating-label ${form.phone ? 'active':''}`}>
-              <span>휴대전화 번호</span>
+              <span>휴대전화 번호(선택)</span>
               <input
                 id='phone'
                 type="text"

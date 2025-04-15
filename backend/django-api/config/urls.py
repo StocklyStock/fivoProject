@@ -28,19 +28,4 @@ urlpatterns = [
     path('api/chatbot/',include("chatbot.urls")),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    # path('api/accounts/password-reset/', 
-    #      auth_views.PasswordResetView.as_view(template_name='accounts/password_reset_form.html'),
-    #      name='password_reset'),
-
-    # path('api/accounts/password-reset/done/', 
-    #      auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'),
-    #      name='password_reset_done'),
-
-    # path('api/accounts/reset/<uidb64>/<token>/', 
-    #      auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'),
-    #      name='password_reset_confirm'),
-
-    # path('api/accounts/reset/done/', 
-    #      auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'),
-    #      name='password_reset_complete'),
 ]
