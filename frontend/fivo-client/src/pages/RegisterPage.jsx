@@ -106,113 +106,125 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">회원가입</h2>
+    <section className="register">
+     
+      <h2 className="text-2xl font-bold mb-6 text-center">회원가입</h2>
 
-        {/* SNS 로그인 */}
-        <div className="flex justify-between mb-6">
-          <button className="border px-4 py-2 rounded-md flex items-center gap-2">
-            <img src={googleLogo} alt="Google" className="w-5 h-5" /> Google
-          </button>
-          <button className="border px-4 py-2 rounded-md flex items-center gap-2">
-            <img src={naverLogo} alt="Naver" className="w-5 h-5" /> 네이버
-          </button>
-          <button className="border px-4 py-2 rounded-md flex items-center gap-2">
-            <img src={kakaoLogo} alt="Kakao" className="w-5 h-5" /> 카카오
-          </button>
-        </div>
-
-        <input
-          type="text"
-          name="nickname"
-          placeholder="닉네임"
-          value={form.nickname}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded mb-2"
-          required
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="비밀번호"
-          value={form.password}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded mb-2"
-          required
-        />
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="비밀번호 확인"
-          value={form.confirmPassword}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded mb-2"
-          required
-        />
-
-        <div className="flex gap-2 mb-2">
-          <input
-            type="email"
-            name="email"
-            placeholder="이메일"
-            value={form.email}
-            onChange={handleChange}
-            className="flex-1 border px-3 py-2 rounded"
-            required
-          />
-          <button
-            type="button"
-            onClick={handleSendCode}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-semibold"
-            disabled={codeSent}
-          >
-            전송
-          </button>
-        </div>
-
-        {codeSent && (
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm text-gray-600">이메일로 전송된 인증번호</span>
-              <span className="text-sm text-gray-500 font-mono">{formatTime(timeLeft)}</span>
-            </div>
-            <input
-              type="text"
-              placeholder="인증번호 (6자리)"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              className="w-full border px-3 py-2 rounded mt-1"
-            />
-            {codeError && <p className="text-red-500 text-sm mt-1">{codeError}</p>}
-            <button
-              onClick={handleVerifyCode}
-              className="w-full mt-2 bg-green-600 text-white py-2 rounded hover:bg-green-700"
-            >
-              인증 확인
-            </button>
-          </div>
-        )}
-
-        <input
-          type="text"
-          name="phone"
-          placeholder="휴대전화 번호"
-          value={form.phone}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded mb-4"
-          required
-        />
-
-        <button
-          disabled={!isFormComplete()}
-          onClick={() => navigate('/login')}
-          className={`w-full py-2 rounded text-white ${isFormComplete() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
-        >
-          로그인 하러가기
-        </button>
+      {/* SNS 로그인 */}
+      <div className="sns">
+        <h2>간편 회원가입</h2>
+        <ul>
+          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={googleLogo} alt="구글 회원가입" /></a></li>
+          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={naverLogo} alt="네이버 회원가입" /></a></li>
+          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={kakaoLogo} alt="카카오 회원가입" /></a></li>
+        </ul>
       </div>
+      <div className='border-wrap'>
+          <form className="">
+            <label htmlFor="nickname" className={`floating-label ${form.nickname ? 'active':''}`}>
+                <span>닉네임</span>
+                <input
+                  id='nickname'
+                  type="text"
+                  name="nickname"
+                  value={form.nickname}
+                  onChange={handleChange}
+                  required
+                />
+            </label>
+            <label htmlFor="password" className={`floating-label ${form.password ? 'active':''}`}>
+              <span>패스워드</span>
+              <input
+                id='password'
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+              />
+            </label>
+            <label htmlFor="confirmPassword" className={`floating-label ${form.confirmPassword ? 'active':''}`}>
+              <span>패스워드 확인</span>  
+              <input
+                id='confirmPassword'
+                type="password"
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </label>
+            <div className='input-wrap'>
+              <label htmlFor="email" className={`floating-label ${form.email ? 'active':''}`}>
+                <span>이메일</span>
+                  <input
+                    id='email'
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </label>
+                <button
+                    type="button"
+                    onClick={handleSendCode}
+                    disabled={codeSent}
+                  >
+                    전송
+                </button>
+              </div>
+
+              {codeSent && (
+              <div className="verify-wrap">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-sm text-gray-600">이메일로 전송된 인증번호</span>
+                <span className="text-sm text-gray-500 font-mono">{formatTime(timeLeft)}</span>
+              </div>
+              <div className='input-wrap'>
+                <label htmlFor="code" className={`floating-label ${code ? 'active':''}`}>
+                  <span>인증번호 (6자리)</span>
+                  <input
+                    id='code'
+                    type="text"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                  />
+                </label>
+  
+                <button
+                  type='button'
+                  onClick={handleVerifyCode}
+                  className="verify-code"
+                >
+                  인증 확인
+                </button>
+              </div>
+              {codeError && <p className="text-red-500 text-sm mt-1">{codeError}</p>}
+            </div>// .verify-wrap 닫음
+            )}
+            <label htmlFor='phone' className={`floating-label ${form.phone ? 'active':''}`}>
+              <span>휴대전화 번호</span>
+              <input
+                id='phone'
+                type="text"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                required
+              />
+            </label>
+            <button
+              type='button'
+              disabled={!isFormComplete()}
+              onClick={() => navigate('/login')}
+              className={` w-full py-2 rounded text-white ${isFormComplete() ? 'register-btn' : 'register-btn inactivated cursor-not-allowed'}`}
+            >
+              회원가입
+            </button>
+          </form>
+        </div> {/*.border-wrap 닫음*/}
+ 
 
       <ToastContainer
         position="top-center"
@@ -223,7 +235,7 @@ const RegisterPage = () => {
         draggable
         pauseOnHover
       />
-    </div>
+    </section>
   )
 }
 

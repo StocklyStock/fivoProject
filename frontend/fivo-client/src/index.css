@@ -64,6 +64,8 @@ header nav ul.nav-left {
 
 header nav ul.nav-right {
   gap: 50px;
+  width: 60%;
+  justify-content: flex-end;
 }
 
 header nav ul.nav-left li.header-logo a {
@@ -77,8 +79,6 @@ header nav ul.nav-right li.search {
   display: flex;
 }
 
-header nav ul.nav-right {}
-
 header nav ul.nav-right svg {
   color: #484848;
 }
@@ -91,6 +91,21 @@ header nav ul.nav-right select.lang {
   border: 1px solid #E9E9E9;
   background-color: #fff;
 }
+.search-box-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  border:1px solid #E9E9E9;
+  border-radius: 3px;
+  position: relative;
+  background-color: #EFEFEF;
+  border:1px solid #E9E9E9;
+  padding: 8px;
+ 
+}
+.search-input{background-color: transparent; outline: none; color: #333;  width: 100%;}
+
+.search-box-wrapper button{display: flex;justify-content: center; align-items: center;}
+
 
 header nav ul.nav-right select.lang option {
   width: 100%;
@@ -147,19 +162,73 @@ header nav ul .login-btn:hover {
 
 .main-banner .swiper .swiper-wrapper .swiper-slide img {}
 
+/*2025-04-15 메인 페이지 작업 - 박홍덕 - start */
+.chart-wrap{  position: relative;
+  bottom: 200px; z-index: 1;gap: 20px; display: flex; justify-content: space-between;
+  max-width: 1630px;
+  margin:auto;
+  width: 100%;}
 .chart-realtime {
-  width: 100%;
-  max-width: 1200px;
+  width: 80%;
   margin: auto;
   background-color: #fff;
   border-radius: 14px;
   box-shadow: 0 0 6px rgba(100, 100, 100, 0.21);
   padding: 30px 34px;
   z-index: 1;
-  position: relative;
-  bottom: 140px;
-  height: 577px;
+
 }
+
+.recommendation{  width: 20%; display:flex; flex-direction: column;
+gap: 20px;}
+.recommendation h1{font-size: 21px; color:#fff; font-weight: bold;
+  padding-bottom: 15px;
+  border-bottom:
+1px solid rgba(255,255,255,0.3);
+display: flex;
+  justify-content: space-between;
+  align-items: baseline;}
+.recommendation > div{
+  background-color: #fff;
+  box-shadow: 0 0 6px rgba(100, 100, 100, 0.21);
+  border-radius:14px;
+  padding: 35px;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #FA7260 0%, #FF986C);
+}
+.current-recomm span, .current-recomm strong,
+.current-recomm div{color:#fff;}
+.current-recomm h2{margin-top: 35px;}
+.current-recomm h2, .current-recomm h3
+{display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.current-recomm h2 strong{  font-size: 25px;}
+  .current-recomm h3 {line-height: 1;}
+.current-recomm h3 strong{font-size: 35px;color:#ffffff; }
+
+
+.recommendation > div.go-to-ai {color: #FA7260;
+  border:1px solid #FFECEA;
+  background-color: #fff;
+  box-shadow: 0 0 6px rgba(251, 135, 155, 0.31);}
+.recommendation > div.go-to-ai p{text-align: center; word-break: break-all;font-size: 20px;
+  color: #fff; }
+.recommendation > div.go-to-ai a{display: block; width: 100%; border-radius: 50px; 
+  background: #FA7260; 
+  background: linear-gradient(90deg, #FA7260, #FF986C);
+  text-align: center; padding: 14px 0;
+color: #fff;}
+
+
+
+
+/*2025-04-15 메인 페이지 작업 - 박홍덕 - end */
+
 
 .chart-realtime h2 {
   text-align: center;
@@ -274,6 +343,7 @@ header nav ul .login-btn:hover {
 
 
 
+
 footer {
   background-color: #AAAAAA;
   width: 100%;
@@ -349,18 +419,113 @@ footer address {
 }
 
 
+/*2025-04-11 로그인, 회원가입 페이지 작업 - 박홍덕 - start */
+.login, .register{max-width: 498px; width: 100%; margin: 114px auto 144px auto; }
 
 
+.login .sns, 
+.register .sns{width: 100%; padding:  20px 0; margin: 0 auto 18px;}
+.sns h2{color:#1F1F1F; font-size: 18px;text-align: center; font-weight: bold; margin-bottom: 12px;}
+.sns ul{width: 100%;display: flex; justify-content: center; align-items: center; gap: 15px;}
+.sns ul li{border: 1px solid #E9E9E9;width: 50px; height: 50px; border-radius: 50%; overflow: hidden;}
+.sns ul li a{display: block; width: 100%;padding: 8px;}
+.sns ul li a img{display:inline-block; width: 100%; margin: auto; object-fit: contain;}
 
-.w1200 {
-  width: 100%;
-  max-width: 1200px;
-  margin: auto;
+.login .sns,
+.register .sns,
+.border-wrap {border-radius:14px;box-shadow: 0 0 5px rgba(0,0,0,0.13); }
+
+.border-wrap{padding:  66px 52px;}
+.login form label,
+.register form label{position: relative;display: block;width: 100%;box-shadow: 0 0 4px rgba(0,0,0,0.13); border:1px solid #E9E9E9; border-radius: 14px; padding: 20px 21px; margin-bottom: 16px; color: #BABABA; font-size: 16px; outline: none;}
+.login form label input,
+.register form label input{width: 100%; display: block; outline: none;}
+
+.login-error{font-size: 13px;color: #333;display: block; margin-bottom: 12px;}
+
+.login form label span,
+.register form label span{position: absolute; font-size: 14px; top: 50%; left: 21px; transform: translateY(-50%); transition: 0.2s; pointer-events: none;}
+.login form label:focus-within span,
+.login form label.active span,
+.register form label:focus-within span,
+.register form label.active span {top: 7px; transform: none; font-size: 9px; }
+
+.register form .input-wrap{gap:13px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.register form .input-wrap label[for="email"], .input-wrap label[for="code"]{margin-bottom: 0;}
+.register form .input-wrap label[for="email"] + button,
+button.verify-code{background-color: #FA7260; border-radius: 14px; font-size: 18px; color:#fff; max-width: 105px; width: 100%;padding: 18px 21px;}
+.input-wrap label[for="code"] + button{padding: 18px 0px; word-spacing: -5px;}
+.login .find-account{width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 12px;}
+.login .find-account a{color:#333; font-size: 14px; width: 50%; text-align: center; display: inline-block;}
+.login .find-account a:first-child{position: relative;}
+.login .find-account a:first-child:after{content: ""; display: block; height: 67%; width: 1px; background-color: #E9E9E9; float: right; position: absolute;
+right: 0; top: 50%; transform: translateY(-50%);}
+
+.login .register-wrap{width: 100%; margin: 60px auto 0 auto; }
+.login .register-wrap p{width: 100%; text-align: center;  position: relative; display: flex; justify-content: space-between; align-items: center;}
+
+.login .register-wrap p span{color:#555555; font-size: 14px; display: block; }
+.login .register-wrap p:before, .login .register-wrap p:after{content: ""; display: block; width: 25%; height: 1px; background-color: #E9E9E9;}
+
+.login .register-wrap a{width: 100%; border:1px solid #FA7260; display: block; text-align: center; border-radius: 14px; color:#FA7260;
+  font-size: 26px; padding: 10px 21px;letter-spacing: 29%; margin-top: 35px;}
+  /*2025-04-11 로그인, 회원가입 페이지 작업 - 박홍덕 - end */
+
+/*2025-04-11 자주묻는 페이지 작업 - 박홍덕 - start */
+.faq-listings{width: 100%; margin: 114px auto 124px auto;}
+.faq-listings ul{max-width: 900px; width:100%; margin:auto;border: 1px solid #D9D9D9;box-shadow: 0 0 5px rgba(0, 0, 0, 0.13);} 
+.faq-listings ul li{border-bottom: 1px solid #D9D9D9; padding: 0 0px; cursor: pointer; }
+.faq-listings ul li:last-child{border-bottom: none;}
+.faq-listings ul li h1{font-size: 18px;color:#222; font-weight: bold; padding: 20px;display: flex; justify-content: space-between;}
+.faq-listings ul li > div{height: 0; overflow: hidden; transition: height 0.3s;}
+.faq-listings ul li > div.menu-open{height: fit-content;border-top: 1px solid #D9D9D9;padding: 20px; }
+
+
+/*2025-04-11 자주묻는 페이지 작업 - 박홍덕 - end  */
+
+
+/*2025-04-11 반응형 작업 - 박홍덕 - start */
+
+/*2025-04-14 헤더 반응형 작업 - 박홍덕 - start */
+@media (max-width:1630px){
+  header{padding: 12px 10px ;}
+}
+/*2025-04-14 헤더 반응형 작업 - 박홍덕 - end */
+
+@media (max-width:1200px){
+  footer > div{padding:30px 10px;gap: 10px;}  
+  footer > div > nav{gap: 70px;}
+}
+@media (max-width:900px){
+  .FAQ-wrap{padding: 0 10px;}
+}
+@media (max-width:768px){
+  footer > div > div{flex-wrap: wrap;width: 100%; gap:10px; width: 50%;}
+  .footer-logo{width: 100%;}
+}
+@media (max-width:498px){
+  .login, .register{padding: 0 10px;}
+  .border-wrap{padding: 66px 15px;}
+  .register-wrap p::before, .login .register-wrap p::after{width: 20%;}
+}
+@media (max-width:480px){
+  footer > div{flex-wrap: wrap;gap:40px;}
+  footer > div > nav{justify-content: flex-start;}
+  footer > div > nav, footer > div > div{width: 100%;}
+  footer address{font-size: 11px; word-break: keep-all;}
+}
+@media (max-width:360px){
+  .login .register-wrap p::before, .login .register-wrap p::after{width: 15%;}
 }
 
-.brand-bg-color {
-  background-color: #FDFBF9;
-}
+/*2025-04-11 반응형 작업 - 박홍덕 - end  */
+
+.login button, 
+.register-btn{letter-spacing: 29%;width: 100%; text-align: center; background-color: #FA7260;border-radius: 14px; color:#fff; font-size: 26px; padding: 10px 21px;}
+
+.register-btn.inactivated{background-color: #AAAAAA;}
+.w1200{width:100%; max-width: 1200px; margin: auto;}
+.brand-bg-color{background-color: #FDFBF9;}
 
 /* 애니메이션 로고 등은 그대로 유지 */
 .logo {

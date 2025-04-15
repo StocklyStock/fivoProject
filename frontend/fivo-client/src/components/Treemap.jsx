@@ -42,12 +42,12 @@ const Treemap = ({ data, onThemeClick }) => {
     const posRoot = d3
       .treemap()
       .size([width / 2, height])
-      .padding(5)(posHierarchy);
+      .padding(0)(posHierarchy);
 
     const negRoot = d3
       .treemap()
       .size([width / 2, height])
-      .padding(5)(negHierarchy);
+      .padding(0)(negHierarchy);
 
     negRoot.eachBefore((node) => {
       if (node.parent) {
@@ -82,24 +82,57 @@ const Treemap = ({ data, onThemeClick }) => {
             .attr("width", (d) => d.x1 - d.x0)
             .attr("height", (d) => d.y1 - d.y0)
             .attr("fill", (d) => colorScale(d.data.value))
-            .attr("stroke", "white");
+            .attr("stroke", "white")
+            .attr("rx", 3)
+            .attr("ry", 3);;
 
-          g.append("text")
-            .attr("x", (d) => (d.x1 - d.x0) / 2)
-            .attr("y", (d) => (d.y1 - d.y0) / 2)
-            .attr("text-anchor", "middle")
-            .style("font-size", (d) =>
-              `${Math.max(Math.min((d.x1 - d.x0) / 8, 14), 8)}px`
-            )
-            .style("fill", "white")
-            .text((d) => {
-              const name = d.data.name ?? "";
-              const value = parseFloat(d.data.value);
-              const valueText =
-                !isNaN(value) && typeof value === "number"
-                  ? `${value > 0 ? "+" : ""}${value.toFixed(2)}%`
-                  : "";
-              return `${name}\n${valueText}`;
+          // g.append("text")
+          //   .attr("x", (d) => (d.x1 - d.x0) / 2)
+          //   .attr("y", (d) => (d.y1 - d.y0) / 2)
+          //   .attr("text-anchor", "middle")
+          //   .style("font-size", (d) =>
+          //     `${Math.max(Math.min((d.x1 - d.x0) / 8, 14), 8)}px`
+          //   )
+          //   .style("fill", "white")
+          //   .text((d) => {
+          //     const name = d.data.name ?? "";
+          //     const value = parseFloat(d.data.value);
+          //     const valueText =
+          //       !isNaN(value) && typeof value === "number"
+          //         ? `${value > 0 ? "+" : ""}${value.toFixed(2)}%`
+          //         : "";
+          //     return `${name}\n${valueText}`;
+          // 텍스트를 foreignObject로 삽입
+          g.append("foreignObject")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", (d) => d.x1 - d.x0)
+          .attr("height", (d) => d.y1 - d.y0)
+          .append("xhtml:div")
+          .style("width", "100%")
+          .style("height", "100%")
+          .style("display", "flex")
+          .style("flex-direction", "column")
+          .style("justify-content", "center")
+          .style("align-items", "center")
+          .style("text-align", "center")
+          .style("cursor","pointer")
+          .style("font-size", (d) => {
+            const w = d.x1 - d.x0;
+            return `${Math.max(12.5, Math.min(13, w /10))}px`
+          })
+          .style("line-height", "1.2")
+          .style("color", "white")
+          .style("padding", "10px")
+          .style("overflow", "hidden")
+          .style("word-break", "break-word")
+          .html((d) => {
+            const name = d.data.name ?? "";
+            const value = parseFloat(d.data.value);
+            const valueText = !isNaN(value)
+              ? `${value > 0 ? "+" : ""}${value.toFixed(2)}%`
+              : "";
+            return `<div>${name}</div><div>${valueText}</div>`;
             });
         });
     };
