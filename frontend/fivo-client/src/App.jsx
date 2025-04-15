@@ -5,7 +5,7 @@ import {
   Route,
   RouterProvider
 } from 'react-router-dom';
-
+import { ToastContainer } from 'react-toastify';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -65,7 +65,21 @@ const router = createBrowserRouter(
 );
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer // ✅ 전역 위치에 선언!
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        theme="colored"
+      />
+    </>
+  );
+  
 };
 
 export default App;

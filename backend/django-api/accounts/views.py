@@ -9,7 +9,7 @@ from datetime import timedelta
 import logging
 
 from .models import CustomUser
-from .serializers import UserSerializer, UserListSerializer
+from .serializers import UserSerializer, UserListSerializer,UserUpdateSerializer,PasswordChangeSerializer
 from .utils import send_verification_code_email
 
 logger = logging.getLogger(__name__)
@@ -121,6 +121,42 @@ class LoginView(APIView):
             }
         }, status=status.HTTP_200_OK)
 
+class UpdateUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        user = request.user
+        serializer = UserUpdateSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            try:
+                serializer.save()
+                return Response({"message": "회원 정보가 성공적으로 수정되었습니다."})
+            except Exception as e:
+                logger.error(f"Update Error: {str(e)}")
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeleteUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        user = request.user
+        try:
+            user.delete()
+            return Response({"message": "회원 탈퇴가 완료되었습니다."}, status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            logger.error(f"Delete Error: {str(e)}")
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "비밀번호가 성공적으로 변경되었습니다."})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # ✔️ 관리자 전용 - 유저 목록 조회
 @api_view(['GET'])

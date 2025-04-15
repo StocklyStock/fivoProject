@@ -21,9 +21,6 @@ const AdminLayout = () => {
           <Typography variant="h5" fontWeight="bold">
             🛠 관리자 페이지
           </Typography>
-          <Button color="error" variant="outlined" onClick={() => navigate('/login')}>
-            로그아웃
-          </Button>
         </Box>
 
         <Paper elevation={1} className="rounded-xl overflow-hidden mb-4">
