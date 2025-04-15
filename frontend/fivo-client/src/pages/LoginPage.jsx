@@ -1,18 +1,22 @@
 import { useState } from 'react';
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Paper,
-  Alert,
-  Link
-} from '@mui/material';
+// import {
+//   Box,
+//   TextField,
+//   Button,
+//   Typography,
+//   Paper,
+//   Alert,
+//   Link
+// } from '@mui/material';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../slices/authSlice';
-import { useNavigate } from 'react-router-dom';
-import Logo from '../assets/fivo_logo.png'; // 로고 경로
+import { useNavigate, Link } from 'react-router-dom';
+//import Logo from '../assets/fivo_logo.png'; // 로고 경로
+
+import googleLogo from '../assets/google-brand.svg';
+import naverLogo from '../assets/naver-brand.svg';
+import kakaoLogo from '../assets/kakao-brand.svg';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -22,7 +26,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     setError('');
     try {
       const response = await axios.post('/api/accounts/login/', { email, password });
@@ -45,60 +50,76 @@ const LoginPage = () => {
   };
 
   return (
-    <Box className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Paper elevation={3} className="p-8 w-full max-w-md">
-        <Box className="flex flex-col items-center mb-6">
+    <section className="login">
+
+        {/* <Box className="flex flex-col items-center mb-6">
           <Typography variant="h5" fontWeight="bold">
             <img src={Logo} alt="FIVO 로고" className="w-48" />
             </Typography>
-        </Box>
+        </Box> */}
+      <div className='sns'>
+        <h2>간편 로그인</h2>
+        <ul>
+          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={googleLogo} alt="구글 회원가입" /></a></li>
+          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={naverLogo} alt="네이버 회원가입" /></a></li>
+          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={kakaoLogo} alt="카카오 회원가입" /></a></li>
+        </ul>
+      </div>
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+      {error && <span class="login-error" severity="error">{error}</span>}
 
-        <TextField
-          label="이메일"
-          type="email"
-          fullWidth
-          margin="normal"
-          value={email}
-          inputProps={{ maxLength: 30 }}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      <div className='border-wrap'>
+        <form className="">
+          {/* <h2>
+            🔐 로그인
+          </h2> */}
 
-        <TextField
-          label="비밀번호"
-          type="password"
-          fullWidth
-          margin="normal"
-          value={password}
-          inputProps={{ maxLength: 30 }}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <label htmlFor="email" className={`floating-label ${email ? 'active' : ''}`}>
+            <span>아이디(이메일 주소)</span>
+            <input
+              id="email"
+              label="이메일"
+              type="email"
+              margin="normal"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <label htmlFor="password" className={`floating-label ${password ? 'active': ''}`}>
+          <span>패스워드</span>
+            <input
+              id="password"
+              label="비밀번호"
+              type="password"
+              margin="normal"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+          {error && <span class="login-error" severity="error">{error}</span>}
 
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-          onClick={handleLogin}
-        >
-          로그인
-        </Button>
-
-        <Box className="mt-4 text-center">
-          <Typography variant="body2">
-            아직 회원이 아니신가요?{' '}
-            <Link href="/register" underline="hover">
-              회원가입
-            </Link>
-          </Typography>
-        </Box>
-      </Paper>
-    </Box>
+          <button
+            variant="contained"
+            color="primary"
+            className=""
+            onClick={handleLogin}
+          >
+            로그인
+          </button>
+    
+        </form>
+        <div className='find-account'>
+          <Link to="/find-id">아이디 찾기</Link>
+          <Link to="/find-password">비밀번호 찾기</Link>
+        </div>
+        <div className='register-wrap'>
+            <p><span>FIVO 회원이 아니신가요?</span></p>
+            <Link to="/register">회원가입</Link>
+        </div>
+      </div>
+    </section>
   );
 };
 

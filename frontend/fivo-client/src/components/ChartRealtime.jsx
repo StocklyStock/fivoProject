@@ -81,23 +81,18 @@ const ChartRealtime = () => {
   };
 
   return (
-    <div
-      className="realtime-wrapper"
-      style={{
-        maxWidth: "1200px",
-        margin: "0 auto",
-        padding: "2rem",
-        background: "#fff",
-        borderRadius: "12px",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-      }}
-    >
-      <h2 className="text-xl font-bold mb-4">📈 실시간 테마주 트리맵</h2>
+    <section className="chart-realtime ">
+      <div
+        className="realtime-wrapper"
 
-      <div style={{ width: "100%", overflowX: "auto" }}>
-        <Treemap data={data} onThemeClick={handleThemeClick} />
+      >
+        <h2 className="text-xl font-bold mb-4">📈 실시간 테마주 트리맵</h2>
+
+        <div style={{ width: "100%", overflowX: "auto" }}>
+          <Treemap data={data} onThemeClick={handleThemeClick} />
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

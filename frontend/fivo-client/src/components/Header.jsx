@@ -11,7 +11,6 @@ import './Header.css';
 
 const Header = () => {
   const user = useSelector((state) => state.auth.user);
-  const accessToken = useSelector((state) => state.auth.accessToken)
   const [language, setLanguage] = useState('ko');
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -19,6 +18,11 @@ const Header = () => {
   const [searchResults, setSearchResults] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -88,24 +92,21 @@ const Header = () => {
 
         <ul className="nav-right">
           <li className="search-box-wrapper">
-            <div className="search-box-wrapper" style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+           
               {searchOpen && (
-                <InputBase
+                <input
                   className="search-input"
                   placeholder="삼성전자 또는 005930"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}  // Enter 키 처리
-                  style={{
-                    marginRight: '10px',
-                    flex: 1,
-                  }}
+            
                 />
               )}
-              <IconButton onClick={toggleSearch} style={{ marginLeft: '5px' }}>
+              <button onClick={toggleSearch} >
                 <Search fontSize="small" color="action" />
-              </IconButton>
-            </div>
+              </button>
+           
 
             {searchResults.length > 0 && (
               <ul className="dropdown-results" style={{
@@ -124,11 +125,7 @@ const Header = () => {
                     key={idx}
                     onClick={() => handleSelectStock(item)}
                     className="dropdown-item"
-                    style={{
-                      padding: '10px',
-                      cursor: 'pointer',
-                      borderBottom: '1px solid #f0f0f0',
-                    }}
+             
                   >
                     {item.회사명} ({item.종목코드}) [{item.시장구분}]
                   </li>
@@ -149,33 +146,7 @@ const Header = () => {
               <option value="en">영어</option>
             </select>
           </li>
-          <li>
-          {user ? (
-              <Button
-                className="login-btn"
-                variant="outlined"
-                color="error"
-                onClick={() => {
-                  console.log('🚀 로그아웃 클릭됨');
-
-                  dispatch(logout());
-                  setTimeout(() => {
-                    navigate('/', { replace: true }); // replace 옵션: 히스토리 스택 정리
-                  }, 0);
-                }}
-              >
-                로그아웃
-              </Button>
-            ) : (
-                  <Button
-                    className="login-btn"
-                    variant="outlined"
-                    onClick={() => navigate('/login')}
-                  >
-                로그인
-                </Button>
-            )}
-          </li>
+          <li><Button className="login-btn" onClick={handleLogout}>로그인</Button></li>
         </ul>
 
         <Drawer anchor="left" open={menuOpen} onClose={toggleMenu}>
