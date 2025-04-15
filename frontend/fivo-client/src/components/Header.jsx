@@ -19,11 +19,6 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
-
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   const toggleSearch = () => {
@@ -146,7 +141,32 @@ const Header = () => {
               <option value="en">영어</option>
             </select>
           </li>
-          <li><Button className="login-btn" onClick={handleLogout}>로그인</Button></li>
+          <li>
+          {user ? (
+              <Button
+                className="login-btn"
+                variant="outlined"
+                color="error"
+                onClick={() => {
+                  console.log('🚀 로그아웃 클릭됨');
+                  dispatch(logout());
+                  setTimeout(() => {
+                    navigate('/', { replace: true });
+                  }, 0);
+                }}
+              >
+                로그아웃
+              </Button>
+            ) : (
+              <Button
+                className="login-btn"
+                variant="outlined"
+                onClick={() => navigate('/login')}
+              >
+                로그인
+              </Button>
+            )}
+          </li>
         </ul>
 
         <Drawer anchor="left" open={menuOpen} onClose={toggleMenu}>

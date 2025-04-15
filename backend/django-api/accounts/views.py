@@ -8,8 +8,12 @@ from django.utils import timezone
 from datetime import timedelta
 import logging
 
+from django.utils.crypto import get_random_string
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+
 from .models import CustomUser
-from .serializers import UserSerializer, UserListSerializer,UserUpdateSerializer,PasswordChangeSerializer
+from .serializers import UserSerializer, UserListSerializer,UserUpdateSerializer,PasswordResetCodeRequestSerializer,PasswordResetSerializer
 from .utils import send_verification_code_email
 
 logger = logging.getLogger(__name__)
@@ -37,7 +41,7 @@ class RegisterView(APIView):
         if serializer.is_valid():
             try:
                 user = serializer.save(is_verified=False)
-                send_verification_code_email(user)
+                send_verification_code_email(user,purpose="register")
                 return Response(
                     {"message": "회원가입이 완료되었습니다. 이메일 인증을 완료해주세요."},
                     status=status.HTTP_201_CREATED
@@ -48,22 +52,19 @@ class RegisterView(APIView):
         print("🛑 serializer errors:", serializer.errors)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# ✔️ 이메일 인증
+    
 class VerifyCodeView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
         email = request.data.get('email')
         code = request.data.get('code')
+        purpose = request.data.get('purpose', 'register')  # 기본값 'register'
 
         try:
             user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
             return Response({"error": "존재하지 않는 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
-
-        if user.is_verified:
-            return Response({"message": "이미 인증된 사용자입니다."}, status=status.HTTP_200_OK)
 
         if not user.email_verification_code or not user.code_created_at:
             return Response({"error": "인증 코드가 발급되지 않았습니다."}, status=status.HTTP_400_BAD_REQUEST)
@@ -74,12 +75,23 @@ class VerifyCodeView(APIView):
         if user.email_verification_code != code:
             return Response({"error": "❌ 인증번호가 일치하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
-        user.is_verified = True
+        # ✅ 목적에 따라 인증 처리 분기
+        if purpose == 'register':
+            if user.is_verified:
+                return Response({"message": "이미 인증된 사용자입니다."}, status=status.HTTP_200_OK)
+            user.is_verified = True
+        elif purpose == 'reset':
+            # 비밀번호 재설정에서는 아무 것도 안 바꿔도 됨
+            pass
+        else:
+            return Response({"error": "잘못된 요청입니다. 인증 목적이 지정되지 않았습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 공통적으로 코드는 무효화
         user.email_verification_code = None
         user.code_created_at = None
         user.save()
 
-        return Response({"message": "✅ 이메일 인증이 완료되었습니다."}, status=status.HTTP_200_OK)
+        return Response({"message": f"✅ 인증이 완료되었습니다."}, status=status.HTTP_200_OK)
 
 # ✔️ 로그인
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -120,6 +132,55 @@ class LoginView(APIView):
                 "role": "admin" if user.is_staff else "user"
             }
         }, status=status.HTTP_200_OK)
+        
+
+class GoogleLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        id_token_from_front = request.data.get("id_token")
+        print("📦 받은 id_token:", id_token_from_front)
+
+        if not id_token_from_front:
+            return Response({"error": "토큰이 없습니다."}, status=400)
+
+        try:
+            idinfo = id_token.verify_oauth2_token(
+                id_token_from_front,
+                google_requests.Request()
+            )
+
+            email = idinfo["email"]
+            name = idinfo.get("name", "")
+
+            user, created = CustomUser.objects.get_or_create(
+                email=email,
+                defaults={
+                    "nickname": name or "GoogleUser",
+                    "is_verified": True,
+                    "phone": "구글가입자",
+                }
+            )
+
+            if created:
+                user.set_password(get_random_string(30))
+                user.save()
+
+            refresh = RefreshToken.for_user(user)
+
+            return Response({
+                "message": "구글 로그인 성공",
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "user": {
+                    "email": user.email,
+                    "nickname": user.nickname,
+                    "role": "admin" if user.is_staff else "user"
+                }
+            })
+
+        except ValueError as e:
+            return Response({"error": "유효하지 않은 토큰입니다."}, status=400)
 
 class UpdateUserView(APIView):
     permission_classes = [IsAuthenticated]
@@ -147,15 +208,44 @@ class DeleteUserView(APIView):
         except Exception as e:
             logger.error(f"Delete Error: {str(e)}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+class SendPasswordResetCodeView(APIView):
+    permission_classes = [AllowAny]
 
-class ChangePasswordView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def put(self, request):
-        serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
+    def post(self, request):
+        serializer = PasswordResetCodeRequestSerializer(data=request.data)
         if serializer.is_valid():
+            email = serializer.validated_data['email']
+            try:
+                user = CustomUser.objects.get(email=email)
+            except CustomUser.DoesNotExist:
+                return Response({"error": "존재하지 않는 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # ✅ 인증 코드 전송 함수 호출
+            send_verification_code_email(user, purpose="reset")
+
+            return Response({"message": "비밀번호 재설정용 인증코드가 이메일로 전송되었습니다."}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class PasswordResetView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = PasswordResetSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                user = CustomUser.objects.get(email=serializer.validated_data['email'])
+            except CustomUser.DoesNotExist:
+                return Response({"error": "존재하지 않는 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # ✅ 인증코드 검증이 끝났는지 확인 (code가 None이면 통과했다고 판단)
+            if user.email_verification_code is not None:
+                return Response({"error": "이메일 인증이 완료되지 않았습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
             serializer.save()
-            return Response({"message": "비밀번호가 성공적으로 변경되었습니다."})
+            return Response({"message": "비밀번호가 성공적으로 재설정되었습니다."}, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # ✔️ 관리자 전용 - 유저 목록 조회

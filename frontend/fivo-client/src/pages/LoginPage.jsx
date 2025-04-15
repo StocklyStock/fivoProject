@@ -1,18 +1,10 @@
 import { useState } from 'react';
-// import {
-//   Box,
-//   TextField,
-//   Button,
-//   Typography,
-//   Paper,
-//   Alert,
-//   Link
-// } from '@mui/material';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../slices/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
-//import Logo from '../assets/fivo_logo.png'; // 로고 경로
+import { GoogleLogin } from '@react-oauth/google';
+import { toast } from 'react-toastify';
+import api from '../services/api';
 
 import googleLogo from '../assets/google-brand.svg';
 import naverLogo from '../assets/naver-brand.svg';
@@ -30,7 +22,7 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
     try {
-      const response = await axios.post('/api/accounts/login/', { email, password });
+      const response = await api.post('/api/accounts/login/', { email, password });
       const { access, refresh, user } = response.data;
 
       localStorage.setItem('accessToken', access);
@@ -51,72 +43,104 @@ const LoginPage = () => {
 
   return (
     <section className="login">
+      {error && <span className="login-error">{error}</span>}
 
-        {/* <Box className="flex flex-col items-center mb-6">
-          <Typography variant="h5" fontWeight="bold">
-            <img src={Logo} alt="FIVO 로고" className="w-48" />
-            </Typography>
-        </Box> */}
-      <div className='sns'>
-        <h2>간편 로그인</h2>
-        <ul>
-          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={googleLogo} alt="구글 회원가입" /></a></li>
-          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={naverLogo} alt="네이버 회원가입" /></a></li>
-          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={kakaoLogo} alt="카카오 회원가입" /></a></li>
-        </ul>
-      </div>
-
-      {error && <span class="login-error" severity="error">{error}</span>}
-
-      <div className='border-wrap'>
-        <form className="">
-          {/* <h2>
-            🔐 로그인
-          </h2> */}
-
+      <div className="border-wrap">
+        <form onSubmit={handleLogin}>
           <label htmlFor="email" className={`floating-label ${email ? 'active' : ''}`}>
             <span>아이디(이메일 주소)</span>
             <input
               id="email"
-              label="이메일"
               type="email"
-              margin="normal"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </label>
-          <label htmlFor="password" className={`floating-label ${password ? 'active': ''}`}>
-          <span>패스워드</span>
+
+          <label htmlFor="password" className={`floating-label ${password ? 'active' : ''}`}>
+            <span>패스워드</span>
             <input
               id="password"
-              label="비밀번호"
               type="password"
-              margin="normal"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </label>
-          {error && <span class="login-error" severity="error">{error}</span>}
 
-          <button
-            variant="contained"
-            color="primary"
-            className=""
-            onClick={handleLogin}
-          >
+          <button type="submit" className="">
             로그인
           </button>
-    
         </form>
-        <div className='find-account'>
-          <Link to="/find-id">아이디 찾기</Link>
-          <Link to="/find-password">비밀번호 찾기</Link>
+
+        <div className="sns">
+          <h2>간편 로그인</h2>
+          <ul>
+            <li>
+              <GoogleLogin
+                onSuccess={async (credentialResponse) => {
+                  const idToken = credentialResponse.credential;
+                  try {
+                    const res = await api.post('/api/accounts/google-login/', {
+                      id_token: idToken,
+                    });
+                    const { user, access, refresh } = res.data;
+
+                    localStorage.setItem('accessToken', access);
+                    localStorage.setItem('refreshToken', refresh);
+
+                    dispatch(loginSuccess({ user, access, refresh }));
+                    toast.success('✅ 구글 로그인 성공!');
+
+                    if (user.role === 'admin' || user.is_staff) {
+                      navigate('/admin');
+                    } else {
+                      navigate('/dashboard');
+                    }
+                  } catch (err) {
+                    toast.error('❌ 구글 로그인 실패');
+                  }
+                }}
+                onError={() => {
+                  toast.error('❌ 구글 로그인에 실패했습니다.');
+                }}
+              />
+            </li>
+            <li>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  console.log('SNS로그인 구현 예정!');
+                }}
+              >
+                <img src={naverLogo} alt="네이버 회원가입" />
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  console.log('SNS로그인 구현 예정!');
+                }}
+              >
+                <img src={kakaoLogo} alt="카카오 회원가입" />
+              </a>
+            </li>
+          </ul>
         </div>
-        <div className='register-wrap'>
-            <p><span>FIVO 회원이 아니신가요?</span></p>
-            <Link to="/register">회원가입</Link>
+
+        <div className="find-account">
+          <Link to="/find-id">아이디 찾기</Link>
+          <Link to="/reset-password" underline="hover">비밀번호 찾기</Link>
+        </div>
+        <div className="register-wrap">
+          <p>
+            <span>FIVO 회원이 아니신가요?</span>
+          </p>
+          <Link to="/register">회원가입</Link>
         </div>
       </div>
     </section>

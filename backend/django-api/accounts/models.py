@@ -29,7 +29,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     nickname = models.CharField(max_length=30)
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20,null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     email_verification_code = models.CharField(max_length=6, blank=True, null=True)
     code_created_at = models.DateTimeField(null=True, blank=True)

@@ -4,7 +4,7 @@ import time
 import requests
 from dotenv import load_dotenv
 
-load_dotenv(".env.development")
+load_dotenv()
 
 # 토큰 발급 + 캐싱
 

@@ -5,7 +5,7 @@ from dotenv import load_dotenv  # 추가
 from datetime import datetime, timedelta
 import os
 
-load_dotenv(dotenv_path=".env.development") 
+load_dotenv() 
 
 # ✅ DB 접속 정보
 DB_CONFIG = {
