@@ -64,7 +64,7 @@ def latest_news(stock_name):
         if title_tag and summary_tag:
             news_data.append(title_tag.get_text(strip=True) + " " + summary_tag.get_text(strip=True))
 
-    driver.quit()  # 드라이버는 꼭 닫아주자
+    driver.quit()
     return news_data
 
 if __name__ == "__main__":

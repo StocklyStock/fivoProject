@@ -6,8 +6,9 @@ import joblib
 import numpy as np
 import random
 from transformers import BertModel, BertTokenizer
-from .train_bert_5class import BERTClassifier  # 실제 장고용
-# from train_bert_5class import BERTClassifier  # 테스트용
+#from .train_bert_5class import BERTClassifier  # 실제 장고용
+#from train_bert_5class import BERTClassifier  # 테스트용
+from chatbot.mymodel.train_bert_5class import BERTClassifier
 
 # ✅ 랜덤 시드 고정 (결정적 결과)
 torch.manual_seed(42)
