@@ -141,72 +141,67 @@ const StockDetailPage = () => {
     : "주식 데이터 로딩 중";
 
   return (
-    <div style={{ padding: '20px' }}>
+    <section className='stock-detail-wrap'>
       {/* 상단 메뉴바 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-        <div style={{ display: 'flex', gap: '15px' }}>
-          <span
-            onClick={() => setSelectedMenu('시세분석')}
-            style={{ cursor: 'pointer', color: selectedMenu === '시세분석' ? 'blue' : 'black' }}
-          >
-            시세분석
-          </span>
-          <span
-            onClick={() => setSelectedMenu('리스크분석')}
-            style={{ cursor: 'pointer', color: selectedMenu === '리스크분석' ? 'blue' : 'black' }}
-          >
-            리스크분석
-          </span>
-        </div>
+      <div className="tab-menus">
+        <span
+          className={`tab-price ${selectedMenu==='시세분석'? 'btn-color':''}`}
+          onClick={() => setSelectedMenu('시세분석')}
+          // style={{ cursor: 'pointer', color: selectedMenu === '시세분석' ? 'blue' : 'black' }}
+        >
+          시세분석
+        </span>
+        <span
+          className={`tab-risk ${selectedMenu==='리스크분석'?'btn-color':''}`}
+          onClick={() => setSelectedMenu('리스크분석')}
+          // style={{ cursor: 'pointer', color: selectedMenu === '리스크분석' ? 'blue' : 'black' }}
+        >
+          리스크분석
+        </span>
       </div>
       
+      
       {/* 종목 제목 */}
-      <h1
-        style={{
-          fontSize: '36px',  // 글씨 크기를 크게
-          fontWeight: 'bold', // 볼드 처리
-          marginBottom: '20px', // 아래쪽 여백 추가
-        }}
-      >
-        {displayTitle}
-      </h1>
+      <h1>{displayTitle}</h1>
       
       {/* 메뉴에 따라 화면 내용 변경 */}
       {selectedMenu === '시세분석' && (
         <div>
           {/* 주식 요약 카드 */}
-          <StockSummaryCard data={summary} /> {/* StockSummaryCard에 데이터 전달 */}
+            <StockSummaryCard data={summary} /> {/* StockSummaryCard에 데이터 전달 */}
+            <section className='graph-wrap'>
+            {/* 차트 단위 선택 버튼 */}
+            <div className='unit-btn-wrap' style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontWeight: 500 }}>단위:</span>
+              {['daily', 'weekly', 'monthly'].map((unit) => {
+                const label = unit === 'daily' ? '일' : unit === 'weekly' ? '주' : '월';
+                const isActive = timeframe === unit;
 
-          {/* 차트 단위 선택 버튼 */}
-          <div style={{ display: 'inline-flex', gap: 8, alignItems: 'center', marginLeft: 20 }}>
-            <span style={{ fontWeight: 500 }}>단위:</span>
-            {['daily', 'weekly', 'monthly'].map((unit) => {
-              const label = unit === 'daily' ? '일' : unit === 'weekly' ? '주' : '월';
-              const isActive = timeframe === unit;
+                return (
+                  <button
+                    key={unit}
+                    onClick={() => setTimeframe(unit)}
+                    className={`unit-btn ${isActive? 'btn-color':''}`}
+                    // style={{
+                    //   padding: '6px 12px',
+                    //   borderRadius: 6,
+                    //   border: isActive ? '2px solid #1976d2' : '1px solid #ccc',
+                    //   background: isActive ? '#e3f2fd' : '#fff',
+                    //   color: isActive ? '#1976d2' : '#333',
+                    //   fontWeight: 500,
+                    //   cursor: 'pointer',
+                    //   minWidth: 40,
+                    // }}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
 
-              return (
-                <button
-                  key={unit}
-                  onClick={() => setTimeframe(unit)}
-                  style={{
-                    padding: '6px 12px',
-                    borderRadius: 6,
-                    border: isActive ? '2px solid #1976d2' : '1px solid #ccc',
-                    background: isActive ? '#e3f2fd' : '#fff',
-                    color: isActive ? '#1976d2' : '#333',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    minWidth: 40,
-                  }}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* D3CandlestickChart 컴포넌트 추가 - 실시간 캔들 차트 */}
-          <D3CandlestickChart key={timeframe} data={candles} symbol={symbol} timeframe={timeframe} />
+            {/* D3CandlestickChart 컴포넌트 추가 - 실시간 캔들 차트 */}
+            <D3CandlestickChart key={timeframe} data={candles} symbol={symbol} timeframe={timeframe} />
+          </section>
         </div>
       )}
 
@@ -309,7 +304,7 @@ const StockDetailPage = () => {
           )}
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

@@ -21,6 +21,7 @@ import AdminLayout from './components/AdminLayout';
 import MainLayout from './layouts/MainLayout';
 import FAQsPage from './pages/FAQsPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import AIRecommPage from './pages/AIRcommPage';
 
 // 라우터 설정
 const router = createBrowserRouter(
@@ -36,6 +37,8 @@ const router = createBrowserRouter(
 
       {/* ✅ 종목 상세 페이지 - 로그인/비로그인 모두 접근 가능 */}
       <Route path="stock/:stockId" element={<StockDetailPage />} />
+
+      <Route path="airecomm" element={<AIRecommPage />} />
 
       {/* ✅ 일반 사용자 대시보드 */}
       <Route

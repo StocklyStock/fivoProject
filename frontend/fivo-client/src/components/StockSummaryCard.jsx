@@ -29,78 +29,41 @@ const StockSummaryCard = ({ data }) => {
     .padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
   return (
-    <div
-      style={{
-        position: 'relative',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        background: '#f9f9fb',
-        borderRadius: 12,
-        padding: '20px 24px',
-        marginBottom: 24,
-        maxWidth: 900,
-        fontFamily: 'sans-serif',
-        boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-        minHeight: 120,
-      }}
-    >
-      {/* 왼쪽 - 현재가 + 등락률 */}
-      <div>
-        <div style={{ fontSize: 36, fontWeight: 'bold', color: '#111' }}>
-          {price.toLocaleString()}
-        </div>
-        <div style={{ fontSize: 16, fontWeight: 500, color }}>
-          {isUp ? '▲' : change < 0 ? '▼' : ''}{' '}
-          {Math.abs(change).toLocaleString()} ({sign}
-          {Math.abs(change_rate).toFixed(2)}%)
-        </div>
-      </div>
-
-      {/* 오른쪽 - 표 형식 정보 */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, auto)',
-          gap: '8px 24px',
-          fontSize: 14,
-        }}
-      >
-        <div style={{ color: '#999' }}>전일</div>
-        <div>{previous_close.toLocaleString()}</div>
-
-        <div style={{ color: '#999' }}>고가</div>
-        <div style={{ color: getColorByPrice(high) }}>{high.toLocaleString()}</div>
-
-        <div style={{ color: '#999' }}>시가</div>
-        <div style={{ color: getColorByPrice(open) }}>{open.toLocaleString()}</div>
-
-        <div style={{ color: '#999' }}>저가</div>
-        <div style={{ color: getColorByPrice(low) }}>{low.toLocaleString()}</div>
-
-        <div style={{ color: '#999' }}>거래량</div>
-        <div>{volume.toLocaleString()}</div>
-
-        <div style={{ color: '#999' }}>거래대금(원)</div>
-        <div>
-          {(trade_amount / 100000000).toFixed(0)}억{' '}
-          {Math.round((trade_amount % 100000000) / 10000)}만
-        </div>
-      </div>
-
+    <>
       {/* 기준 시각 */}
-      <div
-        style={{
-          position: 'absolute',
-          right: 16,
-          bottom: 1,  // 기존 값에서 간격을 늘려줍니다
-          fontSize: 12,
-          color: '#888',
-        }}
-      >
-        {formattedDate} 기준
-      </div>
-    </div>
+      <div className='standard-time'>{formattedDate} 기준</div>
+      <section className='stock-summery-card'>
+
+        {/* 왼쪽 - 현재가 + 등락률 */}
+        <div className="current-stock">
+          <div className="price">
+            {price.toLocaleString()}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 500, color }}>
+            {isUp ? '▲' : change < 0 ? '▼' : ''}{' '}
+            {Math.abs(change).toLocaleString()} ({sign}
+            {Math.abs(change_rate).toFixed(2)}%)
+          </div>
+        </div>
+
+        {/* 오른쪽 - 표 형식 정보 */}
+        <div className="stock-info">
+          <h1><strong>전일</strong> <span>{previous_close.toLocaleString()}</span></h1>
+          <h1><strong>고가</strong> <span style={{ color: getColorByPrice(high) }}>{high.toLocaleString()}</span></h1>
+          <h1><strong>시가</strong> <span style={{ color: getColorByPrice(open) }}>{open.toLocaleString()}</span></h1>
+          <h1><strong>저가</strong> <span style={{ color: getColorByPrice(low) }}>{low.toLocaleString()}</span></h1>
+          <h1><strong>거래량</strong> <span>{volume.toLocaleString()}</span></h1>
+          <h1>
+            <strong>거래대금(원)</strong>
+            <span>
+              {(trade_amount / 100000000).toFixed(0)}억{' '}
+              {Math.round((trade_amount % 100000000) / 10000)}만
+            </span>
+          </h1>
+          
+        </div>
+      </section>
+    </>
   );
 };
 

@@ -12,6 +12,7 @@ import './Header.css';
 const Header = () => {
   const user = useSelector((state) => state.auth.user);
   const [language, setLanguage] = useState('ko');
+  const [langOpen, setLangOpen] =useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -77,7 +78,8 @@ const Header = () => {
             <NavLink className="zen-dots-regular" to="/">FIVO</NavLink>
           </li>
           <li><NavLink onClick={() => handleNav('/admin/stats')} style={menuStyle}>테마 분석</NavLink></li>
-          <li><NavLink onClick={() => handleNav('/admin/users')} style={menuStyle}>AI 추천</NavLink></li>
+          {/* <li><NavLink onClick={() => handleNav('/admin/users')} style={menuStyle}>AI 추천</NavLink></li> */}
+          <li><NavLink to='/airecomm' style={menuStyle}>AI 추천</NavLink></li>
           <li>
             <IconButton sx={{ display: { xs: 'block', sm: 'none' }, ml: 'auto' }} onClick={toggleMenu}>
               <MenuIcon />
@@ -86,7 +88,7 @@ const Header = () => {
         </ul>
 
         <ul className="nav-right">
-          <li className="search-box-wrapper">
+          <li className={`search-box-wrapper ${searchOpen ? 'open':''}` }>
            
               {searchOpen && (
                 <input
@@ -98,7 +100,7 @@ const Header = () => {
             
                 />
               )}
-              <button onClick={toggleSearch} >
+              <button onClick={toggleSearch}  >
                 <Search fontSize="small" color="action" />
               </button>
            
@@ -129,18 +131,25 @@ const Header = () => {
             )}
           </li>
 
-          <li>
+          <li className='color-mode'>
             <Tooltip title="다크모드 토글">
               <IconButton><Brightness4 /></IconButton>
             </Tooltip>
           </li>
-          <li>
-            <FontAwesomeIcon icon={faGlobe} />
-            <select className="lang" value={language} onChange={(e) => setLanguage(e.target.value)}>
-              <option value="ko">한국어</option>
-              <option value="en">영어</option>
-            </select>
+          <li className='lang' onClick={() => setLangOpen((prevState) => !prevState)}>
+            <div>
+              <FontAwesomeIcon icon={faGlobe} />
+              {language === 'ko' ? '한국어':'영어'}
+            </div>
+            {langOpen &&(
+              <ul className="lang-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
+                <li onClick={() => setLanguage('ko')}>한국어</li>
+                <li onClick={() => setLanguage('en')}>영어</li>
+              </ul>
+            )}
+
           </li>
+
           <li>
           {user ? (
               <Button
