@@ -20,6 +20,8 @@ from .routes import (
 
 from fastapi import FastAPI
 from .routes import theme_route
+from .routes import predict_route
+from app.scheduler import start as start_scheduler
 
 app = FastAPI(
     docs_url="/api/docs",             # Swagger UI (기존: /docs → 변경)
@@ -27,8 +29,12 @@ app = FastAPI(
     openapi_url="/api/openapi.json"   # OpenAPI JSON (기존: /openapi.json → 변경)
 )
 
-
 app = FastAPI()
+
+# ✅ 앱 시작 시 스케줄러도 함께 시작
+@app.on_event("startup")
+def startup_event():
+    start_scheduler()
 
 # ✅ CORS 설정 (Vite 프론트엔드 허용)
 app.add_middleware(
@@ -48,7 +54,7 @@ app.include_router(volatility_route.router)
 app.include_router(supply_route.router)
 
 app.include_router(theme_route.router)  # 🆕 테마 뉴스 & 실시간 트리맵
-
+app.include_router(predict_route.router, prefix="/api")
 
 # ✅ 차트 데이터 API
 @app.get("/chart/{timeframe}")

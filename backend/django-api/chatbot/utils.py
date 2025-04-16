@@ -108,7 +108,7 @@ def get_financial_risks(stock_name: str):
         raise ValueError(f"[ERROR] '{stock_name}'에 해당하는 종목코드를 찾을 수 없습니다.")
 
     # 📡 FastAPI 요청 URL 패턴
-    BASE_API = "http://fastapi:8001/stock"
+    BASE_API = "http://localhost:8000/stock"
     endpoints = {
         "financial": {
             "url": f"{BASE_API}/financial?query={stock_code}",

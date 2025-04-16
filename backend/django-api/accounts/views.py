@@ -153,18 +153,24 @@ class GoogleLoginView(APIView):
             email = idinfo["email"]
             name = idinfo.get("name", "")
 
-            user, created = CustomUser.objects.get_or_create(
-                email=email,
-                defaults={
-                    "nickname": name or "GoogleUser",
-                    "is_verified": True,
-                    "phone": "구글가입자",
-                }
-            )
-
-            if created:
+            # ✅ 1. 먼저 탈퇴한 사용자 인지 확인
+            existing_user = CustomUser.objects.filter(email=email).first()
+            if existing_user:
+                if not existing_user.is_active:
+                    return Response({"error": "이미 탈퇴한 사용자입니다."}, status=403)
+                user = existing_user
+                created = False
+            else:
+                # ✅ 2. 없으면 새로 생성
+                user = CustomUser.objects.create(
+                    email=email,
+                    nickname=name or "GoogleUser",
+                    is_verified=True,
+                    phone="구글가입자",
+                )
                 user.set_password(get_random_string(30))
                 user.save()
+                created = True
 
             refresh = RefreshToken.for_user(user)
 
@@ -179,7 +185,7 @@ class GoogleLoginView(APIView):
                 }
             })
 
-        except ValueError as e:
+        except ValueError:
             return Response({"error": "유효하지 않은 토큰입니다."}, status=400)
 
 class UpdateUserView(APIView):
