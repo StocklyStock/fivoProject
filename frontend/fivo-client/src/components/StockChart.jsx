@@ -10,12 +10,12 @@ const D3CandlestickChart = ({ data, symbol, timeframe }) => {
     // 차트를 그리기 전에 이전의 모든 요소를 제거
     d3.select(svgRef.current).selectAll('*').remove();
 
-    const margin = { top: 20, right: 50, bottom: 80, left: 60 };
+    const margin = { top:20, right: 0, bottom: 30, left: 50 };
     const width = 1000;  // 차트 너비
     const height = 600;  // 차트 높이
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
-    const volumeHeight = 120;  // 볼륨 차트 높이
+    const volumeHeight = 100;  // 볼륨 차트 높이
 
     const parseDate = d3.timeParse('%Y%m%d');
     const candles = data.map((d) => ({
@@ -214,7 +214,9 @@ const D3CandlestickChart = ({ data, symbol, timeframe }) => {
   }, [data]);
 
   return (
-    <svg ref={svgRef}></svg>
+    <div className='scroll-wrap'>
+      <svg ref={svgRef}></svg>
+    </div>
   );
 };
 

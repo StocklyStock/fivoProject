@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,6 +28,7 @@
 body {
   background-color: #fff;
   font-size: 16px;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 header {
@@ -83,31 +85,71 @@ header nav ul.nav-right svg {
   color: #484848;
 }
 
-header nav ul.nav-right select.lang {
-  border-radius: 2px;
-  background-color: #fff;
-  cursor: pointer;
-  padding: 8px 10px;
-  border: 1px solid #E9E9E9;
-  background-color: #fff;
-}
+
 .search-box-wrapper{
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
   border:1px solid #E9E9E9;
-  border-radius: 3px;
+  border-radius: 50%;
   position: relative;
   background-color: #EFEFEF;
   border:1px solid #E9E9E9;
   padding: 8px;
- 
+  height: 42px;
+  width: 42px;
 }
+
+.search-box-wrapper.open{  border-radius: 3px; width: 100%;  justify-content: flex-end;}
 .search-input{background-color: transparent; outline: none; color: #333;  width: 100%;}
 
 .search-box-wrapper button{display: flex;justify-content: center; align-items: center;}
 
+.search-box-wrapper ul.dropdown-results{scrollbar-width: thin;scrollbar-color: #FEC5C6 #F6F6F6;}
 
-header nav ul.nav-right select.lang option {
+/* WebKit 스크롤 커스터마이징 */
+.search-box-wrapper ul.dropdown-results::-webkit-scrollbar {
+  width: 10px;
+}
+
+.search-box-wrapper ul.dropdown-results::-webkit-scrollbar-track {
+  background: #F6F6F6;
+  border-radius: 10px;
+}
+
+.search-box-wrapper ul.dropdown-results::-webkit-scrollbar-thumb {
+  background: #FEC5C6;
+  border-radius: 10px;
+}
+
+.search-box-wrapper ul.dropdown-results::-webkit-scrollbar-thumb:hover {
+  background: #FEC5C6;
+}
+
+.color-mode{background-color: #EFEFEF; border-radius: 50%;
+  border:1px solid #E9E9E9;}
+
+header nav ul.nav-right .lang {
+  border-radius: 2px;
+  background-color: #fff;
+  cursor: pointer;
+  padding: 8px 2px;
+  border: 1px solid #E9E9E9;
+  background-color: #fff;
+  position: relative;
+  width: 100%;
+  max-width: 90px;
+}
+header nav ul.nav-right .lang > div{font-size: 14px; color: #737373; display: flex; justify-content: center; gap:6px; align-items: center; width: 100%;}
+header nav ul.nav-right .lang > div svg{ color: #484848; font-size: 18px;}
+header nav ul.nav-right .lang .lang-select{display: flex; flex-direction: column; width: 100%;border: 1px solid #E9E9E9;
+  position: absolute;
+  bottom: -52px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+header nav ul.nav-right .lang .lang-select li {
+  padding: 2px 5px;
   width: 100%;
   background-color: #fff;
   cursor: pointer;
@@ -126,8 +168,10 @@ header nav ul .login-btn {
   color: #FA7260;
   border-radius: 4px;
   font-size: 15px;
-  padding: 8px 16px;
+  padding: 8px 0px;
   transition: 0.2s;
+  max-width: 80px;
+  width: 100%;
 }
 
 header nav ul .login-btn:hover {
@@ -136,14 +180,6 @@ header nav ul .login-btn:hover {
 }
 
 
-
-
-.main-banne {
-  max-width: 1200px;
-  width: 100%;
-  margin: auto;
-  background-color: #fff;
-}
 
 .main-banner,
 .main-banner .swiper,
@@ -164,7 +200,7 @@ header nav ul .login-btn:hover {
 
 /*2025-04-15 메인 페이지 작업 - 박홍덕 - start */
 .chart-wrap{  position: relative;
-  bottom: 200px; z-index: 1;gap: 20px; display: flex; justify-content: space-between;
+  bottom: 100px; z-index: 1;gap: 20px; display: flex; justify-content: space-between;
   max-width: 1630px;
   margin:auto;
   width: 100%;}
@@ -178,9 +214,54 @@ header nav ul .login-btn:hover {
   z-index: 1;
 
 }
+.card-wrapper{
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+}
 
-.recommendation{  width: 20%; display:flex; flex-direction: column;
-gap: 20px;}
+
+.card-wrapper:hover .card-inner {
+  transform: rotateY(180deg);
+}
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 14px;
+  padding: 35px;
+  box-shadow: 0 0 6px rgba(100, 100, 100, 0.21);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 앞면 */
+.card-front {
+  background: linear-gradient(135deg, #FA7260 0%, #FF986C);
+  color: #fff;
+}
+
+/* 뒷면 */
+.card-back {
+  background-color: #fff;
+  color: #FA7260;
+  transform: rotateY(180deg);
+  border:1px solid #FFECEA;
+  box-shadow: 0 0 6px rgba(251, 135, 155, 0.31);
+}
+/* .card-inner{display:flex; flex-direction: column;
+  gap: 20px; position: relative;} */
+  .card-inner{position: relative;
+  width: 100%;
+height: 100%;
+transition: transform 0.8s;
+transform-style: preserve-3d;
+}
+
+.recommendation{  width: 20%; }
+
 .recommendation h1{font-size: 21px; color:#fff; font-weight: bold;
   padding-bottom: 15px;
   border-bottom:
@@ -188,7 +269,7 @@ gap: 20px;}
 display: flex;
   justify-content: space-between;
   align-items: baseline;}
-.recommendation > div{
+.recommendation > div > div > div{
   background-color: #fff;
   box-shadow: 0 0 6px rgba(100, 100, 100, 0.21);
   border-radius:14px;
@@ -197,8 +278,11 @@ display: flex;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(135deg, #FA7260 0%, #FF986C);
 }
+
+
+
+ .current-recomm{  background: linear-gradient(135deg, #FA7260 0%, #FF986C);}
 .current-recomm span, .current-recomm strong,
 .current-recomm div{color:#fff;}
 .current-recomm h2{margin-top: 35px;}
@@ -208,20 +292,26 @@ display: flex;
   align-items: baseline;
 }
 .current-recomm h2 strong{  font-size: 25px;}
-  .current-recomm h3 {line-height: 1;}
+.current-recomm h3 {line-height: 1;}
 .current-recomm h3 strong{font-size: 35px;color:#ffffff; }
 
 
-.recommendation > div.go-to-ai {color: #FA7260;
+div.go-to-ai {
+  color: #FA7260;
   border:1px solid #FFECEA;
   background-color: #fff;
-  box-shadow: 0 0 6px rgba(251, 135, 155, 0.31);}
-.recommendation > div.go-to-ai p{text-align: center; word-break: break-all;font-size: 20px;
-  color: #fff; }
-.recommendation > div.go-to-ai a{display: block; width: 100%; border-radius: 50px; 
-  background: #FA7260; 
-  background: linear-gradient(90deg, #FA7260, #FF986C);
-  text-align: center; padding: 14px 0;
+  box-shadow: 0 0 6px rgba(251, 135, 155, 0.31);
+}
+div.go-to-ai p{
+  text-align: center; 
+  word-break: break-all;
+  font-size: 20px;
+  color: #FA7260; 
+}
+div.go-to-ai a{display: block; width: 100%; border-radius: 50px; 
+background: #FA7260; 
+background: linear-gradient(90deg, #FA7260, #FF986C);
+text-align: center; padding: 14px 0;
 color: #fff;}
 
 
@@ -268,9 +358,15 @@ color: #fff;}
   content: "";
   display: block;
   background-color: #FF9987;
-  height: 5px;
   width: 100%;
+  height: 2px;
   margin-bottom: 2px;
+  background-color: #FF9987;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: polygon(0 0, 98.4% 0, 99% 100%, 0% 100%);
 }
 
 .main-listings>div .headline-wrap h2 span {
@@ -279,8 +375,23 @@ color: #fff;}
   color: #fff;
   font-size: 21px;
   word-spacing: -3px;
-  font-weight: bold;
-  padding: 5px 36px;
+  font-weight: 600;
+  padding: 5px 20px 5px 36px;
+  position: relative;
+}
+
+.main-listings>div .headline-wrap h2 span:after{
+  content: "";
+  display: inline-block;
+  width: 0;
+  padding:0;
+  border-bottom:0px solid transparent;
+  border-left:18px solid #FF9987;
+  border-right:0px solid transparent;
+  position: absolute;
+  right: -18px;
+  border-top:41px solid transparent;
+  bottom: 0;
 }
 
 .main-listings>div .headline-wrap button {
@@ -307,6 +418,7 @@ color: #fff;}
   font-size: 18px;
   ;
 }
+.main-listings>div .list-wrap ul li:first-child{border-top: 1px solid #eee;}
 
 
 .main-listings>div .list-wrap ul {
@@ -471,18 +583,78 @@ right: 0; top: 50%; transform: translateY(-50%);}
   font-size: 26px; padding: 10px 21px;letter-spacing: 29%; margin-top: 35px;}
   /*2025-04-11 로그인, 회원가입 페이지 작업 - 박홍덕 - end */
 
+/*2025-04-15 주식 상세종목 페이지 작업 - 박홍덕 - start */
+/*2025-04-16 ai추천 페이지 작업 - 박홍덕 - start */
+.stock-detail-wrap,
+.ai-recomm-wrap{max-width: 1200px;width: 100%; margin: 80px auto 124px auto;}
+
+.stock-detail-wrap .tab-menus,
+.ai-recomm-wrap .tab-menus{display: flex; width: 100%; gap: 8px; margin-bottom: 10px;}
+
+.stock-detail-wrap .tab-menus > span,
+.ai-recomm-wrap .tab-menus > span{
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #FA7260;
+  background:#fff;
+  color: #FA7260;
+  font-weight: 500;
+  cursor: pointer;
+}
+.stock-detail-wrap .tab-menus > span.btn-color,
+.ai-recomm-wrap .tab-menus > span.btn-color{background-color: #FA7260; color: #fff;}      
+
+.stock-detail-wrap .stock-summery-card,
+.ai-recomm-wrap .stock-summery-card{display: flex; justify-content: space-between; max-width: 1200px; margin: auto;
+border:1px solid #E9E9E9; width: 100%; border-radius: 14px; padding: 28px 40px;
+box-shadow: 0 0 4px rgba(102, 102, 102, 0.12);}
+
+.stock-detail-wrap > h1,
+.ai-recomm-wrap > h1{ font-size: 36px; font-weight: bold; color: #222222;}
+
+.price {font-size: 40px; font-weight: 600; color: #111;font-family: "Zen Dots", sans-serif;}
+.stock-detail-wrap .stock-summery-card .stock-info,
+.ai-recomm-wrap .stock-summery-card .stock-info{display: grid;width: 70%;
+grid-template-columns: repeat(3, 32%); gap:6px 24px; font-size: 14px;}
+
+.stock-detail-wrap .stock-summery-card .stock-info h1,
+.ai-recomm-wrap  .stock-summery-card .stock-info h1  {display: flex; justify-content: flex-start; align-items: center; gap: 18px;}
+.standard-time{color:#C7C7C7; font-size: 14px; margin-bottom: 5px;text-align: right; width: 100%;}
+
+.stock-detail-wrap .stock-summery-card .stock-info h1 strong,
+.ai-recomm-wrap .stock-summery-card .stock-info h1 strong{border: 1px solid #E9E9E9; border-radius: 3px; color: #222222;
+padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align: center; font-weight: 400;}
+
+.current-stock{width: 30%;}
+.graph-wrap{ padding: 50px 33px; box-shadow: 0 0 4px rgba(102, 102, 102, 0.12);border:1px solid #E9E9E9;border-radius: 14px; margin-top: 16px; }
+.unit-btn{padding: 6px 12px;
+      border-radius: 6px;
+      border:1px solid #FA7260 ;
+      background: #fff;
+      color: #FA7260;
+      font-weight: 500;
+      cursor: pointer;
+}
+  .graph-wrap .scroll-wrap{width: 100%; }
+
+.graph-wrap svg{margin: auto;}
+/*2025-04-16 ai추천 페이지 작업 - 박홍덕 - end */
+/*2025-04-15 주식 상세종목 페이지 작업 - 박홍덕 - end */
+
+
+
+
+
+
 /*2025-04-11 자주묻는 페이지 작업 - 박홍덕 - start */
 .faq-listings{width: 100%; margin: 114px auto 124px auto;}
-.faq-listings ul{max-width: 900px; width:100%; margin:auto;border: 1px solid #D9D9D9;box-shadow: 0 0 5px rgba(0, 0, 0, 0.13);} 
+.faq-listings ul{max-width: 900px; width:100%; margin:auto;border: 1px solid #D9D9D9;box-shadow: 0 0 5px rgba(27, 3, 3, 0.13);} 
 .faq-listings ul li{border-bottom: 1px solid #D9D9D9; padding: 0 0px; cursor: pointer; }
 .faq-listings ul li:last-child{border-bottom: none;}
 .faq-listings ul li h1{font-size: 18px;color:#222; font-weight: bold; padding: 20px;display: flex; justify-content: space-between;}
 .faq-listings ul li > div{height: 0; overflow: hidden; transition: height 0.3s;}
 .faq-listings ul li > div.menu-open{height: fit-content;border-top: 1px solid #D9D9D9;padding: 20px; }
-
-
 /*2025-04-11 자주묻는 페이지 작업 - 박홍덕 - end  */
-
 
 /*2025-04-11 반응형 작업 - 박홍덕 - start */
 
@@ -495,14 +667,44 @@ right: 0; top: 50%; transform: translateY(-50%);}
 @media (max-width:1200px){
   footer > div{padding:30px 10px;gap: 10px;}  
   footer > div > nav{gap: 70px;}
+  .main-listings{padding: 80px 10px; gap: 30px;}
+  .stock-detail-wrap{padding: 0 10px;}
+}
+
+@media (max-width:1160px){
+  .stock-detail-wrap .stock-summery-card .stock-info{gap: 6px 14px;}
+  .price{font-size: 36px;}
+  .graph-wrap .scroll-wrap{overflow-x: scroll;scrollbar-width: thin;
+    scrollbar-color: #FEC5C6 #F6F6F6;}
+  .graph-wrap .scroll-wrap::-webkit-scrollbar {width: 10px;}
+  .graph-wrap .scroll-wrap::-webkit-scrollbar-track {background: #F6F6F6;border-radius: 10px;}
+  .graph-wrap .scroll-wrap::-webkit-scrollbar-thumb {background: #FEC5C6;border-radius: 10px;}
+  .graph-wrap .scroll-wrap::-webkit-scrollbar-thumb:hover {background: #FEC5C6;}
+
 }
 @media (max-width:900px){
   .FAQ-wrap{padding: 0 10px;}
+
 }
 @media (max-width:768px){
+  .main-listings {flex-wrap: wrap;}
+  .main-listings > div{width:100%;}
   footer > div > div{flex-wrap: wrap;width: 100%; gap:10px; width: 50%;}
   .footer-logo{width: 100%;}
+
+  .stock-detail-wrap .stock-summery-card{flex-wrap: wrap;}
+  .stock-detail-wrap .stock-summery-card .stock-info{width: 100%;grid-template-columns: repeat(2, 50%);}
+  .price{font-size: 40px;}
+
+  .current-stock{width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:20px;
+    margin-bottom: 15px;
+  }
 }
+
 @media (max-width:498px){
   .login, .register{padding: 0 10px;}
   .border-wrap{padding: 66px 15px;}
@@ -526,6 +728,7 @@ right: 0; top: 50%; transform: translateY(-50%);}
 .register-btn.inactivated{background-color: #AAAAAA;}
 .w1200{width:100%; max-width: 1200px; margin: auto;}
 .brand-bg-color{background-color: #FDFBF9;}
+.btn-color{background-color: #FA7260; color:#fff;}
 
 /* 애니메이션 로고 등은 그대로 유지 */
 .logo {
