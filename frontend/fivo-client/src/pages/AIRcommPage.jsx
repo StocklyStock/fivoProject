@@ -1,7 +1,16 @@
-import {useState}  from "react";
+import {useState,useEffect}  from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { getRecommendedStocks } from '../slices/recommendRandom5Slice';
 
 const AIRecommPage = () => {
+    const dispatch = useDispatch();
     const [selectedMenu, setSelectedMenu] = useState("TOP5");
+    const { stocks, loading, error } = useSelector((state) => state.recommend5);
+
+    useEffect(() => {
+        dispatch(getRecommendedStocks());
+      }, [dispatch]);
+
     return (
         <section className="ai-recomm-wrap">
             <div className="tab-menus">
@@ -62,9 +71,22 @@ const AIRecommPage = () => {
                         5000만
                         </span>
                     </h1>
-                    
                     </div>
                     </section>
+                    {selectedMenu === 'TOP5' && (
+                        <>
+                            <h2>🔥 AI 추천 종목</h2>
+                            {loading && <p>불러오는 중...</p>}
+                            {error && <p>에러: {error}</p>}
+                            <ul>
+                            {stocks.map((stock, idx) => (
+                                <li key={idx}>
+                                {stock.company_name} ({stock.stock_code})
+                                </li>
+                            ))}
+                            </ul>
+                        </>
+                    )}
             </>
         </section>
     );
