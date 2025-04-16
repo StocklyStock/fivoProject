@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chatbot',
     'drf_yasg',
-    'favorites',
+    # 'favorites',
+    'aiRecommendRandom5',
 ]
 
 MIDDLEWARE = [

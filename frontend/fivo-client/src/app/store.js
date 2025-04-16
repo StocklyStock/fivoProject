@@ -5,7 +5,8 @@ import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
 import { combineReducers } from 'redux'
 import { thunk } from 'redux-thunk' // ✅ 여기 수정
-import themeReducer from "../slices/themeSlice"; 
+import themeReducer from "../slices/themeSlice";
+import recommendRandomReducer from "../slices/recommendRandom5Slice";
 
 const persistConfig = {
   key: 'root',
@@ -16,6 +17,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authReducer,
   theme: themeReducer,
+  recommend5: recommendRandomReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
