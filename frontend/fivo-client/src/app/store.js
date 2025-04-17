@@ -7,6 +7,7 @@ import { combineReducers } from 'redux'
 import { thunk } from 'redux-thunk' // ✅ 여기 수정
 import themeReducer from "../slices/themeSlice";
 import recommendRandomReducer from "../slices/recommendRandom5Slice";
+import favoritesReducer from '../slices/favoriteSlice'
 
 const persistConfig = {
   key: 'root',
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   theme: themeReducer,
   recommend5: recommendRandomReducer,
+  favorites: favoritesReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
