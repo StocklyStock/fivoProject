@@ -25,6 +25,8 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
+def default_owned_stocks():
+    return ['삼성전자']
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
@@ -40,7 +42,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     # ✅ 가입일 필드 추가 (핵심!)
     date_joined = models.DateTimeField(auto_now_add=True)
-
+    
+    owned_stocks = models.JSONField(default=default_owned_stocks, blank=True)  # ['005930', '000660'] 같은 구조
+    trading_frequency = models.PositiveIntegerField(default=28)  # 0~10 정도의 빈도 기준 (ex. 일주일에 몇 번)
+    investment_period_months = models.PositiveIntegerField(default=30)  # 투자기간 (ex. 24개월)
+    investment_style = models.CharField(default="안정형")
+    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nickname', 'phone']
 
