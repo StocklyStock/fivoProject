@@ -67,9 +67,72 @@ def latest_news(stock_name):
     driver.quit()
     return news_data
 
+def fetch_structured_news(stock_name):
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    DATA_PATH = os.path.join(BASE_DIR, "data", "stock_list.json")
+
+    with open(DATA_PATH, "r", encoding="utf-8") as f:
+        stock_data = json.load(f)
+
+    stock_code = None
+    for item in stock_data:
+        if item["회사명"] == stock_name:
+            stock_code = item["종목코드"]
+            break
+
+    if not stock_code:
+        print(f"❌ 종목명 '{stock_name}'을 찾을 수 없습니다.")
+        return []
+
+    url = f'https://finance.daum.net/quotes/A{stock_code}#news/stock'
+
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("window-size=1920x1080")
+    options.add_argument("user-agent=Mozilla/5.0")
+
+    driver = webdriver.Chrome(options=options)
+    driver.get(url)
+
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "tableB"))
+        )
+    except:
+        print("뉴스 요소 로딩 실패")
+        driver.quit()
+        return []
+
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    news_list = soup.find("div", class_="tableB").find_all("li")
+
+    news_data = []
+
+    for news in news_list:
+        title_tag = news.find("a", class_="tit")
+        summary_tag = news.find("a", class_="txt")
+
+        if title_tag and summary_tag:
+            news_data.append({
+                "title": title_tag.get_text(strip=True),
+                "summary": summary_tag.get_text(strip=True),
+                "url": title_tag.get("href")
+            })
+
+    driver.quit()
+    return news_data
+
 if __name__ == "__main__":
     # 종목이름을 불러와서 종목 코드를 불러온뒤 latest_news에 넣는다
-    news = latest_news("삼성전자")
+    # news = latest_news("삼성전자")
+    # for n in news:
+    #     print("📰", n)
+    # print(len(news))
+    
+    news = fetch_structured_news("삼성전자")
     for n in news:
         print("📰", n)
     print(len(news))

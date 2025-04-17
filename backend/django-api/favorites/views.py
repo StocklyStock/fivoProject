@@ -30,4 +30,15 @@ class FavoriteStockViewSet(viewsets.ModelViewSet):
 
         favorite.delete()
         return Response({"detail": f"{favorite.stock_code} 즐겨찾기에서 삭제됨 ✅"}, status=204)
-        
+
+class DeleteFavoriteByCodeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, stock_code):
+        user = request.user
+        try:
+            fav = FavoriteStock.objects.get(user=user, stock_code=stock_code)
+            fav.delete()
+            return Response({"detail": f"{stock_code} 즐겨찾기 삭제됨 ✅"}, status=204)
+        except FavoriteStock.DoesNotExist:
+            return Response({"error": "해당 즐겨찾기 항목이 없습니다."}, status=404)

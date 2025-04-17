@@ -29,6 +29,15 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+    
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id', 'email', 'nickname', 'phone',
+            'investment_style', 'investment_period_months',
+            'trading_frequency', 'owned_stocks',
+        ]
 
 # 관리자용 유저 리스트 시리얼라이저
 class UserListSerializer(serializers.ModelSerializer):

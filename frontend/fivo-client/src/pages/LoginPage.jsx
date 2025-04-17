@@ -22,22 +22,42 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
     try {
-      const response = await api.post('/api/accounts/login/', { email, password });
-      const { access, refresh, user } = response.data;
+      // ✅ 1. 로그인 요청
+      const res = await api.post('/api/accounts/login/', { email, password });
+      const { access, refresh } = res.data;
 
+      // ✅ 2. 토큰 저장
       localStorage.setItem('accessToken', access);
       localStorage.setItem('refreshToken', refresh);
 
-      dispatch(loginSuccess({ user, access, refresh }));
+      // ✅ 3. 유저 정보 재요청 (/me) - Authorization 헤더 직접 추가
+      const meRes = await api.get('/api/accounts/me/', {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
 
-      if (user.role === 'admin' || user.is_staff) {
+      console.log('✅ 유저 정보:', meRes.data);
+
+      // ✅ 4. Redux 저장
+      dispatch(loginSuccess({
+        user: meRes.data,
+        access,
+        refresh,
+      }));
+
+      toast.success('✅ 로그인 성공!');
+
+      // ✅ 5. 이동
+      if (meRes.data.role === 'admin' || meRes.data.is_staff) {
         navigate('/admin');
       } else {
         navigate('/dashboard');
       }
+
     } catch (err) {
       console.error(err);
-      setError('로그인 실패! 이메일 또는 비밀번호를 확인해주세요.');
+      setError('❌ 로그인 실패! 이메일 또는 비밀번호 확인해주세요.');
     }
   };
 
@@ -78,34 +98,54 @@ const LoginPage = () => {
           <h2>간편 로그인</h2>
           <ul>
             <li>
-              <GoogleLogin
-                onSuccess={async (credentialResponse) => {
-                  const idToken = credentialResponse.credential;
-                  try {
-                    const res = await api.post('/api/accounts/google-login/', {
-                      id_token: idToken,
-                    });
-                    const { user, access, refresh } = res.data;
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                const idToken = credentialResponse.credential;
+                try {
+                  // 1️⃣ 구글 로그인 요청
+                  const res = await api.post('/api/accounts/google-login/', {
+                    id_token: idToken,
+                  });
 
-                    localStorage.setItem('accessToken', access);
-                    localStorage.setItem('refreshToken', refresh);
+                  const { access, refresh } = res.data;
 
-                    dispatch(loginSuccess({ user, access, refresh }));
-                    toast.success('✅ 구글 로그인 성공!');
+                  // 2️⃣ 토큰 저장
+                  localStorage.setItem('accessToken', access);
+                  localStorage.setItem('refreshToken', refresh);
 
-                    if (user.role === 'admin' || user.is_staff) {
-                      navigate('/admin');
-                    } else {
-                      navigate('/dashboard');
-                    }
-                  } catch (err) {
-                    toast.error('❌ 구글 로그인 실패');
+                  // 3️⃣ 유저 정보 가져오기 (Authorization 수동 설정)
+                  const meRes = await api.get('/api/accounts/me/', {
+                    headers: {
+                      Authorization: `Bearer ${access}`,
+                    },
+                  });
+
+                  // 4️⃣ Redux 저장
+                  dispatch(loginSuccess({
+                    user: meRes.data,
+                    access,
+                    refresh,
+                  }));
+
+                  toast.success('✅ 구글 로그인 성공!');
+
+                  // 5️⃣ 이동
+                  if (meRes.data.role === 'admin' || meRes.data.is_staff) {
+                    navigate('/admin');
+                  } else {
+                    navigate('/dashboard');
                   }
-                }}
-                onError={() => {
-                  toast.error('❌ 구글 로그인에 실패했습니다.');
-                }}
-              />
+
+                } catch (err) {
+                  console.error('❌ 구글 로그인 실패:', err);
+                  toast.error('❌ 구글 로그인 실패!');
+                }
+              }}
+              onError={() => {
+                toast.error('❌ 구글 로그인에 실패했습니다.');
+              }}
+            />
+
             </li>
             <li>
               <a

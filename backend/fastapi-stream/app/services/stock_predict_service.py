@@ -31,7 +31,7 @@ DJANGO_CRAWLING_PATH = os.path.join(MYMODEL_PATH, "stock_crawling.py")
 
 # ✅ 함수 불러오기
 predict = import_from_file(DJANGO_PREDICT_PATH, "predict")
-latest_news = import_from_file(DJANGO_CRAWLING_PATH, "latest_news")
+latest_news = import_from_file(DJANGO_CRAWLING_PATH, "fetch_structured_news")
 
 # ✅ 핵심 함수: 예측 수행
 def predict_high_volatility_stocks():
@@ -45,27 +45,42 @@ def predict_high_volatility_stocks():
     for stock in stocks:
         company_name = stock["회사명"]
         stock_code = stock["종목코드"]
-        news_list = latest_news(company_name)
+        news_list = latest_news(company_name)  # 이제 dict list임
 
         if not news_list:
             continue
 
-        news_probs_list = []
+        all_probs = []
+        class_3_articles = []
+
         for article in news_list:
-            preds, probs = predict(article)
+            # 🧠 예측 입력용 텍스트 구성
+            text = article["title"] + " " + article["summary"]
+            preds, probs = predict(text)
             pred_class = preds[0]
-            prob_dist = probs[0][:4]  # 4개 클래스 확률만 사용
+            prob_dist = probs[0][:4]
 
-            news_probs_list.append(prob_dist)
+            all_probs.append(prob_dist)
 
-        # 평균 확률로 최종 클래스 선택
-        avg_probs = [sum(p[i] for p in news_probs_list) / len(news_probs_list) for i in range(4)]
+            if pred_class == 3:
+                class_3_articles.append({
+                    "title": article["title"],
+                    "summary": article["summary"],
+                    "url": article["url"],
+                    "prob": float(prob_dist[3])  # 강한 상승이라고 예측한 확률
+                })
+
+        if not all_probs:
+            continue
+
+        avg_probs = [sum(p[i] for p in all_probs) / len(all_probs) for i in range(4)]
         predicted_class = avg_probs.index(max(avg_probs))
 
         results.append({
             "stock_code": stock_code,
             "company": company_name,
             "class_prediction": predicted_class,
+            "positive_news": class_3_articles
         })
 
     return results
@@ -73,24 +88,27 @@ def predict_high_volatility_stocks():
 def run_daily_prediction():
     print("📌 [예측 시작] 고변동성 종목 예측 중...")
     session = SessionLocal()
-    
+
     session.query(PredictedStock).delete()
     session.commit()
-    
+
     results = predict_high_volatility_stocks()
 
     for r in results:
+
+        # ✅ DB 저장
         session.add(PredictedStock(
             stock_code=r["stock_code"],
             company_name=r["company"],
             predicted_label=r["class_prediction"],
+            positive_news=r["positive_news"],
             created_at=datetime.now()
         ))
 
     session.commit()
     session.close()
     print("✅ [예측 완료] DB에 저장됨.")
-
+    
 # ✅ 단독 실행 확인용
 if __name__ == "__main__":
     run_daily_prediction()
