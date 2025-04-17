@@ -20,7 +20,7 @@ import {
 import { BarChart2, Bell, UserCheck } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
-import { updateUserInfo, deleteAccount, getCurrentUser } from '../services/user';
+import { updateUserInfo, deleteAccount, getCurrentUser, changePassword } from '../services/user';
 
 const Dashboard = () => {
   const reduxUser = useSelector((state) => state.auth.user);
@@ -28,8 +28,14 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const [openEdit, setOpenEdit] = useState(false);
+  const [openPassword, setOpenPassword] = useState(false);
+
   const [nickname, setNickname] = useState('');
   const [phone, setPhone] = useState('');
+
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPassword2, setNewPassword2] = useState('');
 
   // ✅ 마이페이지 진입 시 유저 정보 직접 불러오기
   useEffect(() => {
@@ -56,6 +62,32 @@ const Dashboard = () => {
     }
   };
 
+  const handleChangePassword = async () => {
+    try {
+      if (newPassword !== newPassword2) {
+        toast.error('새 비밀번호가 일치하지 않습니다.');
+        return;
+      }
+  
+      await changePassword({
+        current_password: currentPassword,
+        new_password: newPassword,
+        new_password2: newPassword2,
+      });
+  
+      toast.success('비밀번호가 성공적으로 변경됐어요!');
+      setOpenPassword(false);
+      setCurrentPassword('');
+      setNewPassword('');
+      setNewPassword2('');
+    } catch (e) {
+      console.error("❌ change-password 응답:", e.response?.data);
+      const data = e.response?.data || {};
+      const allErrors = Object.values(data).flat().join(' ') || '오류 발생';
+      toast.error('변경 실패: ' + allErrors);
+    }
+  };
+
   const handleDelete = async () => {
     if (!window.confirm('정말 탈퇴하시겠어요? 되돌릴 수 없어요!')) return;
     try {
@@ -79,6 +111,9 @@ const Dashboard = () => {
             <Box>
               <Button onClick={() => setOpenEdit(true)} variant="outlined" sx={{ mr: 1 }}>
                 회원정보 수정
+              </Button>
+              <Button onClick={() => setOpenPassword(true)} variant="outlined" color="secondary">
+                비밀번호 변경
               </Button>
             </Box>
           </Box>
@@ -132,6 +167,43 @@ const Dashboard = () => {
             <Button onClick={() => setOpenEdit(false)}>취소</Button>
             <Button onClick={handleUpdate} variant="contained">수정</Button>
             <Button onClick={handleDelete} color="error">회원 탈퇴</Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* 🔐 비밀번호 변경 Dialog */}
+        <Dialog open={openPassword} onClose={() => setOpenPassword(false)}>
+          <DialogTitle>비밀번호 변경</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="현재 비밀번호"
+              type="password"
+              fullWidth
+              margin="normal"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+            <TextField
+              label="새 비밀번호"
+              type="password"
+              fullWidth
+              margin="normal"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <TextField
+              label="새 비밀번호 확인"
+              type="password"
+              fullWidth
+              margin="normal"
+              value={newPassword2}
+              onChange={(e) => setNewPassword2(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenPassword(false)}>취소</Button>
+            <Button variant="contained" onClick={handleChangePassword}>
+              변경
+            </Button>
           </DialogActions>
         </Dialog>
       </Box>

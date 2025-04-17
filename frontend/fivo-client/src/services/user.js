@@ -20,3 +20,5 @@ export const resetPassword = (email, new_password, new_password2) =>
     new_password,
     new_password2,
   });
+
+  export const changePassword = (data) => api.put('/api/accounts/change-password/', data);

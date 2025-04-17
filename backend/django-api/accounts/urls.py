@@ -12,6 +12,7 @@ from .views import (
     DeleteUserView,
     SendPasswordResetCodeView,
     PasswordResetView,
+    ChangePasswordView,
     GoogleLoginView,
 )
 
@@ -26,6 +27,7 @@ urlpatterns = [
     path('me/delete/', DeleteUserView.as_view(), name='delete_self'), # 회원전용 삭제
     path('send-reset-code/', SendPasswordResetCodeView.as_view(), name='send_reset_code'), # 비밀번호 재설정 코드 전송용
     path('reset-password/', PasswordResetView.as_view(), name='reset_password'), # 비밀번호 재설정
+    path('change-password/', ChangePasswordView.as_view(), name='change-password'), # 로그인시 비밀번호 변경
     path('google-login/', GoogleLoginView.as_view(), name='google_login'),
     path('users/', user_list, name='user_list'),
     path('users/<int:user_id>/delete/', delete_user, name='delete_user'),
