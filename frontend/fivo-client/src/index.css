@@ -52,6 +52,7 @@ header nav {
   margin: auto;
   display: flex;
   justify-content: space-between;
+  gap:20px;
 }
 
 header nav ul {
@@ -70,6 +71,11 @@ header nav ul.nav-right {
   justify-content: flex-end;
 }
 
+header .nav-wrap{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
 header nav ul.nav-left li.header-logo a {
   color: #FA7260;
   font-size: 24px;
@@ -133,25 +139,30 @@ header nav ul.nav-right .lang {
   border-radius: 2px;
   background-color: #fff;
   cursor: pointer;
-  padding: 8px 2px;
+  padding: 8px 6px;
   border: 1px solid #E9E9E9;
   background-color: #fff;
   position: relative;
   width: 100%;
-  max-width: 90px;
+  max-width: 78px;
 }
-header nav ul.nav-right .lang > div{font-size: 14px; color: #737373; display: flex; justify-content: center; gap:6px; align-items: center; width: 100%;}
-header nav ul.nav-right .lang > div svg{ color: #484848; font-size: 18px;}
-header nav ul.nav-right .lang .lang-select{display: flex; flex-direction: column; width: 100%;border: 1px solid #E9E9E9;
+header nav ul.nav-right .lang > div{font-size: 13px; color: #737373; display: flex; justify-content: space-between;; align-items: center; width: 100%;}
+header nav ul.nav-right .lang > div svg{ color: #484848; font-size: 13px;}
+header nav ul.nav-right .lang > div svg.fa-caret-down{color: #333; font-size: 10px;}
+header nav ul.nav-right .lang .lang-select{
+  display: flex; 
+  flex-direction: column; 
+  width: 100%;
+  border: 1px solid #E9E9E9;
   position: absolute;
-  bottom: -52px;
+  bottom: -60px;
   left: 50%;
   transform: translateX(-50%);
+  background-color: #fff;
 }
 header nav ul.nav-right .lang .lang-select li {
-  padding: 2px 5px;
+  padding: 4px 5px;
   width: 100%;
-  background-color: #fff;
   cursor: pointer;
   border: none;
   border-radius: 2px;
@@ -161,25 +172,47 @@ header nav ul.nav-right .lang .lang-select li {
 header nav ul a {
   color: #333;
   font-size: 15px;
+  transition: 0.3s;
 }
 
-header nav ul .login-btn {
+header nav ul a:hover{
+  color:#FA7260;
+}
+
+header nav ul .login-btn,
+header nav ul .logout-btn {
   border: 1px solid #FA7260;
   color: #FA7260;
   border-radius: 4px;
   font-size: 15px;
-  padding: 8px 0px;
+  
   transition: 0.2s;
-  max-width: 80px;
-  width: 100%;
-}
 
-header nav ul .login-btn:hover {
+}
+header nav ul .login-btn{  width: 80px;padding: 7px 0px;}
+header nav ul .logout-btn{ width: 100%;padding: 3px 0px;margin-top: 8px; font-size: 14px;}
+
+header nav ul .login-btn:hover{
   background-color: #FA7260;
   color: #fff;
 }
 
 
+ul.user-info{display: flex; gap:20px;}
+ul.user-info li {cursor: pointer;}
+ul.user-info li svg{color:#333333; font-size: 20px; transition: 0.3s;}
+ul.user-info li:hover svg{color: #FA7260;;}
+
+li.my-menu{position: relative;}
+li.my-menu:hover div.my-sub-menu{opacity: 1; z-index: 10;}
+div.my-sub-menu{width: 100px; background-color: #fff; position: absolute;
+left: 50%; transform: translateX(-50%); opacity: 0; z-index: -10;
+border-radius: 3px; border: 1px solid #E9E9E9; padding: 10px; transition: 0.3s;}
+
+div.my-sub-menu a{display: block;  width: 100%; text-align: center; transition: 0.3s;}
+div.my-sub-menu a:hover{color:#FA7260;}
+.responsive-menus{}
+.responsive-btn{display: none;font-size: 24px; cursor: pointer;}
 
 .main-banner,
 .main-banner .swiper,
@@ -282,7 +315,7 @@ display: flex;
 
 
 
- .current-recomm{  background: linear-gradient(135deg, #FA7260 0%, #FF986C);}
+.current-recomm{  background: linear-gradient(135deg, #FA7260 0%, #FF986C);}
 .current-recomm span, .current-recomm strong,
 .current-recomm div{color:#fff;}
 .current-recomm h2{margin-top: 35px;}
@@ -313,12 +346,7 @@ background: #FA7260;
 background: linear-gradient(90deg, #FA7260, #FF986C);
 text-align: center; padding: 14px 0;
 color: #fff;}
-
-
-
-
 /*2025-04-15 메인 페이지 작업 - 박홍덕 - end */
-
 
 .chart-realtime h2 {
   text-align: center;
@@ -454,8 +482,6 @@ color: #fff;}
 }
 
 
-
-
 footer {
   background-color: #AAAAAA;
   width: 100%;
@@ -532,8 +558,8 @@ footer address {
 
 
 /*2025-04-11 로그인, 회원가입 페이지 작업 - 박홍덕 - start */
-.login, .register{max-width: 498px; width: 100%; margin: 114px auto 144px auto; }
-
+/*2025-04-17 마이페이지(대시보드) 페이지 작업 - 박홍덕 - start */
+.login, .register, .my-page{max-width: 498px; width: 100%; margin: 114px auto 144px auto; }
 
 .login .sns, 
 .register .sns{width: 100%; padding:  20px 0; margin: 0 auto 18px;}
@@ -549,9 +575,15 @@ footer address {
 
 .border-wrap{padding:  66px 52px;}
 .login form label,
-.register form label{position: relative;display: block;width: 100%;box-shadow: 0 0 4px rgba(0,0,0,0.13); border:1px solid #E9E9E9; border-radius: 14px; padding: 20px 21px; margin-bottom: 16px; color: #BABABA; font-size: 16px; outline: none;}
+.register form label,
+.my-page label{position: relative;display: block;width: 100%;box-shadow: 0 0 4px rgba(0,0,0,0.13); border:1px solid #E9E9E9; border-radius: 14px; padding: 20px 21px; margin-bottom: 16px; color: #BABABA; font-size: 16px; outline: none;}
 .login form label input,
-.register form label input{width: 100%; display: block; outline: none;}
+.register form label input,
+.my-page label input{ display: block; outline: none; color: #333; position: relative; background-color: transparent;}
+
+.login form label input,
+.register form label input{width: 100%;}
+.my-page label input{width: 70%;}
 
 .login-error{font-size: 13px;color: #333;display: block; margin-bottom: 12px;}
 
@@ -561,6 +593,16 @@ footer address {
 .login form label.active span,
 .register form label:focus-within span,
 .register form label.active span {top: 7px; transform: none; font-size: 9px; }
+
+.my-page label {display: flex; justify-content: space-between;}
+.my-page label span{font-size: 14px;}
+
+.my-page .btn-wrap{width: 100%;}
+.my-page .btn-wrap .delete-btn{width: 29%;
+  border:1px solid #E9E9E9;
+  padding:11px 5px;
+  color: #555555;
+border-radius: 14px; float: right;}
 
 .register form .input-wrap{gap:13px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .register form .input-wrap label[for="email"], .input-wrap label[for="code"]{margin-bottom: 0;}
@@ -581,6 +623,7 @@ right: 0; top: 50%; transform: translateY(-50%);}
 
 .login .register-wrap a{width: 100%; border:1px solid #FA7260; display: block; text-align: center; border-radius: 14px; color:#FA7260;
   font-size: 26px; padding: 10px 21px;letter-spacing: 29%; margin-top: 35px;}
+  /*2025-04-17 마이페이지(대시보드) 페이지 작업 - 박홍덕 - end */
   /*2025-04-11 로그인, 회원가입 페이지 작업 - 박홍덕 - end */
 
 /*2025-04-15 주식 상세종목 페이지 작업 - 박홍덕 - start */
@@ -672,6 +715,8 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 }
 
 @media (max-width:1160px){
+  header nav ul.nav-left{gap: 40px;}
+  header nav ul.nav-right{gap: 30px;}
   .stock-detail-wrap .stock-summery-card .stock-info{gap: 6px 14px;}
   .price{font-size: 36px;}
   .graph-wrap .scroll-wrap{overflow-x: scroll;scrollbar-width: thin;
@@ -683,10 +728,19 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 
 }
 @media (max-width:900px){
+  header nav ul.nav-right{gap: 20px;}
   .FAQ-wrap{padding: 0 10px;}
 
 }
 @media (max-width:768px){
+  header nav ul.nav-right{width: 88%;}
+  header nav ul.nav-left{width: 12%;}
+  header nav ul.nav-left li{display: none;}
+  header nav ul.nav-left li.header-logo{display: block;}
+  header nav ul.nav-right .lang,
+  header nav ul.nav-right .color-mode{display: none;}
+  .responsive-btn{display:block;}
+
   .main-listings {flex-wrap: wrap;}
   .main-listings > div{width:100%;}
   footer > div > div{flex-wrap: wrap;width: 100%; gap:10px; width: 50%;}
@@ -723,7 +777,8 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 /*2025-04-11 반응형 작업 - 박홍덕 - end  */
 
 .login button, 
-.register-btn{letter-spacing: 29%;width: 100%; text-align: center; background-color: #FA7260;border-radius: 14px; color:#fff; font-size: 26px; padding: 10px 21px;}
+.register-btn,
+.edit-btn{letter-spacing: 29%;width: 100%; text-align: center; background-color: #FA7260;border-radius: 14px; color:#fff; font-size: 26px; padding: 10px 21px;}
 
 .register-btn.inactivated{background-color: #AAAAAA;}
 .w1200{width:100%; max-width: 1200px; margin: auto;}
