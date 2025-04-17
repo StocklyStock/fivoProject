@@ -769,3 +769,48 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 .read-the-docs {
   color: #888;
 }
+
+.recommend-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.recommend-card {
+  background: #fffdf9;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  width: 180px;
+  flex-shrink: 0;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.recommend-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.stock-code {
+  font-size: 12px;
+  color: gray;
+  margin-left: 4px;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.change-rate {
+  font-size: 14px;
+  margin-top: 4px;
+}

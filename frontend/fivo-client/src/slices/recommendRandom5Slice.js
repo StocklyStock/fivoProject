@@ -9,7 +9,7 @@ export const getRecommendedStocks = createAsyncThunk(
   }
 );
 
-const stocksSlice = createSlice({
+const recommendRandom5Slice = createSlice({
   name: "stocks",
   initialState: {
     stocks: [],
@@ -33,4 +33,4 @@ const stocksSlice = createSlice({
   },
 });
 
-export default stocksSlice.reducer;
+export default recommendRandom5Slice.reducer;
