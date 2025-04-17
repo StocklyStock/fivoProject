@@ -13,7 +13,9 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 
 from .models import CustomUser
-from .serializers import UserSerializer, UserListSerializer,UserUpdateSerializer,PasswordResetCodeRequestSerializer,PasswordResetSerializer
+from .serializers import (UserSerializer, UserListSerializer,UserUpdateSerializer,
+                          PasswordResetCodeRequestSerializer,PasswordResetSerializer,
+                          PasswordChangeSerializer)
 from .utils import send_verification_code_email
 
 logger = logging.getLogger(__name__)
@@ -202,7 +204,20 @@ class UpdateUserView(APIView):
                 logger.error(f"Update Error: {str(e)}")
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def put(self, request):
+        logger.info(f"👤 현재 유저: {request.user}")
+        logger.info(f"🔐 인증 상태: {request.user.is_authenticated}")
+
+        serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "비밀번호가 변경되었습니다."}, status=200)
+        return Response(serializer.errors, status=400)
+    
 class DeleteUserView(APIView):
     permission_classes = [IsAuthenticated]
 
