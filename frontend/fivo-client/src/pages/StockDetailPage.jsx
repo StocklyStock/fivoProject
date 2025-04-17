@@ -11,6 +11,8 @@ import StabilityRiskOverview from '../components/StabilityRiskOverview'; // 안�
 import StabilityGauge from '../components/StabilityGauge'; // 안정성 점수 컴포넌트
 import ProfitabilityOverview from '../components/ProfitabilityOverview'; // 수익성 리스크 분석 컴포넌트
 import ProfitabilityGauge from '../components/ProfitabilityGauge'; // 수익성 리스크 점수 컴포넌트
+import { useDispatch, useSelector } from 'react-redux';
+import { addFavorite, removeFavorite, fetchFavorites } from '../slices/favoriteSlice';
 
 const StockDetailPage = () => {
   const { stockId } = useParams();  // URL에서 stockId 가져오기
@@ -27,6 +29,34 @@ const StockDetailPage = () => {
   const [stocksList, setStocksList] = useState([]); // 전체 종목 리스트
   const [selectedMenu, setSelectedMenu] = useState('시세분석'); // 선택된 메뉴 상태 (시세분석, 리스크분석)
   const [riskAnalysisMenu, setRiskAnalysisMenu] = useState('변동성 리스크 분석'); // 리스크 분석 메뉴 상태
+
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.favorites.items);
+
+  // 현재 종목이 즐겨찾기인지 확인
+  const isFavorite = favorites.some((fav) => fav.stock_code === stockId);
+  const favoriteId = favorites.find((fav) => fav.stock_code === stockId)?.id;
+  const isAuthenticated = useSelector((state) => state.auth.user !== null);
+
+  useEffect(() => {
+    dispatch(fetchFavorites());
+  }, []);
+
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      dispatch(removeFavorite(favoriteId));
+    } else {
+      if (!selectedStock) {
+        console.error("📛 선택된 종목 정보 없음");
+        return;
+      }
+  
+      dispatch(addFavorite({
+        stock_code: selectedStock.종목코드,
+        stock_name: selectedStock.회사명,
+      }));
+    }
+  };
 
   // 종목 리스트를 가져오는 함수
   useEffect(() => {
@@ -161,8 +191,14 @@ const StockDetailPage = () => {
       </div>
       
       
-      {/* 종목 제목 */}
-      <h1>{displayTitle}</h1>
+      <h1>
+        {displayTitle}{' '}
+        {isAuthenticated && (
+          <button onClick={toggleFavorite} style={{ marginLeft: '10px' }}>
+            {isFavorite ? '⭐' : '☆'}
+          </button>
+        )}
+      </h1>
       
       {/* 메뉴에 따라 화면 내용 변경 */}
       {selectedMenu === '시세분석' && (

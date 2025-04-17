@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/accounts/', include('accounts.urls', namespace='accounts')),
     path('api/health/', health_check),  # ✅ 헬스 체크 엔드포인트
     path('api/chatbot/',include("chatbot.urls")),
-    # path('api/favorites/', include('favorites.urls')),
+    path('api/favorites/', include('favorites.urls')),
     path('api/stocks/', include('aiRecommendRandom5.urls')), 
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

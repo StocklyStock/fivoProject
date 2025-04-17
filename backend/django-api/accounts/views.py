@@ -209,9 +209,6 @@ class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request):
-        logger.info(f"👤 현재 유저: {request.user}")
-        logger.info(f"🔐 인증 상태: {request.user.is_authenticated}")
-
         serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
