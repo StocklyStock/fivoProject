@@ -6,8 +6,10 @@ import { logout } from '../slices/authSlice';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { fetchStockSearch } from '../services/stockapi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe, faCaretDown, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBell as farBell, faCircleUser as farCircleUser } from '@fortawesome/free-regular-svg-icons';
 import './Header.css';
+import LoginStateMenus from './LoginStateMenus';
 
 const Header = () => {
   const user = useSelector((state) => state.auth.user);
@@ -73,112 +75,155 @@ const Header = () => {
   return (
     <header>
       <nav>
-        <ul className="nav-left">
-          <li className="header-logo">
-            <NavLink className="zen-dots-regular" to="/">FIVO</NavLink>
-          </li>
-          <li><NavLink onClick={() => handleNav('/admin/stats')} style={menuStyle}>테마 분석</NavLink></li>
-          {/* <li><NavLink onClick={() => handleNav('/admin/users')} style={menuStyle}>AI 추천</NavLink></li> */}
-          <li><NavLink to='/airecomm' style={menuStyle}>AI 추천</NavLink></li>
-          <li>
-            <IconButton sx={{ display: { xs: 'block', sm: 'none' }, ml: 'auto' }} onClick={toggleMenu}>
-              <MenuIcon />
-            </IconButton>
-          </li>
-        </ul>
-
-        <ul className="nav-right">
-          <li className={`search-box-wrapper ${searchOpen ? 'open':''}` }>
-           
-              {searchOpen && (
-                <input
-                  className="search-input"
-                  placeholder="삼성전자 또는 005930"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={handleKeyDown}  // Enter 키 처리
+        <div className="nav-wrap">
+          <ul className="nav-left">
+            <li className="header-logo">
+              <NavLink className="zen-dots-regular" to="/">FIVO</NavLink>
+            </li>
+            <li><NavLink onClick={() => handleNav('/admin/stats')} >테마 분석</NavLink></li>
+            {/* <li><NavLink onClick={() => handleNav('/admin/users')} style={menuStyle}>AI 추천</NavLink></li> */}
+            <li><NavLink to='/airecomm'>AI 추천</NavLink></li>
+            {/* <li>
+              <IconButton sx={{ display: { xs: 'block', sm: 'none' }, ml: 'auto' }} onClick={toggleMenu}>
+                <MenuIcon />
+              </IconButton>
+            </li> */}
+          </ul>
+          <ul className="nav-right">
+            <li className={`search-box-wrapper ${searchOpen ? 'open':''}` }>
             
-                />
+                {searchOpen && (
+                  <input
+                    className="search-input"
+                    placeholder="삼성전자 또는 005930"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}  // Enter 키 처리
+              
+                  />
+                )}
+                <button onClick={toggleSearch}  >
+                  <Search fontSize="small" color="action" />
+                </button>
+            
+
+              {searchResults.length > 0 && (
+                <ul className="dropdown-results" style={{
+                  maxHeight: '220px',
+                  overflowY: 'auto',
+                  marginTop: '5px',
+                  padding: '0',
+                  border: '1px solid #ddd',
+                  borderRadius: '5px',
+                  backgroundColor: 'white',
+                  listStyleType: 'none',
+                  display: 'block',
+                }}>
+                  {searchResults.map((item, idx) => (
+                    <li
+                      key={idx}
+                      onClick={() => handleSelectStock(item)}
+                      className="dropdown-item"
+              
+                    >
+                      {item.회사명} ({item.종목코드}) [{item.시장구분}]
+                    </li>
+                  ))}
+                </ul>
               )}
-              <button onClick={toggleSearch}  >
-                <Search fontSize="small" color="action" />
-              </button>
-           
+            </li>
 
-            {searchResults.length > 0 && (
-              <ul className="dropdown-results" style={{
-                maxHeight: '220px',
-                overflowY: 'auto',
-                marginTop: '5px',
-                padding: '0',
-                border: '1px solid #ddd',
-                borderRadius: '5px',
-                backgroundColor: 'white',
-                listStyleType: 'none',
-                display: 'block',
-              }}>
-                {searchResults.map((item, idx) => (
-                  <li
-                    key={idx}
-                    onClick={() => handleSelectStock(item)}
-                    className="dropdown-item"
-             
-                  >
-                    {item.회사명} ({item.종목코드}) [{item.시장구분}]
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
+            <li className='color-mode'>
+              <Tooltip title="다크모드 토글">
+                <IconButton><Brightness4 /></IconButton>
+              </Tooltip>
+            </li>
+            <li className='lang' onClick={() => setLangOpen((prevState) => !prevState)}>
+              <div>
+                <FontAwesomeIcon icon={faGlobe} />
+                {language === 'ko' ? '한국어':'영어'}
+                <FontAwesomeIcon icon={faCaretDown} />
+              </div>
+              {langOpen &&(
+                <ul className="lang-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
+                  <li onClick={() => setLanguage('ko')}>한국어</li>
+                  <li onClick={() => setLanguage('en')}>영어</li>
+                </ul>
+              )}
 
-          <li className='color-mode'>
-            <Tooltip title="다크모드 토글">
-              <IconButton><Brightness4 /></IconButton>
-            </Tooltip>
-          </li>
-          <li className='lang' onClick={() => setLangOpen((prevState) => !prevState)}>
-            <div>
-              <FontAwesomeIcon icon={faGlobe} />
-              {language === 'ko' ? '한국어':'영어'}
-            </div>
-            {langOpen &&(
-              <ul className="lang-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
-                <li onClick={() => setLanguage('ko')}>한국어</li>
-                <li onClick={() => setLanguage('en')}>영어</li>
-              </ul>
-            )}
+            </li>
 
-          </li>
 
-          <li>
+
+            {/* <li className='responsive-btn' onClick={toggleMenu}><FontAwesomeIcon icon={faBars}/></li> */}
+          </ul>
+
+        </div>{/*.nav-wrap 닫음*/}
+        
+        <ul className='user-info'>          
           {user ? (
-              <Button
-                className="login-btn"
-                variant="outlined"
-                color="error"
-                onClick={() => {
-                  console.log('🚀 로그아웃 클릭됨');
-                  dispatch(logout());
-                  setTimeout(() => {
-                    navigate('/', { replace: true });
-                  }, 0);
-                }}
-              >
-                로그아웃
-              </Button>
+            <LoginStateMenus />
+            
+              // {/* <li className='my-menu'>
+              //   <FontAwesomeIcon icon={farCircleUser}/>
+              //   <div>
+              //     <NavLink to="/dashboard">마이페이지</NavLink>
+              //     <button
+              //       type='button'
+              //       className="logout-btn"
+              //       variant="outlined"
+              //       color="error"
+              //       onClick={() => {
+              //       console.log('🚀 로그아웃 클릭됨');
+              //       dispatch(logout());
+              //       setTimeout(() => {
+              //         navigate('/', { replace: true });
+              //       }, 0);
+              //       }}
+              //     >
+              //       로그아웃
+              //     </button>
+
+              //   </div>
+              // </li>
+              // <li><FontAwesomeIcon icon={farBell}/></li> */}
+            
             ) : (
-              <Button
+              <li>
+              <button
+                type='button'
                 className="login-btn"
                 variant="outlined"
                 onClick={() => navigate('/login')}
               >
                 로그인
-              </Button>
+              </button>
+              </li>    
             )}
-          </li>
-        </ul>
+  
+            {/* <li>
+              <FontAwesomeIcon icon={farCircleUser}/>
+              <div>
+                <Button className="login-btn"                   
+                onClick={() => {
+                  console.log('🚀 로그아웃 클릭됨');
+                  dispatch(logout());
+                  setTimeout(() => {
+                  navigate('/', { replace: true });
+                  }, 0);
+                }}
+                >로그아웃</Button>
+              </div>
+            </li> */}
+          
+        </ul>{/*user-info 닫음*/}
+        
 
-        <Drawer anchor="left" open={menuOpen} onClose={toggleMenu}>
+
+
+
+
+        {/* <Drawer anchor="left" open={menuOpen} onClose={toggleMenu}>
           <Box sx={{ width: 250 }}>
             <List>
               <ListItem button onClick={() => handleNav('/admin/stats')}>
@@ -192,8 +237,10 @@ const Header = () => {
               </ListItem>
             </List>
           </Box>
-        </Drawer>
+        </Drawer> */}
+        
       </nav>
+
     </header>
   );
 };
