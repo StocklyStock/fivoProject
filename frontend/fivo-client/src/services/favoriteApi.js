@@ -17,3 +17,13 @@ export const getFavorites = async () => {
   const res = await api.get('/api/favorites/');
   return res.data;
 };
+
+// 즐겨찾기 조회
+export const getFavoriteStocks = async () => {
+  return await api.get('/api/favorites/');
+};
+
+// 즐겨찾기 종목 코드로 삭제
+export const deleteFavoriteByCode = async (stockCode) => {
+  return await api.delete(`/api/favorites/code/${stockCode}/`);
+};

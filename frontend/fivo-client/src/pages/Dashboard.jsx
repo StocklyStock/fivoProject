@@ -21,6 +21,7 @@ import { BarChart2, Bell, UserCheck } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
 import { updateUserInfo, deleteAccount, getCurrentUser, changePassword } from '../services/user';
+import {getFavoriteStocks, deleteFavoriteByCode} from '../services/favoriteApi'
 
 const Dashboard = () => {
   const reduxUser = useSelector((state) => state.auth.user);
@@ -37,6 +38,8 @@ const Dashboard = () => {
   const [newPassword, setNewPassword] = useState('');
   const [newPassword2, setNewPassword2] = useState('');
 
+  const [favorites, setFavorites] = useState([]);
+
   // ✅ 마이페이지 진입 시 유저 정보 직접 불러오기
   useEffect(() => {
     const fetchUser = async () => {
@@ -49,8 +52,41 @@ const Dashboard = () => {
         console.error(e);
       }
     };
+
     fetchUser();
   }, []);
+  
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const res = await getFavoriteStocks();
+        setFavorites(res.data);  // 또는 .results로 변경
+      } catch (e) {
+        toast.error('즐겨찾기 정보를 불러오지 못했습니다.');
+        console.error(e);
+      }
+    };
+  
+    fetchFavorites();
+  }, []);
+
+  const handleDeleteFavorite = async (stockCode) => {
+    const target = favorites.find((f) => f.stock_code === stockCode);
+
+    if (!window.confirm(`${target?.stock_name || stockCode} 즐겨찾기를 삭제할까요?`)) return;
+
+    try {
+      await deleteFavoriteByCode(stockCode);
+      toast.success(`${target?.stock_name || stockCode} 삭제 완료!`);
+  
+      // 목록 갱신
+      setFavorites((prev) => prev.filter((f) => f.stock_code !== stockCode));
+    } catch (e) {
+      toast.error(`삭제 실패: ${e.response?.data?.error || '오류 발생'}`);
+      console.error(e);
+    }
+  };
+  
 
   const handleUpdate = async () => {
     try {
@@ -122,28 +158,58 @@ const Dashboard = () => {
             📊 대시보드 내용
           </Typography>
 
-          <Grid container spacing={3} sx={{ mt: 2 }}>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card className="rounded-2xl shadow-md text-center p-4">
-                <BarChart2 className="mx-auto mb-2" />
-                <Typography variant="subtitle1">통계 보기</Typography>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card className="rounded-2xl shadow-md text-center p-4">
-                <UserCheck className="mx-auto mb-2" />
-                <Typography variant="subtitle1">사용자 목록</Typography>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card className="rounded-2xl shadow-md text-center p-4">
-                <Bell className="mx-auto mb-2" />
-                <Typography variant="subtitle1">알림 설정</Typography>
-              </Card>
-            </Grid>
-          </Grid>
-        </Card>
+          <Typography variant="h6" fontWeight="bold" gutterBottom>
+            📌 나의 투자 프로필
+          </Typography>
 
+          <Typography>👤 투자자 성향: <strong>{reduxUser?.investment_style || '미지정'}</strong></Typography>
+          <Typography>
+            ⏳ 투자 기간: <strong>
+              약 {Math.round((reduxUser?.investment_period_months || 0) / 30)}개월
+            </strong>
+          </Typography>
+          <Typography>📈 매매 빈도: <strong>{reduxUser?.trading_frequency}회/월</strong></Typography>
+
+          <Typography sx={{ mt: 1 }}>📦 보유 종목:</Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+            {(typeof reduxUser?.owned_stocks === 'string'
+              ? JSON.parse(reduxUser.owned_stocks)
+              : reduxUser.owned_stocks || []
+            ).map((stock, idx) => (
+              <span key={idx} className="bg-gray-200 dark:bg-gray-700 text-sm rounded-xl px-2 py-1">
+                {stock}
+              </span>
+            ))}
+          </Box>
+          <Typography sx={{ mt: 2 }}>⭐ 즐겨찾기 종목:</Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+            {(favorites || []).map((item, idx) => (
+              <Box
+                key={idx}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  backgroundColor: 'lightyellow',
+                  px: 1,
+                  py: 0.5,
+                  borderRadius: '16px',
+                  gap: 0.5,
+                }}
+              >
+                <span>{item.stock_name} ({item.stock_code})</span>
+                <Button
+                  size="small"
+                  variant="text"
+                  color="error"
+                  onClick={() => handleDeleteFavorite(item.stock_code)}
+                >
+                  ✕
+                </Button>
+              </Box>
+            ))}
+          </Box>       
+        </Card>
+        
         {/* ✏️ 회원정보 수정 Dialog */}
         <Dialog open={openEdit} onClose={() => setOpenEdit(false)}>
           <DialogTitle>회원정보 수정</DialogTitle>

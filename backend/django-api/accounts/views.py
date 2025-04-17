@@ -15,7 +15,7 @@ from google.auth.transport import requests as google_requests
 from .models import CustomUser
 from .serializers import (UserSerializer, UserListSerializer,UserUpdateSerializer,
                           PasswordResetCodeRequestSerializer,PasswordResetSerializer,
-                          PasswordChangeSerializer)
+                          PasswordChangeSerializer,UserProfileSerializer)
 from .utils import send_verification_code_email
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ class CurrentUserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = UserSerializer(request.user)
+        serializer = UserProfileSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 # ✔️ 회원가입

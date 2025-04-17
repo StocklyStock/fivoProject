@@ -5,7 +5,11 @@ import random
 
 @api_view(['GET'])
 def aiRecommendRandom5(request):
-    queryset = list(PredictedStock.objects.filter(predicted_label='3').values('stock_code', 'company_name'))
+    queryset = list(
+        PredictedStock.objects.filter(predicted_label='3').values(
+            'stock_code', 'company_name', 'positive_news'  # ✅ 요거 추가!
+        )
+    )
 
     if len(queryset) > 5:
         queryset = random.sample(queryset, 5)

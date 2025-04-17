@@ -99,78 +99,132 @@ const AIRecommPage = () => {
       </div>
 
       {selectedMenu === "TOP5" && (
-        <>
-          <h1 style={{ marginTop: 20 }}>🔥 AI 추천 종목</h1>
-          {loading && <p>불러오는 중...</p>}
-          {error && <p>에러: {error}</p>}
+  <>
+    <h1 style={{ marginTop: 20 }}>🔥 AI 추천 종목</h1>
+    {loading && <p>불러오는 중...</p>}
+    {error && <p>에러: {error}</p>}
 
-          <div className="recommend-cards-container" style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-            {stocks.map((stock) => {
-              const summary = summaries[stock.stock_code];
-              const isSelected = selectedStock?.stock_code === stock.stock_code;
-              const isUp = summary?.change > 0;
-              const changeColor = isUp ? "red" : "blue";
-              const symbol = isUp ? "▲" : "▼";
+    <div
+      className="recommend-cards-container"
+      style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}
+    >
+      {stocks.map((stock) => {
+        const summary = summaries[stock.stock_code];
+        const isSelected = selectedStock?.stock_code === stock.stock_code;
+        const isUp = summary?.change > 0;
+        const changeColor = isUp ? "red" : "blue";
+        const symbol = isUp ? "▲" : "▼";
 
-              return (
+        return (
+          <div
+            key={stock.stock_code}
+            onClick={() => setSelectedStock(stock)}
+            className={`recommend-card ${isSelected ? "selected" : ""}`}
+            style={{
+              padding: "16px",
+              borderRadius: "12px",
+              background: "#fff",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+              cursor: "pointer",
+              minWidth: "200px",
+              border: isSelected ? "2px solid #1976d2" : "1px solid #ccc",
+            }}
+          >
+            <div className="card-header" style={{ marginBottom: "8px" }}>
+              <strong>{stock.company_name}</strong>
+              <div style={{ fontSize: "12px", color: "#888" }}>
+                ({stock.stock_code})
+              </div>
+            </div>
+            {summary ? (
+              <>
                 <div
-                  key={stock.stock_code}
-                  onClick={() => setSelectedStock(stock)}
-                  className={`recommend-card ${isSelected ? "selected" : ""}`}
-                  style={{
-                    padding: "16px",
-                    borderRadius: "12px",
-                    background: "#fff",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
-                    cursor: "pointer",
-                    minWidth: "200px",
-                    border: isSelected ? "2px solid #1976d2" : "1px solid #ccc",
-                  }}
+                  className="price"
+                  style={{ fontSize: "22px", fontWeight: "bold" }}
                 >
-                  <div className="card-header" style={{ marginBottom: "8px" }}>
-                    <strong>{stock.company_name}</strong>
-                    <div style={{ fontSize: "12px", color: "#888" }}>({stock.stock_code})</div>
-                  </div>
-                  {summary ? (
-                    <>
-                      <div className="price" style={{ fontSize: "22px", fontWeight: "bold" }}>
-                        {Number(summary.price).toLocaleString()}원
-                      </div>
-                      <div className="change-rate" style={{ color: changeColor }}>
-                        {symbol}
-                        {Math.abs(summary.change).toLocaleString()} ({Math.abs(summary.change_rate).toFixed(2)}%)
-                      </div>
-                    </>
-                  ) : (
-                    <div className="price">로딩 중...</div>
-                  )}
+                  {Number(summary.price).toLocaleString()}원
                 </div>
-              );
-            })}
+                <div className="change-rate" style={{ color: changeColor }}>
+                  {symbol}
+                  {Math.abs(summary.change).toLocaleString()} (
+                  {Math.abs(summary.change_rate).toFixed(2)}%)
+                </div>
+              </>
+            ) : (
+              <div className="price">로딩 중...</div>
+            )}
           </div>
+        );
+      })}
+    </div>
 
-          {selectedSummary && (
-            <>
-              <h2 style={{ marginTop: "40px" }}>
-                {selectedStock?.company_name} ({selectedStock?.stock_code})
-              </h2>
-              <StockSummaryCard data={selectedSummary} />
+    {selectedSummary && (
+      <>
+        <h2 style={{ marginTop: "40px" }}>
+          {selectedStock?.company_name} ({selectedStock?.stock_code})
+        </h2>
+        <StockSummaryCard data={selectedSummary} />
 
-              {volatility && profitability && stability && supplyRisk && (
-                <RiskScoreSelector
-                  companyName={selectedStock?.company_name}
-                  scores={{
-                    volatility: volatility.volatility_score,
-                    profitability: profitability.profitability_score,
-                    stability: stability.stability_score,
-                    supplyRisk: supplyRisk.risk_score,
-                  }}
-                />
-              )}
-            </>
-          )}
-        </>
-      )}
+        {volatility && profitability && stability && supplyRisk && (
+          <RiskScoreSelector
+            companyName={selectedStock?.company_name}
+            scores={{
+              volatility: volatility.volatility_score,
+              profitability: profitability.profitability_score,
+              stability: stability.stability_score,
+              supplyRisk: supplyRisk.risk_score,
+            }}
+          />
+        )}
+
+        {/* ✅ 디버깅 코드
+        {console.log("🧪 selectedStock:", selectedStock)}
+        {console.log("🧪 positive_news:", selectedStock?.positive_news)} */}
+
+        {/* ✅ 조건부 렌더링 테스트 */}
+        {selectedStock?.positive_news?.length > 0 && (
+          <div style={{ marginTop: "32px" }}>
+            <h3>📈 상승 확률 높은 뉴스 TOP 3</h3>
+            <ul style={{ paddingLeft: "16px", fontSize: "14px" }}>
+              {[...selectedStock.positive_news]
+                .sort((a, b) => b.prob - a.prob)
+                .slice(0, 3)
+                .map((news, idx) => (
+                  <li key={idx} style={{ marginBottom: "12px" }}>
+                    <a
+                      href={news.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontWeight: "bold",
+                        color: "#1976d2",
+                        textDecoration: "none",
+                      }}
+                    >
+                      {news.title}
+                    </a>
+                    <div
+                      style={{
+                        color: "#555",
+                        fontSize: "13px",
+                        marginTop: "4px",
+                      }}
+                    >
+                      {news.summary}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "#999" }}>
+                      상승 확률: {(news.prob * 100).toFixed(2)}%
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
+      </>
+    )}
+  </>
+)}
+
     </section>
   );
 };
