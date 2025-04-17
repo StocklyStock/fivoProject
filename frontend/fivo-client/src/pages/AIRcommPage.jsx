@@ -1,94 +1,178 @@
-import {useState,useEffect}  from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { getRecommendedStocks } from '../slices/recommendRandom5Slice';
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getRecommendedStocks } from "../slices/recommendRandom5Slice";
+import { fetchStockSummary, fetchVolatility, fetchSupplyRisk, fetchFinancial, fetchProfitability } from "../services/stockapi";
+import StockSummaryCard from "../components/StockSummaryCard";
+import RiskScoreSelector from "../components/RiskScoreSelector";
 
 const AIRecommPage = () => {
-    const dispatch = useDispatch();
-    const [selectedMenu, setSelectedMenu] = useState("TOP5");
-    const { stocks, loading, error } = useSelector((state) => state.recommend5);
+  const dispatch = useDispatch();
+  const { stocks, loading, error } = useSelector((state) => state.recommend5);
 
-    useEffect(() => {
-        dispatch(getRecommendedStocks());
-      }, [dispatch]);
+  const [summaries, setSummaries] = useState({});
+  const [selectedStock, setSelectedStock] = useState(null);
+  const [selectedSummary, setSelectedSummary] = useState(null);
+  const [selectedMenu, setSelectedMenu] = useState("TOP5");
 
-    return (
-        <section className="ai-recomm-wrap">
-            <div className="tab-menus">
-                <span
-                className={`tab-top5 ${selectedMenu==='TOP5'? 'btn-color':''}`}
-                onClick={() => setSelectedMenu('TOP5')}
-                >
-                TOP5
-                </span>
-                <span
-                className={`tab-risk ${selectedMenu==='사용자맞춤추천'?'btn-color':''}`}
-                onClick={() => setSelectedMenu('사용자맞춤추천')}
-                >
-                사용자맞춤 추천
-                </span>
-                <span
-                className={`tab-risk ${selectedMenu==='커스터마이징추천'?'btn-color':''}`}
-                onClick={() => setSelectedMenu('커스터마이징추천')}
-                >
-                커스터마이징 추천
-                </span>
-                <span
-                className={`tab-risk ${selectedMenu==='보유종목리포트'?'btn-color':''}`}
-                onClick={() => setSelectedMenu('보유종목리포트')}
-                >
-                보유종목 리포트
-                </span>
-            </div>
+  const [volatility, setVolatility] = useState(null);
+  const [profitability, setProfitability] = useState(null);
+  const [stability, setStability] = useState(null);
+  const [supplyRisk, setSupplyRisk] = useState(null);
 
-            <h1>종목 제목</h1> {/* 종목 제목 */}
+  useEffect(() => {
+    dispatch(getRecommendedStocks());
+  }, [dispatch]);
 
-            {/* 주식 요약 카드 */}
+  useEffect(() => {
+    const fetchAllSummaries = async () => {
+      const results = {};
+      for (const stock of stocks) {
+        try {
+          const summary = await fetchStockSummary(stock.stock_code);
+          results[stock.stock_code] = summary;
+        } catch (e) {
+          console.error("요약 정보 실패:", stock.stock_code);
+        }
+      }
+      setSummaries(results);
+      if (stocks.length > 0 && !selectedStock) {
+        setSelectedStock(stocks[0]);
+      }
+    };
+
+    if (stocks.length > 0) {
+      fetchAllSummaries();
+    }
+  }, [stocks]);
+
+  useEffect(() => {
+    let interval;
+
+    const fetchAll = async () => {
+      if (selectedStock?.stock_code) {
+        try {
+          const summary = await fetchStockSummary(selectedStock.stock_code);
+          setSelectedSummary(summary);
+          const [v, p, f, s] = await Promise.all([
+            fetchVolatility(selectedStock.stock_code),
+            fetchProfitability(selectedStock.stock_code),
+            fetchFinancial(selectedStock.stock_code),
+            fetchSupplyRisk(selectedStock.stock_code),
+          ]);
+          setVolatility(v);
+          setProfitability(p);
+          setStability(f);
+          setSupplyRisk(s);
+        } catch (err) {
+          console.error("요약, 리스크 정보 로딩 실패:", err);
+        }
+      }
+    };
+
+    fetchAll();
+    interval = setInterval(fetchAll, 3000);
+    return () => clearInterval(interval);
+  }, [selectedStock?.stock_code]);
+
+  return (
+    <section className="ai-recomm-wrap">
+      <div className="tab-menus" style={{ marginBottom: 20 }}>
+        {["TOP5", "사용자맞춤추천", "커스터마이징추천", "보유종목리포트"].map((menu) => (
+          <span
+            key={menu}
+            className={`tab-risk ${selectedMenu === menu ? "btn-color" : ""}`}
+            onClick={() => setSelectedMenu(menu)}
+            style={{
+              marginRight: 12,
+              padding: "8px 16px",
+              borderRadius: 8,
+              background: selectedMenu === menu ? "#f05a28" : "#fff",
+              color: selectedMenu === menu ? "#fff" : "#333",
+              cursor: "pointer",
+              fontWeight: 500,
+              border: "1px solid #ddd",
+            }}
+          >
+            {menu}
+          </span>
+        ))}
+      </div>
+
+      {selectedMenu === "TOP5" && (
+        <>
+          <h1 style={{ marginTop: 20 }}>🔥 AI 추천 종목</h1>
+          {loading && <p>불러오는 중...</p>}
+          {error && <p>에러: {error}</p>}
+
+          <div className="recommend-cards-container" style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+            {stocks.map((stock) => {
+              const summary = summaries[stock.stock_code];
+              const isSelected = selectedStock?.stock_code === stock.stock_code;
+              const isUp = summary?.change > 0;
+              const changeColor = isUp ? "red" : "blue";
+              const symbol = isUp ? "▲" : "▼";
+
+              return (
+                <div
+                  key={stock.stock_code}
+                  onClick={() => setSelectedStock(stock)}
+                  className={`recommend-card ${isSelected ? "selected" : ""}`}
+                  style={{
+                    padding: "16px",
+                    borderRadius: "12px",
+                    background: "#fff",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                    cursor: "pointer",
+                    minWidth: "200px",
+                    border: isSelected ? "2px solid #1976d2" : "1px solid #ccc",
+                  }}
+                >
+                  <div className="card-header" style={{ marginBottom: "8px" }}>
+                    <strong>{stock.company_name}</strong>
+                    <div style={{ fontSize: "12px", color: "#888" }}>({stock.stock_code})</div>
+                  </div>
+                  {summary ? (
+                    <>
+                      <div className="price" style={{ fontSize: "22px", fontWeight: "bold" }}>
+                        {Number(summary.price).toLocaleString()}원
+                      </div>
+                      <div className="change-rate" style={{ color: changeColor }}>
+                        {symbol}
+                        {Math.abs(summary.change).toLocaleString()} ({Math.abs(summary.change_rate).toFixed(2)}%)
+                      </div>
+                    </>
+                  ) : (
+                    <div className="price">로딩 중...</div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {selectedSummary && (
             <>
-                <div className='standard-time'>2025-04-16 기준</div>
-                <section className='stock-summery-card'>
+              <h2 style={{ marginTop: "40px" }}>
+                {selectedStock?.company_name} ({selectedStock?.stock_code})
+              </h2>
+              <StockSummaryCard data={selectedSummary} />
 
-                    {/* 왼쪽 - 현재가 + 등락률 */}
-                    <div className="current-stock">
-                        <div className="price">
-                            123,456
-                        </div>
-                        <div style={{ fontSize: 16, fontWeight: 500/*, color*/ }}>
-                            ▲+12%(등락률 표시부분)
-                        </div>
-                    </div>
-
-                    {/* 오른쪽 - 표 형식 정보 */}
-                    <div className="stock-info">
-                    <h1><strong>전일</strong> <span>2,025</span></h1>
-                    <h1><strong>고가</strong> <span style={{ color: 'red' }}>1,234</span></h1>
-                    <h1><strong>시가</strong> <span style={{ color: 'blue' }}>5,678</span></h1>
-                    <h1><strong>저가</strong> <span style={{ color: 'blue' }}>1,357</span></h1>
-                    <h1><strong>거래량</strong> <span>2,468</span></h1>
-                    <h1>
-                        <strong>거래대금(원)</strong>
-                        <span>
-                        1억
-                        5000만
-                        </span>
-                    </h1>
-                    </div>
-                    </section>
-                    {selectedMenu === 'TOP5' && (
-                        <>
-                            <h2>🔥 AI 추천 종목</h2>
-                            {loading && <p>불러오는 중...</p>}
-                            {error && <p>에러: {error}</p>}
-                            <ul>
-                            {stocks.map((stock, idx) => (
-                                <li key={idx}>
-                                {stock.company_name} ({stock.stock_code})
-                                </li>
-                            ))}
-                            </ul>
-                        </>
-                    )}
+              {volatility && profitability && stability && supplyRisk && (
+                <RiskScoreSelector
+                  companyName={selectedStock?.company_name}
+                  scores={{
+                    volatility: volatility.volatility_score,
+                    profitability: profitability.profitability_score,
+                    stability: stability.stability_score,
+                    supplyRisk: supplyRisk.risk_score,
+                  }}
+                />
+              )}
             </>
-        </section>
-    );
-}
+          )}
+        </>
+      )}
+    </section>
+  );
+};
+
 export default AIRecommPage;
