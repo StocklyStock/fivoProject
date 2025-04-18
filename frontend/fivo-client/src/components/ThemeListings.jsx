@@ -52,9 +52,9 @@ const ThemeListings = ({ stock_list = [], themeName }) => {
     getStockDetailsSequentially();
   }, [stock_list]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div>
@@ -62,36 +62,41 @@ const ThemeListings = ({ stock_list = [], themeName }) => {
         <h2><span>{themeName} 관련 종목</span></h2>
       </div>
       <div className="list-wrap">
-        <ul>
-          {getLimitedStockList().map((stock, index) => {
-            const stockCode = extractStockCode(stock.link);  // 종목 코드 추출
-            return (
-              <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <a href={stock.link} rel="noopener noreferrer" style={{ flex: 1 }}>
-                  {stock.name}
-                </a>
-                {/* 가격과 등락률을 추가 */}
-                {stockCode && stockDetails[stockCode] && (
-                  <div style={{ display: 'inline-block', textAlign: 'right', flex: 1 }}>
-                    <span style={{ fontSize: '16px', fontWeight: 'bold' }}>
-                      {stockDetails[stockCode].price.toLocaleString()}
-                    </span>
-                    <span 
-                      style={{
-                        color: stockDetails[stockCode].change > 0 ? 'red' : 'blue', 
-                        fontSize: '14px', 
-                        marginLeft: '8px'
-                      }}
-                    >
-                      {stockDetails[stockCode].change > 0 ? '▲' : '▼'} 
-                      {Math.abs(stockDetails[stockCode].change).toLocaleString()} ({Math.abs(stockDetails[stockCode].change_rate).toFixed(2)}%)
-                    </span>
-                  </div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+        {loading ? (
+          <div>Loading...</div>
+        ):(
+          <ul>
+            {getLimitedStockList().map((stock, index) => {
+              const stockCode = extractStockCode(stock.link);  // 종목 코드 추출
+              return (
+                <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <a href={stock.link} rel="noopener noreferrer" style={{ flex: 1 }}>
+                    {stock.name}
+                  </a>
+                  {/* 가격과 등락률을 추가 */}
+                  {stockCode && stockDetails[stockCode] && (
+                    <div style={{ display: 'inline-block', textAlign: 'right', flex: 1 }}>
+                      <span style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                        {stockDetails[stockCode].price.toLocaleString()}
+                      </span>
+                      <span 
+                        style={{
+                          color: stockDetails[stockCode].change > 0 ? 'red' : 'blue', 
+                          fontSize: '14px', 
+                          marginLeft: '8px'
+                        }}
+                      >
+                        {stockDetails[stockCode].change > 0 ? '▲' : '▼'} 
+                        {Math.abs(stockDetails[stockCode].change).toLocaleString()} ({Math.abs(stockDetails[stockCode].change_rate).toFixed(2)}%)
+                      </span>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
       </div>
     </div>
   );

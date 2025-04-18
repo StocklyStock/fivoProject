@@ -214,6 +214,19 @@ div.my-sub-menu a:hover{color:#FA7260;}
 .responsive-menus{}
 .responsive-btn{display: none;font-size: 24px; cursor: pointer;}
 
+nav.navbar-responsive{position:sticky;bottom: 0; left:0;width: 100%; background: #fff;
+  margin: auto; box-shadow: 0 0 5px rgba(0, 0, 0, 0.13);z-index: 10; display: none; padding: 20px 10px;}
+nav.navbar-responsive ul{width: 100%; display: flex; justify-content: space-between; align-items: center; text-align: center;}
+nav.navbar-responsive ul li a,
+nav.navbar-responsive ul li button{cursor: pointer;display: flex;
+  justify-content: space-between;
+  flex-direction: column;}
+nav.navbar-responsive ul li.color-mode{background-color: transparent; border: none; border-radius: none;}
+nav.navbar-responsive ul li.color-mode button{padding: 0;}
+nav.navbar-responsive ul li.color-mode svg{font-size: 30px; margin: 0 auto;}
+nav.navbar-responsive ul li svg{font-size: 25px; color: #333;}
+nav.navbar-responsive ul li span{display: block; font-size: 10.5px;}
+
 .main-banner,
 .main-banner .swiper,
 .main-banner .swiper .swiper-wrapper,
@@ -327,7 +340,13 @@ display: flex;
 .current-recomm h2 strong{  font-size: 25px;}
 .current-recomm h3 {line-height: 1;}
 .current-recomm h3 strong{font-size: 35px;color:#ffffff; }
-
+.current-recomm h3 > span{background-color: #fff;
+  padding:
+4px 10px;
+  border-radius:
+4px;
+  border:
+2px solid #f7684c;}
 
 div.go-to-ai {
   color: #FA7260;
@@ -634,8 +653,12 @@ right: 0; top: 50%; transform: translateY(-50%);}
 .stock-detail-wrap .tab-menus,
 .ai-recomm-wrap .tab-menus{display: flex; width: 100%; gap: 8px; margin-bottom: 10px;}
 
+.stock-detail-wrap .tab-sub-menus{width: 100%; margin: 35px auto 5px auto; display: flex; justify-content: flex-start; gap: 8px;}
+
+
 .stock-detail-wrap .tab-menus > span,
-.ai-recomm-wrap .tab-menus > span{
+.ai-recomm-wrap .tab-menus > span,
+.stock-detail-wrap .tab-sub-menus span{
   padding: 6px 12px;
   border-radius: 6px;
   border: 1px solid #FA7260;
@@ -645,7 +668,8 @@ right: 0; top: 50%; transform: translateY(-50%);}
   cursor: pointer;
 }
 .stock-detail-wrap .tab-menus > span.btn-color,
-.ai-recomm-wrap .tab-menus > span.btn-color{background-color: #FA7260; color: #fff;}      
+.ai-recomm-wrap .tab-menus > span.btn-color,
+.stock-detail-wrap .tab-sub-menus span.btn-color{background-color: #FA7260; color: #fff;}      
 
 .stock-detail-wrap .stock-summery-card,
 .ai-recomm-wrap .stock-summery-card{display: flex; justify-content: space-between; max-width: 1200px; margin: auto;
@@ -678,16 +702,88 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
       font-weight: 500;
       cursor: pointer;
 }
-  .graph-wrap .scroll-wrap{width: 100%; }
+.graph-wrap .scroll-wrap{width: 100%; }
 
 .graph-wrap svg{margin: auto;}
+.volatility-risk{
+  margin: 16px auto 0 auto;
+  background-color: #FBFAF8;
+  max-width: 1500px;
+  width: 100%;
+  padding: 50px 40px;
+  border-radius: 14px;
+  border: 1px solid #E9E9E9;
+  box-shadow: 0 0 4px rgba(100, 100, 100, 0.12);
+}
+
+.volatility-risk h2{color: #222; font-weight: 600; font-size: 22px; margin-bottom: 13px;}
+.volatility-risk >ul{        
+  display: flex;
+  width:100%;
+  gap: 16px;
+  margin: auto;
+  justify-content: space-between;
+}
+
+.volatility-risk >ul li{             
+  position: relative;
+  max-width: 320px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #fff;
+  border:1px solid #e9e9e9;
+  box-shadow: 0 0 4px rgba(100, 100, 100, 0.12);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+.volatility-risk >ul li span.decription-btn{cursor: pointer; font-size: 12px;} 
+.volatility-risk >ul li h3{margin-bottom: 5px;font-size: 21px; color: #222; font-weight: 600; display: flex; justify-content: space-between; align-items: center; width: 100%;}
+.volatility-chart-wrap{width: 100%; position: relative;}
+.volatility-chart-wrap h4,
+.volatility-gauge .volatility-gauge-wrap h2{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 110px;
+  height: 110px;
+  border-radius:50%;
+  background-color: #fff;
+  border:1px solid #E9E9E9;
+  box-shadow: 0 0 4px rgba(100, 100, 100, 0.12);}
+.volatility-chart-wrap h4 p{font-size: 24px; line-height: 1; font-weight: 800; letter-spacing: -0.5px; margin-top: 12px;}
+.volatility-chart-wrap h4 span{font-size: 19px;}
+
+.volatility-gauge{ background-color: #fbfaf8;
+  position:relative;border: 1px solid #e9e9e9; border-radius: 14px; margin: 20px auto 0 auto; padding: 50px 40px;box-shadow: 0 0 4px rgba(100, 100, 100, 0.12); }
+.volatility-gauge h1{margin-bottom: 46px;
+  font-size: 21px;
+  color: #222;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; position: relative;}
+  .volatility-gauge .volatility-gauge-wrap{position: relative;
+    background-color: #fff;
+    border-radius:14px;
+    border:1px solid #e9e9e9;
+    padding:30px 15px 60px 15px;
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 0 0 4px rgba(100, 100, 100, 0.12);}
+  
+    .volatility-gauge .volatility-gauge-wrap .volatility-gauge-chart-wrap{position: relative;}
+  .volatility-gauge .volatility-gauge-wrap h2{width: 130px; height: 130px;}
+  .volatility-gauge .volatility-gauge-wrap h2 p{font-size: 50px; font-weight: 800;} 
+
 /*2025-04-16 ai추천 페이지 작업 - 박홍덕 - end */
+
+
 /*2025-04-15 주식 상세종목 페이지 작업 - 박홍덕 - end */
-
-
-
-
-
 
 /*2025-04-11 자주묻는 페이지 작업 - 박홍덕 - start */
 .faq-listings{width: 100%; margin: 114px auto 124px auto;}
@@ -712,6 +808,8 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   footer > div > nav{gap: 70px;}
   .main-listings{padding: 80px 10px; gap: 30px;}
   .stock-detail-wrap{padding: 0 10px;}
+
+  
 }
 
 @media (max-width:1160px){
@@ -731,15 +829,25 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   header nav ul.nav-right{gap: 20px;}
   .FAQ-wrap{padding: 0 10px;}
 
+  .volatility-risk{padding: 50px 20px;}
+  .volatility-risk > ul li h3{font-size: 16px;}
+  .volatility-chart-wrap h4{width: 95px;
+    height: 95px;}
+
+  .volatility-chart-wrap h4 p{font-size: 18px;}
 }
 @media (max-width:768px){
   header nav ul.nav-right{width: 88%;}
   header nav ul.nav-left{width: 12%;}
+  .search-box-wrapper.open{width: 94%;}
   header nav ul.nav-left li{display: none;}
   header nav ul.nav-left li.header-logo{display: block;}
   header nav ul.nav-right .lang,
-  header nav ul.nav-right .color-mode{display: none;}
+  header nav ul.nav-right .color-mode, ul.user-info li.my-menu,
+  header nav ul .login-btn{display: none;}
   .responsive-btn{display:block;}
+  nav.navbar-responsive{display: block; }
+
 
   .main-listings {flex-wrap: wrap;}
   .main-listings > div{width:100%;}
@@ -750,6 +858,11 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   .stock-detail-wrap .stock-summery-card .stock-info{width: 100%;grid-template-columns: repeat(2, 50%);}
   .price{font-size: 40px;}
 
+  .volatility-risk{padding: 50px 10px;}
+  .volatility-risk > ul{flex-wrap: wrap;justify-content: center;}
+  .volatility-risk > ul li{width: 48%;}
+  .volatility-chart-wrap h4 p{font-size: 24px;}
+  .volatility-chart-wrap h4{width: 120px; height: 120px;}
   .current-stock{width: 100%;
     display: flex;
     justify-content: center;
@@ -769,6 +882,9 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   footer > div > nav{justify-content: flex-start;}
   footer > div > nav, footer > div > div{width: 100%;}
   footer address{font-size: 11px; word-break: keep-all;}
+
+  .volatility-risk h2{text-align: center;}
+  .volatility-risk > ul li{width: 100%;}
 }
 @media (max-width:360px){
   .login .register-wrap p::before, .login .register-wrap p::after{width: 15%;}
@@ -784,6 +900,7 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 .w1200{width:100%; max-width: 1200px; margin: auto;}
 .brand-bg-color{background-color: #FDFBF9;}
 .btn-color{background-color: #FA7260; color:#fff;}
+.mh600{min-height: 600px;}
 
 /* 애니메이션 로고 등은 그대로 유지 */
 .logo {
@@ -860,10 +977,10 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   margin-left: 4px;
 }
 
-.price {
+/* .price {
   font-size: 20px;
   font-weight: bold;
-}
+} */
 
 .change-rate {
   font-size: 14px;

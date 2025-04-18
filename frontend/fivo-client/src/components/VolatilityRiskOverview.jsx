@@ -4,6 +4,9 @@ import {
   RadialBar,
   PolarAngleAxis,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 
 const descriptions = {
@@ -22,122 +25,115 @@ const getStatus = (label, value) => {
 };
 
 const statusColor = {
-  높음: '#d62728',
-  보통: '#f9c80e',
-  낮음: '#2ca02c',
+  높음: '#FF6E6E',
+  보통: 'rgb(247, 182, 42)',
+  낮음: 'rgb(29, 196, 101)',
 };
 
 const VolatilityRiskOverview = ({ data }) => {
   const [tooltipKey, setTooltipKey] = useState(null);
 
   return (
-    <div
-      style={{
-        marginBottom: 24,
-        maxWidth: 1000,
-        padding: 20,
-        borderRadius: 12,
-        background: '#f6f9fb',
-        fontFamily: 'sans-serif',
-      }}
-    >
-      <h3 style={{ marginBottom: 16 }}>⚡ 변동성 리스크 구성 지표</h3>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 16,
-        }}
-      >
+    <section className='volatility-risk'>
+      <h2>⚡ 변동성 리스크 구성 지표</h2>
+      <ul>
         {data.map((item, i) => {
           const status = getStatus(item.label, item.value);
           const color = statusColor[status];
 
           return (
-            <div
-              key={i}
-              style={{
-                position: 'relative',
-                padding: '12px 16px',
-                borderRadius: 8,
-                background: '#fff',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-              }}
-            >
-              <div style={{ fontWeight: 'bold', marginBottom: 4 }}>
-                {item.label}
-                <span
+            <li key={i}>
+            
+
+            <h3>
+              {item.label}
+
+              {tooltipKey === item.label && (
+                <div
                   style={{
-                    marginLeft: 6,
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    color: '#888',
+                    position: 'absolute',
+                    top: 30,
+                    left: 0,
+                    zIndex: 10,
+                    background: '#333',
+                    color: '#fff',
+                    padding: '8px 12px',
+                    borderRadius: 6,
+                    fontSize: 12,
+                    maxWidth: 260,
+                    whiteSpace: 'pre-line',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
                   }}
-                  onClick={() =>
-                    setTooltipKey(tooltipKey === item.label ? null : item.label)
-                  }
-                  title="지표 설명 보기"
                 >
-                  ℹ️
-                </span>
-                {tooltipKey === item.label && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: 30,
-                      left: 0,
-                      zIndex: 10,
-                      background: '#333',
-                      color: '#fff',
-                      padding: '8px 12px',
-                      borderRadius: 6,
-                      fontSize: 12,
-                      maxWidth: 260,
-                      whiteSpace: 'pre-line',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-                    }}
-                  >
-                    {descriptions[item.label]}
-                  </div>
-                )}
-              </div>
-
-              <ResponsiveContainer width="100%" height={130}>
-                <RadialBarChart
-                  cx="50%"
-                  cy="50%"
-                  innerRadius="60%"
-                  outerRadius="100%"
-                  barSize={12}
+                  {descriptions[item.label]}
+                </div>
+              )}
+              <span className='decription-btn'
+                onClick={() =>
+                  setTooltipKey(tooltipKey === item.label ? null : item.label)
+                }
+                title="지표 설명 보기"
+              >
+                ℹ️
+              </span>
+            </h3>
+            <div className='volatility-chart-wrap'>
+              <ResponsiveContainer width="100%" height={175} >
+              <PieChart>
+                <Pie
+                  dataKey="value"
+                  startAngle={90}
+                  endAngle={-270} // 시계방향으로 360도
                   data={[
-                    {
-                      name: item.label,
-                      value: Math.abs(item.value),
-                      fill: color,
-                    },
+                    { name: item.label, value: Math.abs(item.value) },
+                    { name: '빈공간', value: 100 - Math.abs(item.value) },
                   ]}
-                  startAngle={180}
-                  endAngle={0}
+                  innerRadius="65%"
+                  outerRadius="100%"
+                  cornerRadius={4}
                 >
-                  <PolarAngleAxis
-                    type="number"
-                    domain={[0, 100]}
-                    angleAxisId={0}
-                    tick={false}
-                  />
-                  <RadialBar background dataKey="value" cornerRadius={6} />
-                </RadialBarChart>
-              </ResponsiveContainer>
+                  {[statusColor[status], '#EDEDED'].map((fill, index) => (
+                    <Cell key={`cell-${index}`} fill={fill} />
+                  ))}
+                </Pie>
+              </PieChart>
+                      {/* <RadialBarChart
+                        cx="50%"
+                        cy="60%"
+                        innerRadius="79%"
+                        outerRadius="120%"
+                        barSize={23}
+                        data={[
+                          {
+                            name: item.label,
+                            value: Math.abs(item.value),
+                            fill: color,
+                          },
+                        ]}
+                        startAngle={180}
+                        endAngle={0}
+                      >
+                      <PolarAngleAxis
+                        type="number"
+                        domain={[0, 100]}
+                        angleAxisId={0}
+                        tick={false}
+                      />
+                    <RadialBar background dataKey="value" cornerRadius={6} />
+                  </RadialBarChart> */}
+                </ResponsiveContainer>
 
-              <div style={{ textAlign: 'center', marginTop: 4, fontSize: 14 }}>
-                {item.value.toFixed(2)}% /{' '}
-                <span style={{ color }}>{status}</span>
+                <h4>
+                  <p style={{ color }}>{item.value.toFixed(2)}% {' '}</p>
+                  <span style={{ color }}>{status}</span>
+                </h4>
+
               </div>
-            </div>
+            </li>
           );
         })}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 };
 
