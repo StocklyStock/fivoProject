@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
 import {
-  RadialBarChart,
-  RadialBar,
-  PolarAngleAxis,
-  ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  ResponsiveContainer
 } from 'recharts';
 
 const VolatilityGauge = ({ score }) => {
-  const color = score >= 70 ? '#FF4E42' : score >= 40 ? '#F9C80E' : 'rgb(29, 196, 101)';
+  const getColor = (score) => {
+    if (score >= 70) return '#FF4E42';       // 높음
+    if (score >= 40) return '#F9C80E';       // 보통
+    return 'rgb(29, 196, 101)';              // 낮음
+  };
+
+  const getLevelText = (score) => {
+    if (score >= 70) return '위험';
+    if (score >= 40) return '주의';
+    return '안정적';
+  };
+
+  const color = getColor(score);
+  const levelText = getLevelText(score);
+
   const [showTooltip, setShowTooltip] = useState(false);
 
   const tooltipStyle = {
@@ -36,16 +47,14 @@ const VolatilityGauge = ({ score }) => {
 - 40~69 : 보통 (주의)
 - 70~100 : 높음 (위험)`;
 
-const data=[
-  {name: "score", value: score},
-  {name: "rest", value: 100 - score}
-]
+  const data = [
+    { name: "score", value: score },
+    { name: "rest", value: 100 - score }
+  ];
 
   return (
     <section className="volatility-gauge">
-
- 
-      <div className='volatility-gauge-wrap'>
+      <div className="volatility-gauge-wrap">
         <h1>
           ⚡ 변동성 점수
           <span
@@ -57,47 +66,40 @@ const data=[
           </span>
         </h1>
         {showTooltip && <div style={tooltipStyle}>{explanation}</div>}
-        <div className='volatility-gauge-chart-wrap'>
-        <ResponsiveContainer width="100%" height={200}>
-          <PieChart>
-            <Pie
-            data={data}
-            dataKey="value"
-            startAngle={90}
-            endAngle={-270}
-              // cx="50%"
-              // cy="100%"
-              innerRadius="65%"
-              outerRadius="100%"  
-              connerRadius={4}
-              //barSize={20}
-
+        <div className="volatility-gauge-chart-wrap" style={{ position: 'relative', textAlign: 'center' }}>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                startAngle={90}
+                endAngle={-270}
+                innerRadius="65%"
+                outerRadius="100%"
               >
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={index === 0 ? color: '#ededed'} />
+                  <Cell key={`cell-${index}`} fill={index === 0 ? color : '#ededed'} />
                 ))}
               </Pie>
-            </PieChart>  
-          {/* <RadialBarChart
-            cx="50%"
-            cy="100%"
-            innerRadius="60%"
-            outerRadius="100%"
-            startAngle={180}
-            endAngle={0}
-            barSize={20}
-            data={[{ name: 'volatility', value: score, fill: color }]}
-          >
-            <PolarAngleAxis type="number" domain={[0, 100]} tick={false} angleAxisId={0} />
-            <RadialBar background dataKey="value" cornerRadius={10} />
-          </RadialBarChart> */}
-        </ResponsiveContainer>
+            </PieChart>
+          </ResponsiveContainer>
 
-          <h2 style={{color}}>
-            <p>{score}</p>
-          </h2>
-        </div>{/*.volatility-gauge-chart-wrap 닫음*/}
-      </div>{/*.volatility-gauge-wrap 닫음*/}
+          {/* 가운데 점수 + 텍스트 */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              textAlign: 'center',
+              color: color,
+            }}
+          >
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{`${score.toFixed(2)}%`}</div>
+            <div style={{ fontSize: '1rem', fontWeight: 'bold' }}>{levelText}</div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
