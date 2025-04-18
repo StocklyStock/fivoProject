@@ -89,6 +89,60 @@ def predict_high_volatility_stocks():
 
     return results
 
+def load_code_to_name_map():
+    FASTAPI_BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    DATA_PATH = os.path.join(FASTAPI_BASE_DIR, "..", "data", "stock_list.json")
+    DATA_PATH = os.path.abspath(DATA_PATH)  # ← 깔끔하게 절대경로 변환
+    with open(DATA_PATH, "r", encoding="utf-8") as f:
+        stock_data = json.load(f)
+        return {item["종목코드"]: item["회사명"] for item in stock_data}
+
+def predict_by_sector_selected_stocks(selected_stocks):
+    results = []
+    code_to_name = load_code_to_name_map()
+    for stock in selected_stocks:
+        stock_code = stock
+        company_name = code_to_name.get(stock_code)
+        # 코드로 이름 찾아서 넣어줘야함
+        news_list = latest_news(company_name)
+
+        if not news_list:
+            continue
+
+        all_probs = []
+        class_3_articles = []
+
+        for article in news_list:
+            text = article["title"] + " " + article["summary"]
+            preds, probs = predict(text)
+            pred_class = preds[0]
+            prob_dist = probs[0][:4]
+
+            all_probs.append(prob_dist)
+
+            if pred_class == 3:
+                class_3_articles.append({
+                    "title": article["title"],
+                    "summary": article["summary"],
+                    "url": article["url"],
+                    "prob": float(prob_dist[3])
+                })
+
+        if not all_probs:
+            continue
+
+        avg_probs = [sum(p[i] for p in all_probs) / len(all_probs) for i in range(4)]
+        predicted_class = avg_probs.index(max(avg_probs))
+
+        results.append({
+            "stock_code": stock_code,
+            "company": company_name,
+            "class_prediction": predicted_class,
+            "positive_news": class_3_articles
+        })
+
+    return results
+
 def run_daily_prediction():
     print("📌 [예측 시작] 고변동성 종목 예측 중...")
     session = SessionLocal()
