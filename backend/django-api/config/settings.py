@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'favorites',
     'aiRecommendRandom5',
+    'userRecommend',
 ]
 
 MIDDLEWARE = [
