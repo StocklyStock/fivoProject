@@ -25,8 +25,13 @@ const authSlice = createSlice({
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
     },
+     /*2025-04-18 정보 갱신용 - 박홍덕 - start*/ 
+    setUser: (state, action) => {
+      state.user = action.payload;
+    }
+     /*2025-04-18 정보 갱신용 - 박홍덕 - end*/ 
   },
 });
 
-export const { loginSuccess, logout } = authSlice.actions;
+export const { loginSuccess, logout, setUser } = authSlice.actions;
 export default authSlice.reducer;

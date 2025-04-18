@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
+ /*2025-04-18 정보 갱신용 - 박홍덕 - start*/ 
+import {setUser} from "../slices/authSlice";
+ /*2025-04-18 정보 갱신용 - 박홍덕 - end*/ 
 import {
   Box,
   Typography,
@@ -39,6 +42,7 @@ const Dashboard = () => {
   const [newPassword2, setNewPassword2] = useState('');
 
   const [favorites, setFavorites] = useState([]);
+
 
   // ✅ 마이페이지 진입 시 유저 정보 직접 불러오기
   useEffect(() => {
@@ -93,6 +97,10 @@ const Dashboard = () => {
       await updateUserInfo({ nickname, phone });
       toast.success('회원 정보가 수정되었어요!');
       setOpenEdit(false);
+/*2025-04-18 정보 갱신용 - 박홍덕 - start*/
+      const res = await getCurrentUser();
+      dispatch(setUser(res.data));
+/*2025-04-18 정보 갱신용 - 박홍덕 - end*/
     } catch (e) {
       toast.error('수정 실패: ' + (e.response?.data?.error || '오류 발생'));
     }

@@ -244,47 +244,29 @@ const StockDetailPage = () => {
       {selectedMenu === '리스크분석' && (
         <div>
           {/* 리스크 분석 메뉴바 */}
-          <div style={{ display: 'flex', marginBottom: '20px' }}>
-            <span
-              onClick={() => setRiskAnalysisMenu('변동성 리스크 분석')}
-              style={{
-                cursor: 'pointer',
-                color: riskAnalysisMenu === '변동성 리스크 분석' ? 'blue' : 'black',
-                marginRight: '20px',
-              }}
-            >
+          <div className='tab-sub-menus'>
+            <span 
+            className={`${riskAnalysisMenu === '변동성 리스크 분석' ? 'btn-color':''}`}
+            onClick={() => setRiskAnalysisMenu('변동성 리스크 분석')}
+>
               변동성 리스크 분석
             </span>
-            <span
-              onClick={() => setRiskAnalysisMenu('외국인 수급 리스크 분석')}
-              style={{
-                cursor: 'pointer',
-                color: riskAnalysisMenu === '외국인 수급 리스크 분석' ? 'blue' : 'black',
-                marginRight: '20px',
-              }}
-            >
+            <span 
+            className={`${riskAnalysisMenu === '외국인 수급 리스크 분석' ? 'btn-color':''}`}
+            onClick={() => setRiskAnalysisMenu('외국인 수급 리스크 분석')}>
               외국인 수급 리스크 분석
             </span>
-            <span
-              onClick={() => setRiskAnalysisMenu('안정성 리스크 분석')}
-              style={{
-                cursor: 'pointer',
-                color: riskAnalysisMenu === '안정성 리스크 분석' ? 'blue' : 'black',
-                marginRight: '20px',
-              }}
-            >
+            <span 
+            className={`${riskAnalysisMenu === '안정성 리스크 분석' ? 'btn-color':''}`}
+            onClick={() => setRiskAnalysisMenu('안정성 리스크 분석')}>
               안정성 리스크 분석
             </span>
-            <span
-              onClick={() => setRiskAnalysisMenu('수익성 리스크 분석')}
-              style={{
-                cursor: 'pointer',
-                color: riskAnalysisMenu === '수익성 리스크 분석' ? 'blue' : 'black',
-              }}
-            >
+            <span 
+            className={`${riskAnalysisMenu === '수익성 리스크 분석' ? 'btn-color':''}`}
+            onClick={() => setRiskAnalysisMenu('수익성 리스크 분석')}>
               수익성 리스크 분석
             </span>
-          </div>
+          </div>{/*.tab-sub-menus 닫음*/}
 
           {/* 리스크 분석 메뉴에 따른 화면 내용 */}
           {riskAnalysisMenu === '변동성 리스크 분석' && volatility && (
