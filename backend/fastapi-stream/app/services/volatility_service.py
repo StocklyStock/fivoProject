@@ -1,7 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
-from ..core.token_manager import get_access_token  
+from app.core.token_manager import get_access_token  
 
 load_dotenv()
 
