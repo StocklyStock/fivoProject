@@ -2,9 +2,11 @@ import importlib.util
 import os
 import json
 import sys
+import asyncio
 from app.models.predicted_stock import PredictedStock
 from app.database import SessionLocal
 from datetime import datetime
+from app.services.save_high_volatility_to_file import save_high_volatility_json
 
 # 📌 현재 이 파일 위치
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -35,6 +37,8 @@ latest_news = import_from_file(DJANGO_CRAWLING_PATH, "fetch_structured_news")
 
 # ✅ 핵심 함수: 예측 수행
 def predict_high_volatility_stocks():
+    # 🔁 고변동성 종목 먼저 계산하여 저장
+    asyncio.run(save_high_volatility_json())
     data_path = os.path.join(BASE_DIR, "../data/high_volatility_stocks.json")
 
     with open(data_path, "r", encoding="utf-8") as f:
@@ -108,7 +112,7 @@ def run_daily_prediction():
     session.commit()
     session.close()
     print("✅ [예측 완료] DB에 저장됨.")
-    
+
 # ✅ 단독 실행 확인용
 if __name__ == "__main__":
     run_daily_prediction()
