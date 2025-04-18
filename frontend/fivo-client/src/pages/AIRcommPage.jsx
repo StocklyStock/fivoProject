@@ -195,15 +195,7 @@ const AIRecommPage = () => {
                 {selectedStock?.company_name} ({selectedStock?.stock_code})
                 {isAuthenticated && (
                   <>
-                    <button
-                      onClick={toggleFavorite}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <button onClick={toggleFavorite} style={{ marginLeft: '10px' }}>
                       {isFavorite ? '⭐' : '☆'}
                     </button>
                     <button
