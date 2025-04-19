@@ -1,4 +1,3 @@
-
 import os
 import json
 import time
@@ -19,11 +18,26 @@ DATA_DIR = BASE_DIR / "data"
 INPUT_FILE = DATA_DIR / "stock_list_with_sector.json"
 OUTPUT_FILE = DATA_DIR / "stock_with_risk_score.json"
 
-# ✅ 투자자 성향별 가중치
+# ✅ 투자자 성향별 가중치 (영문 명칭)
 WEIGHTS = {
-    "공격형": {"안정성": 0.2, "수익성": 0.4, "변동성": 0.3, "수급": 0.1},
-    "중립형": {"안정성": 0.3, "수익성": 0.3, "변동성": 0.25, "수급": 0.15},
-    "안정형": {"안정성": 0.5, "수익성": 0.3, "변동성": 0.1, "수급": 0.1},
+    "aggressive": {
+        "stability_score": 0.2,
+        "profitability_score": 0.4,
+        "volatility_score": 0.3,
+        "demand_score": 0.1,
+    },
+    "moderate": {
+        "stability_score": 0.3,
+        "profitability_score": 0.3,
+        "volatility_score": 0.25,
+        "demand_score": 0.15,
+    },
+    "conservative": {
+        "stability_score": 0.5,
+        "profitability_score": 0.3,
+        "volatility_score": 0.1,
+        "demand_score": 0.1,
+    },
 }
 
 
@@ -58,10 +72,10 @@ def calculate_risk_score_for_stock(symbol: str, name: str) -> dict:
 
         # 5. 종합 점수 계산
         metric_scores = {
-            "안정성": stability_score,
-            "수익성": profitability_score,
-            "변동성": volatility_score,
-            "수급": demand_score,
+            "stability_score": stability_score,
+            "profitability_score": profitability_score,
+            "volatility_score": volatility_score,
+            "demand_score": demand_score,
         }
 
         final_scores = calculate_final_scores(metric_scores)
@@ -96,10 +110,12 @@ def calculate_and_save_risk_scores(limit: int = None):
 
         result = calculate_risk_score_for_stock(symbol, name)
         if result:
-            stock.update({
-                "리스크_점수": result["risk_scores"],
-                "최종점수": result["final_scores"]
-            })
+            stock.update(
+                {
+                    "risk_scores": result["risk_scores"],
+                    "final_scores": result["final_scores"],
+                }
+            )
             updated_list.append(stock)
             print(f"✅ [{i+1}/{len(stock_list)}] {name} 처리 완료")
         else:
