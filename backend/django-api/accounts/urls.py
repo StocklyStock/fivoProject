@@ -15,6 +15,10 @@ from .views import (
     ChangePasswordView,
     GoogleLoginView,
     admin_user_stats,
+    notification_list_create,
+    public_notifications,
+    update_notification,
+    delete_notification,
 )
 
 app_name = 'accounts'
@@ -35,5 +39,9 @@ urlpatterns = [
     path('users/<int:user_id>/update/', update_user, name='update_user'),
     path('health/', health_check, name='health_check'),  
     path('admin/stats/', admin_user_stats),  # 어드민 페이지의 통계
+    path('admin/notifications/', notification_list_create),  # 어드민 알림 설정
+    path('notifications/public/', public_notifications),
+    path('admin/notifications/<int:notification_id>/update/', update_notification),
+    path('admin/notifications/<int:notification_id>/delete/', delete_notification),
     path('api/stocks/', include('userRecommend.urls')),
 ]

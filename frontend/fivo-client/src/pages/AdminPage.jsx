@@ -25,9 +25,12 @@ import Layout from '../components/Layout';
 import { useDispatch } from 'react-redux';
 import { logout } from '../auth/authSlice';
 import { useNavigate } from 'react-router-dom';
+import AdminStats from './AdminStats';
+import AdminNotifications from './AdminNotifications';
 
 const AdminPage = () => {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(null); // ✅ 초기 null
+  const [ready, setReady] = useState(false); // ✅ 렌더링 준비 상태
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -67,14 +70,11 @@ const AdminPage = () => {
         setUsers(response.data);
         setFilteredUsers(response.data);
       } else {
-        console.error("응답 데이터가 배열이 아님:", response.data);
         setUsers([]);
         setFilteredUsers([]);
       }
     } catch (error) {
-      console.error('유저 목록 가져오기 실패:', error);
       if (error.response?.status === 401 || error.response?.status === 403) {
-        // 인증 실패 → 로그인으로 튕기기
         localStorage.removeItem('accessToken');
         navigate('/login');
       } else {
@@ -91,6 +91,8 @@ const AdminPage = () => {
     if (!token) {
       navigate('/login');
     }
+    setTab(0); // ✅ 탭 초기값 설정
+    setReady(true); // ✅ 렌더링 준비 완료
   }, []);
 
   useEffect(() => {
@@ -100,13 +102,11 @@ const AdminPage = () => {
   }, [tab]);
 
   useEffect(() => {
-    const filtered = Array.isArray(users)
-      ? users.filter(
-          (user) =>
-            user.email.toLowerCase().includes(search.toLowerCase()) ||
-            user.nickname.toLowerCase().includes(search.toLowerCase())
-        )
-      : [];
+    const filtered = users.filter(
+      (user) =>
+        user.email.toLowerCase().includes(search.toLowerCase()) ||
+        user.nickname.toLowerCase().includes(search.toLowerCase())
+    );
     setFilteredUsers(filtered);
   }, [search, users]);
 
@@ -122,31 +122,25 @@ const AdminPage = () => {
           </Button>
         </Box>
 
-        <Paper elevation={1} className="rounded-xl overflow-hidden">
-          <Tabs
-            value={tab}
-            onChange={handleTabChange}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <Tab label="📊 통계 보기" />
-            <Tab label="👥 사용자 목록" />
-            <Tab label="🔔 알림 설정" />
-          </Tabs>
-        </Paper>
-
-        {/* 탭 콘텐츠 */}
-        {tab === 0 && (
-          <Box mt={4}>
-            <Typography variant="h6">📈 통계 영역 준비 중...</Typography>
-            <Typography variant="body2" color="text.secondary">
-              누적 가입자, 일간 가입자, 인증 완료 비율 등 시각화 예정
-            </Typography>
-          </Box>
+        {ready && (
+          <Paper elevation={1} className="rounded-xl overflow-hidden">
+            <Tabs
+              value={tab}
+              onChange={handleTabChange}
+              indicatorColor="primary"
+              textColor="primary"
+              centered
+            >
+              <Tab label="📊 통계 보기" />
+              <Tab label="👥 사용자 목록" />
+              <Tab label="🔔 알림 설정" />
+            </Tabs>
+          </Paper>
         )}
 
-        {tab === 1 && (
+        {ready && tab === 0 && <AdminStats />}
+
+        {ready && tab === 1 && (
           <Box mt={4}>
             <TextField
               label="사용자 검색"
@@ -244,14 +238,7 @@ const AdminPage = () => {
           </Box>
         )}
 
-        {tab === 2 && (
-          <Box mt={4}>
-            <Typography variant="h6">🔔 알림 설정 기능 준비 중</Typography>
-            <Typography variant="body2" color="text.secondary">
-              사용자 대상 공지 또는 이벤트 발송 기능 추가 예정입니다.
-            </Typography>
-          </Box>
-        )}
+        {ready && tab === 2 && <AdminNotifications />}
       </Box>
     </Layout>
   );

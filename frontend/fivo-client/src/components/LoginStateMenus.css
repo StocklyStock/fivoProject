@@ -1,0 +1,34 @@
+.notification-menu {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .notification-dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    width: 250px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    z-index: 999;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 10px;
+  }
+  
+  .notification-dropdown .dropdown-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .notification-item {
+    padding: 5px 0;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .notification-empty {
+    font-size: 13px;
+    color: #888;
+  }
+  

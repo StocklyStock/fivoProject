@@ -15,10 +15,11 @@ from django.utils.crypto import get_random_string
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 
-from .models import CustomUser
+from .models import CustomUser,Notification
 from .serializers import (UserSerializer, UserListSerializer,UserUpdateSerializer,
                           PasswordResetCodeRequestSerializer,PasswordResetSerializer,
-                          PasswordChangeSerializer,UserProfileSerializer, LoginSerializer,)
+                          PasswordChangeSerializer,UserProfileSerializer, LoginSerializer,
+                          NotificationSerializer)
 from .utils import send_verification_code_email
 from drf_yasg.utils import swagger_auto_schema
 
@@ -347,3 +348,57 @@ def admin_user_stats(request):
         "verification_rate": verification_rate,
         "daily_signups": daily_counts,
     }, status=status.HTTP_200_OK)
+
+# ✔️ 관리자 전용 - 알림 작성 및 전체 조회
+@api_view(['GET', 'POST'])
+@permission_classes([IsAdminUser])
+def notification_list_create(request):
+    if request.method == 'GET':
+        noti = Notification.objects.order_by('-created_at')
+        serializer = NotificationSerializer(noti, many=True)
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        serializer = NotificationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+@permission_classes([AllowAny])  # 또는 IsAuthenticated
+def public_notifications(request):
+    notis = Notification.objects.order_by('-created_at')[:10]
+    serializer = NotificationSerializer(notis, many=True)
+    return Response(serializer.data)
+
+# ✔️ 관리자 전용 - 알림 수정 (PATCH)
+@api_view(['PATCH'])
+@permission_classes([IsAdminUser])
+def update_notification(request, notification_id):
+    try:
+        from .models import Notification
+        from .serializers import NotificationSerializer
+
+        noti = Notification.objects.get(id=notification_id)
+    except Notification.DoesNotExist:
+        return Response({"error": "해당 알림이 존재하지 않습니다."}, status=404)
+
+    serializer = NotificationSerializer(noti, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+# ✔️ 관리자 전용 - 알림 삭제 (DELETE)
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_notification(request, notification_id):
+    try:
+        from .models import Notification
+        noti = Notification.objects.get(id=notification_id)
+        noti.delete()
+        return Response({"message": "삭제 완료!"}, status=204)
+    except Notification.DoesNotExist:
+        return Response({"error": "해당 알림이 존재하지 않습니다."}, status=404)
