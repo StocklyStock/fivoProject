@@ -7,6 +7,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils import timezone
 from datetime import timedelta
 import logging
+from django.utils.timezone import now, timedelta
+from django.db.models.functions import TruncDate
+from django.db.models import Count
 
 from django.utils.crypto import get_random_string
 from google.oauth2 import id_token
@@ -300,3 +303,28 @@ def update_user(request, user_id):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# ✔️ 관리자 전용 - 통계 조회
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def admin_user_stats(request):
+
+    total_users = CustomUser.objects.count()
+    verified_users = CustomUser.objects.filter(is_verified=True).count()
+    verification_rate = round((verified_users / total_users) * 100, 2) if total_users else 0
+
+    last_7_days = now() - timedelta(days=6)
+    daily_counts = (
+        CustomUser.objects.filter(date_joined__gte=last_7_days)
+        .annotate(day=TruncDate('date_joined'))
+        .values('day')
+        .annotate(count=Count('id'))
+        .order_by('day')
+    )
+
+    return Response({
+        "total_users": total_users,
+        "verified_users": verified_users,
+        "verification_rate": verification_rate,
+        "daily_signups": daily_counts,
+    }, status=status.HTTP_200_OK)

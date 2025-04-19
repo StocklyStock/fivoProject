@@ -14,6 +14,7 @@ from .views import (
     PasswordResetView,
     ChangePasswordView,
     GoogleLoginView,
+    admin_user_stats,
 )
 
 app_name = 'accounts'
@@ -32,5 +33,6 @@ urlpatterns = [
     path('users/', user_list, name='user_list'),
     path('users/<int:user_id>/delete/', delete_user, name='delete_user'),
     path('users/<int:user_id>/update/', update_user, name='update_user'),
-    path('health/', health_check, name='health_check'),  # ✅ 이거 꼭 필요
+    path('health/', health_check, name='health_check'),  
+    path('admin/stats/', admin_user_stats),  # 어드민 페이지의 통계
 ]

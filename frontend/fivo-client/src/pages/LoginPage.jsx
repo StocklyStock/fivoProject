@@ -49,9 +49,11 @@ const LoginPage = () => {
       toast.success('✅ 로그인 성공!');
 
       // ✅ 5. 이동
-      if (meRes.data.role === 'admin' || meRes.data.is_staff) {
+      if (meRes.data.is_staff === true) {
+        console.log("🚀 관리자입니다. /admin으로 이동합니다.");
         navigate('/admin');
       } else {
+        console.log("➡️ 일반 유저입니다. /dashboard로 이동합니다.");
         navigate('/dashboard');
       }
 

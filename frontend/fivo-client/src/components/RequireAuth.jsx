@@ -1,16 +1,17 @@
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 const RequireAuth = ({ children, adminOnly = false }) => {
   const user = useSelector((state) => state.auth.user);
+  const location = useLocation();
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // ✅ 관리자 전용 페이지 접근 제한
-  if (adminOnly && user.role !== 'admin') {
-    return <Navigate to="/dashboard" />;
+  // ✅ 관리자 여부를 정확하게 확인
+  if (adminOnly && !user.is_staff) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;
