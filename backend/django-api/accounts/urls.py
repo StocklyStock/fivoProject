@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
     RegisterView,
     VerifyCodeView,
@@ -35,4 +35,5 @@ urlpatterns = [
     path('users/<int:user_id>/update/', update_user, name='update_user'),
     path('health/', health_check, name='health_check'),  
     path('admin/stats/', admin_user_stats),  # 어드민 페이지의 통계
+    path('api/stocks/', include('userRecommend.urls')),
 ]

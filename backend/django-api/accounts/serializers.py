@@ -29,7 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
-    
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -55,7 +55,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         if not value.strip():
             raise serializers.ValidationError("닉네임은 공백일 수 없습니다.")
         return value
-    
+
 class PasswordResetCodeRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
@@ -65,7 +65,7 @@ class PasswordResetCodeRequestSerializer(serializers.Serializer):
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError("해당 이메일로 가입된 계정이 없습니다.")
         return value
-    
+
 class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField()
     new_password = serializers.CharField(write_only=True)
@@ -84,7 +84,7 @@ class PasswordResetSerializer(serializers.Serializer):
         user.set_password(new_password)
         user.save()
         return user
-    
+
 class PasswordChangeSerializer(serializers.Serializer):
     current_password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True)
@@ -107,3 +107,9 @@ class PasswordChangeSerializer(serializers.Serializer):
         user.set_password(new_password)
         user.save()
         return user
+
+
+# ✅ 로그인 Swagger 입력용 시리얼라이저
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)

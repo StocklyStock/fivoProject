@@ -18,8 +18,9 @@ from google.auth.transport import requests as google_requests
 from .models import CustomUser
 from .serializers import (UserSerializer, UserListSerializer,UserUpdateSerializer,
                           PasswordResetCodeRequestSerializer,PasswordResetSerializer,
-                          PasswordChangeSerializer,UserProfileSerializer)
+                          PasswordChangeSerializer,UserProfileSerializer, LoginSerializer,)
 from .utils import send_verification_code_email
+from drf_yasg.utils import swagger_auto_schema
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +58,7 @@ class RegisterView(APIView):
         print("🛑 serializer errors:", serializer.errors)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 class VerifyCodeView(APIView):
     permission_classes = [AllowAny]
 
@@ -102,42 +103,60 @@ class VerifyCodeView(APIView):
 from rest_framework_simplejwt.tokens import RefreshToken
 import traceback
 
+
 class LoginView(APIView):
     permission_classes = [AllowAny]
+    serializer_class = LoginSerializer
 
+    @swagger_auto_schema(request_body=LoginSerializer)  # ✅ Swagger 문서 입력 필드용
     def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
+        serializer = self.serializer_class(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        email = serializer.validated_data["email"]
+        password = serializer.validated_data["password"]
 
         try:
             user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
-            return Response({"error": "존재하지 않는 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "존재하지 않는 이메일입니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if not user.check_password(password):
-            return Response({"error": "비밀번호가 틀렸습니다."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "비밀번호가 틀렸습니다."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         if not user.is_verified:
-            return Response({"error": "이메일 인증이 완료되지 않았습니다."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "이메일 인증이 완료되지 않았습니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         try:
             refresh = RefreshToken.for_user(user)
         except Exception as e:
-            print("🔥 토큰 생성 중 오류:", str(e))
-            print(traceback.format_exc())
+            logger.error("🔥 토큰 생성 오류: %s", str(e))
+            logger.debug(traceback.format_exc())
             return Response({"error": "토큰 생성 실패"}, status=500)
 
-        return Response({
-            "message": "로그인 성공",
-            "access": str(refresh.access_token),
-            "refresh": str(refresh),
-            "user": {
-                "email": user.email,
-                "nickname": user.nickname,
-                "role": "admin" if user.is_staff else "user"
-            }
-        }, status=status.HTTP_200_OK)
-        
+        return Response(
+            {
+                "message": "로그인 성공",
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "user": {
+                    "email": user.email,
+                    "nickname": user.nickname,
+                    "role": "admin" if user.is_staff else "user",
+                },
+            },
+            status=status.HTTP_200_OK,
+        )
+
 
 class GoogleLoginView(APIView):
     permission_classes = [AllowAny]
@@ -207,7 +226,7 @@ class UpdateUserView(APIView):
                 logger.error(f"Update Error: {str(e)}")
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -217,7 +236,7 @@ class ChangePasswordView(APIView):
             serializer.save()
             return Response({"message": "비밀번호가 변경되었습니다."}, status=200)
         return Response(serializer.errors, status=400)
-    
+
 class DeleteUserView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -229,7 +248,7 @@ class DeleteUserView(APIView):
         except Exception as e:
             logger.error(f"Delete Error: {str(e)}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
 class SendPasswordResetCodeView(APIView):
     permission_classes = [AllowAny]
 
@@ -248,7 +267,7 @@ class SendPasswordResetCodeView(APIView):
             return Response({"message": "비밀번호 재설정용 인증코드가 이메일로 전송되었습니다."}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 class PasswordResetView(APIView):
     permission_classes = [AllowAny]
 
