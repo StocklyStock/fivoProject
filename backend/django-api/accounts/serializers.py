@@ -1,6 +1,6 @@
 # 📄 backend/accounts/serializers.py
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Notification
 
 class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
@@ -113,3 +113,9 @@ class PasswordChangeSerializer(serializers.Serializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
+
+# 관리자 알림 설정용 시리얼
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
