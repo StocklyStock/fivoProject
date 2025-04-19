@@ -36,7 +36,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'email', 'nickname', 'phone',
             'investment_style', 'investment_period_months',
-            'trading_frequency', 'owned_stocks',
+            'trading_frequency', 'owned_stocks','is_staff',
         ]
 
 # 관리자용 유저 리스트 시리얼라이저

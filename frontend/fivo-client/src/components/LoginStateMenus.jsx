@@ -18,7 +18,9 @@ const LoginStateMenus = () => {
         <FontAwesomeIcon icon={farCircleUser}/>
         
         <div className={`my-sub-menu`}>
-          <NavLink to="/dashboard">마이페이지</NavLink>
+          <NavLink to={user?.is_staff ? "/admin/stats" : "/dashboard"}>
+            {user?.is_staff ? "관리페이지" : "마이페이지"}
+          </NavLink>
           <button
             type='button'
             className="logout-btn"
