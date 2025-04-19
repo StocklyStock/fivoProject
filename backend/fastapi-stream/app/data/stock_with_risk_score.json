@@ -1,0 +1,172 @@
+[
+  {
+    "회사명": "DSR제강",
+    "종목코드": "069730",
+    "시장구분": "KOSPI",
+    "업종": "1차 철강 제조업",
+    "risk_scores": {
+      "stability_score": 100.0,
+      "profitability_score": 10,
+      "volatility_score": 75,
+      "demand_score": 45
+    },
+    "final_scores": {
+      "aggressive": 51.0,
+      "middle": 58.5,
+      "stable": 65.0
+    }
+  },
+  {
+    "회사명": "GS글로벌",
+    "종목코드": "001250",
+    "시장구분": "KOSPI",
+    "업종": "상품 종합 도매업",
+    "risk_scores": {
+      "stability_score": 75.0,
+      "profitability_score": 25,
+      "volatility_score": 25,
+      "demand_score": 50
+    },
+    "final_scores": {
+      "aggressive": 37.5,
+      "middle": 43.75,
+      "stable": 52.5
+    }
+  },
+  {
+    "회사명": "HDC랩스",
+    "종목코드": "039570",
+    "시장구분": "KOSPI",
+    "업종": "전기 및 통신 공사업",
+    "risk_scores": {
+      "stability_score": 100.0,
+      "profitability_score": 15,
+      "volatility_score": 15,
+      "demand_score": 25
+    },
+    "final_scores": {
+      "aggressive": 33.0,
+      "middle": 42.0,
+      "stable": 58.5
+    }
+  },
+  {
+    "회사명": "HD한국조선해양",
+    "종목코드": "009540",
+    "시장구분": "KOSPI",
+    "업종": "기타 금융업",
+    "risk_scores": {
+      "stability_score": 66.67,
+      "profitability_score": 35,
+      "volatility_score": 15,
+      "demand_score": 60
+    },
+    "final_scores": {
+      "aggressive": 37.83,
+      "middle": 43.25,
+      "stable": 51.34
+    }
+  },
+  {
+    "회사명": "HD현대",
+    "종목코드": "267250",
+    "시장구분": "KOSDAQ",
+    "업종": "기타 금융업",
+    "risk_scores": {
+      "stability_score": 66.67,
+      "profitability_score": 15,
+      "volatility_score": 10,
+      "demand_score": 40
+    },
+    "final_scores": {
+      "aggressive": 26.33,
+      "middle": 33.0,
+      "stable": 42.84
+    }
+  },
+  {
+    "회사명": "HL만도",
+    "종목코드": "204320",
+    "시장구분": "KOSDAQ",
+    "업종": "자동차 부품 제조업",
+    "risk_scores": {
+      "stability_score": 66.67,
+      "profitability_score": 20,
+      "volatility_score": 15,
+      "demand_score": 50
+    },
+    "final_scores": {
+      "aggressive": 30.83,
+      "middle": 37.25,
+      "stable": 45.84
+    }
+  },
+  {
+    "회사명": "LS네트웍스",
+    "종목코드": "000680",
+    "시장구분": "KOSPI",
+    "업종": "상품 종합 도매업",
+    "risk_scores": {
+      "stability_score": 58.33,
+      "profitability_score": 10,
+      "volatility_score": 20,
+      "demand_score": 45
+    },
+    "final_scores": {
+      "aggressive": 26.17,
+      "middle": 32.25,
+      "stable": 38.66
+    }
+  },
+  {
+    "회사명": "LX하우시스",
+    "종목코드": "108670",
+    "시장구분": "KOSDAQ",
+    "업종": "플라스틱제품 제조업",
+    "risk_scores": {
+      "stability_score": 66.67,
+      "profitability_score": 30,
+      "volatility_score": 35,
+      "demand_score": 35
+    },
+    "final_scores": {
+      "aggressive": 39.33,
+      "middle": 43.0,
+      "stable": 49.34
+    }
+  },
+  {
+    "회사명": "NAVER",
+    "종목코드": "035420",
+    "시장구분": "KOSPI",
+    "업종": "자료처리, 호스팅, 포털 및 기타 인터넷 정보매개서비스업",
+    "risk_scores": {
+      "stability_score": 100.0,
+      "profitability_score": 50,
+      "volatility_score": 30,
+      "demand_score": 55
+    },
+    "final_scores": {
+      "aggressive": 54.5,
+      "middle": 60.75,
+      "stable": 73.5
+    }
+  },
+  {
+    "회사명": "NICE평가정보",
+    "종목코드": "030190",
+    "시장구분": "KOSPI",
+    "업종": "기타 정보 서비스업",
+    "risk_scores": {
+      "stability_score": 100.0,
+      "profitability_score": 60,
+      "volatility_score": 10,
+      "demand_score": 50
+    },
+    "final_scores": {
+      "aggressive": 52.0,
+      "middle": 58.0,
+      "stable": 74.0
+    }
+  }
+]

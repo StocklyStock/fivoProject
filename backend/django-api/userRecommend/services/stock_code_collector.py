@@ -1,11 +1,11 @@
 import os
-from accounts.models import CustomUser
-from favorites.models import FavoriteStock
+# from accounts.models import CustomUser
+# from favorites.models import FavoriteStock
 import json
 from collections import Counter
 
 def get_all_user_stock_codes(user):
-    # from favorites.models import FavoriteStock
+    from favorites.models import FavoriteStock
     favorite_codes = list(
         FavoriteStock.objects.filter(user=user).values_list('stock_code', flat=True)
     )
@@ -74,19 +74,19 @@ def get_sector_stocks_for_prediction(user):
     selected = [item for item in filtered if item["시장구분"] == selected_market]
     return [item["종목코드"] for item in selected]
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
     # PYTHONPATH=. python userRecommend/services/stock_code_collector.py
-    # import django
-    # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
-    # django.setup()
+    import django
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+    django.setup()
 
-    # from accounts.models import CustomUser
+    from accounts.models import CustomUser
     
-    # user = CustomUser.objects.get(id=113)
-    # codes = get_sector_stocks_for_prediction(user)
-    # print("🎯 최종 예측 대상 종목:", len(codes))
-    # # codes = get_all_user_stock_codes(user)
-    # # print("✅ 종목 코드 리스트:", codes)
+    user = CustomUser.objects.get(id=7)
+    codes = get_sector_stocks_for_prediction(user)
+    print("🎯 최종 예측 대상 종목:", codes)
+    # codes = get_all_user_stock_codes(user)
+    # print("✅ 종목 코드 리스트:", codes)
 
-    # # top2 = get_top2_sectors(user)
-    # # print("🔥 Top2 산업군:", top2)
+    top2 = get_top2_sectors(user)
+    print("🔥 Top2 산업군:", top2)
