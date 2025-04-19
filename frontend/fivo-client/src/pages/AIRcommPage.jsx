@@ -12,6 +12,7 @@ import {
 import StockSummaryCard from "../components/StockSummaryCard";
 import RiskScoreSelector from "../components/RiskScoreSelector";
 import { addFavorite, removeFavorite, fetchFavorites } from "../slices/favoriteSlice";
+import "../index.css"; // ✅ index.css import
 
 const AIRecommPage = () => {
   const dispatch = useDispatch();
@@ -135,10 +136,7 @@ const AIRecommPage = () => {
           {loading && <p>불러오는 중...</p>}
           {error && <p>에러: {error}</p>}
 
-          <div
-            className="recommend-cards-container"
-            style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}
-          >
+          <div className="recommend-cards-container">
             {stocks.map((stock) => {
               const summary = summaries[stock.stock_code];
               const isSelected = selectedStock?.stock_code === stock.stock_code;
@@ -151,17 +149,8 @@ const AIRecommPage = () => {
                   key={stock.stock_code}
                   onClick={() => setSelectedStock(stock)}
                   className={`recommend-card ${isSelected ? "selected" : ""}`}
-                  style={{
-                    padding: "16px",
-                    borderRadius: "12px",
-                    background: "#fff",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
-                    cursor: "pointer",
-                    minWidth: "200px",
-                    border: isSelected ? "2px solid #1976d2" : "1px solid #ccc",
-                  }}
                 >
-                  <div className="card-header" style={{ marginBottom: "8px" }}>
+                  <div className="card-header">
                     <strong>{stock.company_name}</strong>
                     <div style={{ fontSize: "12px", color: "#888" }}>
                       ({stock.stock_code})
@@ -169,10 +158,7 @@ const AIRecommPage = () => {
                   </div>
                   {summary ? (
                     <>
-                      <div
-                        className="price"
-                        style={{ fontSize: "22px", fontWeight: "bold" }}
-                      >
+                      <div className="price">
                         {Number(summary.price).toLocaleString()}원
                       </div>
                       <div className="change-rate" style={{ color: changeColor }}>
@@ -198,33 +184,7 @@ const AIRecommPage = () => {
                     <button onClick={toggleFavorite} style={{ marginLeft: '10px' }}>
                       {isFavorite ? '⭐' : '☆'}
                     </button>
-                    <button
-                      onClick={goToDetailPage}
-                      style={{
-                        background: "#e0e0e0",
-                        color: "#333",
-                        padding: "8px 14px",
-                        borderRadius: "6px",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        border: "none",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6,
-                        boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                        transition: "background 0.2s, transform 0.2s",
-                        marginLeft: "auto",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "#d5d5d5";
-                        e.currentTarget.style.transform = "translateY(-1px)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "#e0e0e0";
-                        e.currentTarget.style.transform = "translateY(0)";
-                      }}
-                    >
+                    <button className="detail-button" onClick={goToDetailPage}>
                       🔍 종목 상세
                     </button>
                   </>
@@ -260,15 +220,7 @@ const AIRecommPage = () => {
                           <div
                             key={idx}
                             onClick={() => setSelectedUrl(news.url)}
-                            style={{
-                              background: '#fff',
-                              padding: '16px',
-                              borderRadius: 10,
-                              boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
-                              cursor: 'pointer',
-                              flex: '1 1 250px',
-                              border: isHighProb ? '2px solid #ff5252' : '1px solid #ccc',
-                            }}
+                            className={`news-card ${isHighProb ? "high-prob" : ""}`}
                           >
                             <div style={{ fontSize: '16px', fontWeight: 600, marginBottom: 6 }}>
                               {news.title.length > 40 ? `${news.title.slice(0, 40)}...` : news.title}
@@ -276,13 +228,7 @@ const AIRecommPage = () => {
                             <div style={{ color: '#555', fontSize: '13px', marginBottom: 6 }}>
                               {news.summary.length > 50 ? `${news.summary.slice(0, 50)}...` : news.summary}
                             </div>
-                            <div
-                              style={{
-                                fontSize: '13px',
-                                fontWeight: 600,
-                                color: isHighProb ? '#ff3d00' : '#1976d2',
-                              }}
-                            >
+                            <div style={{ fontSize: '13px', fontWeight: 600, color: isHighProb ? '#ff3d00' : '#1976d2' }}>
                               상승 확률: {(news.prob * 100).toFixed(2)}%
                             </div>
                           </div>
@@ -290,41 +236,9 @@ const AIRecommPage = () => {
                       })}
                   </div>
                   {selectedUrl && (
-                    <div
-                      style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        backgroundColor: "rgba(0,0,0,0.6)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        zIndex: 9999,
-                      }}
-                      onClick={() => setSelectedUrl(null)}
-                    >
-                      <div
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                          width: "90%",
-                          height: "80%",
-                          background: "#fff",
-                          borderRadius: "8px",
-                          overflow: "hidden",
-                          position: "relative",
-                          boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-                        }}
-                      >
-                        <div
-                          style={{
-                            textAlign: "right",
-                            padding: "0.5rem 1rem",
-                            borderBottom: "1px solid #eee",
-                            backgroundColor: "#f5f5f5",
-                          }}
-                        >
+                    <div className="news-modal-overlay" onClick={() => setSelectedUrl(null)}>
+                      <div className="news-modal-container" onClick={(e) => e.stopPropagation()}>
+                        <div className="news-modal-header">
                           <button onClick={() => setSelectedUrl(null)}>✖️ 닫기</button>
                         </div>
                         <iframe
