@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import UserStocksView
+from .views import user_recommendations
 
 urlpatterns = [
-    path('user-stocks/', UserStocksView.as_view(), name='user-stocks'),
+    path("userRecommendations/", user_recommendations, name="user-recommend")
 ]
