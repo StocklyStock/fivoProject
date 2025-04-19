@@ -1,5 +1,5 @@
 export function Card({ children, className = '' }) {
-  return <div className={`border rounded-xl p-4 bg-white shadow ${className}`}>{children}</div>;
+  return <div className={` bg-white ${className}`}>{children}</div>;
 }
 
 export function CardContent({ children }) {

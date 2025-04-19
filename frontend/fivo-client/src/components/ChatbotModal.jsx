@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Chatbot from './Chatbot';
+import chatbotIcon from "../assets/chat-bot-icon.png"
 
 export default function ChatbotModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,9 +11,9 @@ export default function ChatbotModal() {
       {/* 모달 여는 버튼 */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-blue-600 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-700 transition"
+        className="chat-bot-btn shadow-md transition"
       >
-        💬 챗봇
+        <img src={chatbotIcon} alt='💬 챗봇' />
       </button>
 
       {/* 모달 전체 */}
@@ -30,22 +31,22 @@ export default function ChatbotModal() {
 
             {/* 모달 박스 */}
             <motion.div
-              className="fixed bottom-16 right-6 z-50 w-[90vw] max-w-2xl bg-white rounded-xl shadow-lg overflow-hidden flex flex-col"
+              className="chat-bot-box fixed z-50 flex flex-col"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 50 }}
               transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             >
               {/* 상단바 */}
-              <div className="flex justify-between items-center px-4 py-2 border-b bg-gray-100">
-                <h2 className="text-lg font-semibold">Fivo 챗봇</h2>
-                <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-black">
+              <div className="chat-bot-headline flex justify-between items-center">
+                <h2 className="text-lg font-semibold"><span>FIVO</span> 챗봇</h2>
+                <button onClick={() => setIsOpen(false)}>
                   ✖
                 </button>
               </div>
 
               {/* 챗봇 본체 */}
-              <div className="p-4 h-[70vh] overflow-y-auto bg-gray-50">
+              <div className="chat-bot-body verflow-y-auto">
                 <Chatbot />
               </div>
             </motion.div>

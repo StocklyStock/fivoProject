@@ -215,7 +215,7 @@ div.my-sub-menu a:hover{color:#FA7260;}
 .responsive-btn{display: none;font-size: 24px; cursor: pointer;}
 
 nav.navbar-responsive{position:sticky;bottom: 0; left:0;width: 100%; background: #fff;
-  margin: auto; box-shadow: 0 0 5px rgba(0, 0, 0, 0.13);z-index: 10; display: none; padding: 20px 10px;}
+  margin: auto; box-shadow: 0 0 5px rgba(0, 0, 0, 0.13);z-index: 10; display: none; padding: 10px 20px;}
 nav.navbar-responsive ul{width: 100%; display: flex; justify-content: space-between; align-items: center; text-align: center;}
 nav.navbar-responsive ul li a,
 nav.navbar-responsive ul li button{cursor: pointer;display: flex;
@@ -226,6 +226,64 @@ nav.navbar-responsive ul li.color-mode button{padding: 0;}
 nav.navbar-responsive ul li.color-mode svg{font-size: 30px; margin: 0 auto;}
 nav.navbar-responsive ul li svg{font-size: 25px; color: #333;}
 nav.navbar-responsive ul li span{display: block; font-size: 10.5px;}
+h1.icon-wrap{height: 28px;}
+
+/*2025-04-19 챗봇 작업 - 박홍덕 - start */
+.chat-bot-btn{z-index: 100; background-color: #FA7260; width: 64px; height: 64px;
+border-radius: 50%; position: fixed; bottom: 40px; right: 30px; padding-bottom: 6px;
+display: flex; justify-content: center; align-items: center;
+box-shadow: inset -3px -4px 0#E8604E, inset 2px 2px 0 #FF9384;}
+.chat-bot-headline{color:#FA7260;font-size: 15px; border-bottom: 1px solid #F5F5F5;
+padding: 8px; width: 100%; text-align: center;}
+.chat-bot-headline h2{width: 100%; text-align: center;}
+.chat-bot-headline h2 span{  font-family: "Zen Dots", sans-serif; font-weight: normal;}
+.chat-bot-headline button{color:#888;}
+.chat-bot-headline button:hover{color:#FA7260;}
+.chat-bot-box{border-radius: 14px; overflow: hidden; background-color: #fff;
+bottom: 2.8rem;right: 6.4rem;padding:0 20px;}
+.chat-bot-body{padding: 0 0 40px 0;}
+
+.chat-bot-menus{padding: 18px 0; margin-bottom: 18px; border-bottom: 1px solid #F5F5F5;}
+.chat-bot-menus > div{display: flex; flex-direction: column; gap:5px;}
+.chat-bot-menus button{background-color:#FBFBFB; border:1px solid #E8E8E8;color:#333;
+padding: 10px; border-radius: 5px;width: 75%; margin: auto;}
+
+.chat-area{padding-top: 18px;  /* Firefox 스타일 */
+scrollbar-width: thin;
+scrollbar-color: #FEC5C6 #F6F6F6;
+}
+
+/* WebKit 스크롤 커스터마이징 */
+.chat-area::-webkit-scrollbar {
+width: 10px;
+}
+
+.chat-area::-webkit-scrollbar-track {
+background: #F6F6F6;
+border-radius: 10px;
+}
+
+.chat-area::-webkit-scrollbar-thumb {
+background: #FEC5C6;
+border-radius: 10px;
+}
+
+.chat-area::-webkit-scrollbar-thumb:hover {
+background: #FEC5C6;
+}
+
+.chat-area > div{display: flex; flex-direction: column; gap: 9px;}
+.chat-area > div > div > div{box-shadow: 3px 3px 6px rgba(100, 100, 100, 0.18);}
+.user-chat{background-color: #FB8773;}
+.bot-chat{background-color: #EDEDED;}
+
+.chat-bot-body form{width: 100%;}
+.chat-bot-body form input{border:1px solid #DEDEDE; border-radius: 40px; color:#333; outline: none;}
+.chat-bot-body form input:focus{border:1px solid #FB8773;}
+.chat-bot-body form button[type="submit"]{background-color: #FA7260; padding-left: 14px;
+width: 38px;height: 38px;border-radius: 50%; display: flex; justify-content: center; align-items: center;}
+
+/*2025-04-19 챗봇 작업 - 박홍덕 - end */
 
 .main-banner,
 .main-banner .swiper,

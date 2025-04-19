@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button"; 
+import { Button } from "./ui/button";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'; 
 
 export default function Chatbot() {
   const [message, setMessage] = useState('');
@@ -109,22 +111,20 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-4">
-      <Card className="mb-4">
+    <>
+      <Card className="chat-bot-menus">
         <CardContent>
-          <h2 className="text-lg font-semibold mb-2">📋 메뉴</h2>
-          <div className="flex flex-col gap-2">
-            <Button onClick={handleUsageClick} className="bg-white border border-gray-300 text-black">
-              Fivo의 사용법
-            </Button>
-            <Button onClick={handleClearChat} className="bg-red-100 border border-red-300 text-red-600">
-              💬 대화 초기화
-            </Button>
-          </div>
+          {/* <h2 className="text-lg font-semibold mb-2">📋 메뉴</h2> */}
+          <Button onClick={handleUsageClick}>
+            Fivo의 사용법
+          </Button>
+          <Button onClick={handleClearChat}>
+            💬 대화 초기화
+          </Button>
         </CardContent>
       </Card>
 
-      <Card className="h-96 overflow-y-auto mb-4 bg-gray-50">
+      <Card className="chat-area h-80 overflow-y-auto mb-4">
         <CardContent className="space-y-4">
           {messages.map((msg, idx) => (
             <div
@@ -134,8 +134,8 @@ export default function Chatbot() {
               <div
                 className={`px-4 py-2 rounded-xl max-w-xs break-words whitespace-pre-line ${
                   msg.sender === 'user'
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-black'
+                    ? 'bg-blue-500 text-white user-chat'
+                    : 'bg-gray-200 text-black bot-chat'
                 }`}
               >
                 {msg.text}
@@ -165,10 +165,10 @@ export default function Chatbot() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <Button type="submit" disabled={loading} className="bg-blue-600 text-white">
-          {loading ? '^' : '^'}
+        <Button type="submit" disabled={loading} className="text-white">
+          {loading ? (<FontAwesomeIcon icon={faPaperPlane}/>) : (<FontAwesomeIcon icon={faPaperPlane}/>)}
         </Button>
       </form>
-    </div>
+    </>
   );
 }
