@@ -19,23 +19,23 @@ const NavbarResponsive = () => {
     return (
         <nav className="navbar-responsive">
             <ul>
-                <li><NavLink to="/admin/stats"><FontAwesomeIcon icon={faChartLine}/><span>테마 분석</span></NavLink></li>
-                <li><NavLink to="/airecomm"><FontAwesomeIcon icon={faRobot}/><span>AI 추천</span></NavLink></li>
+                <li><NavLink to="/admin/stats"><h1 className="icon-wrap"><FontAwesomeIcon icon={faChartLine}/></h1><span>테마 분석</span></NavLink></li>
+                <li><NavLink to="/airecomm"><h1 className="icon-wrap"><FontAwesomeIcon icon={faRobot}/></h1><span>AI 추천</span></NavLink></li>
                 <li className='color-mode'>
                     <button type='button'>
-                        <Brightness4 />
+                        <h1 className="icon-wrap"><Brightness4 /></h1>
                         <span>컬러모드</span>
                     </button>
                 </li>
                 <li onClick={() => setIsKor((prevState) => !prevState)}>
                     <button type='button'>
-                        <FontAwesomeIcon icon={faGlobe} />
+                        <h1 className="icon-wrap"><FontAwesomeIcon icon={faGlobe} /></h1>
                         <span>{isKor ? '한국어' : '영어'}</span>
                     </button>
                 </li>
                 <li onClick={() => {user ? navigate("/dashboard") : navigate("/login")}}>
                     <button type='button'>
-                    <FontAwesomeIcon icon={farCircleUser}/>
+                    <h1 className="icon-wrap"><FontAwesomeIcon icon={farCircleUser}/></h1>
                     <span>마이페이지</span>
                     </button>
                 </li>
