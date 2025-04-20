@@ -382,7 +382,7 @@ display: flex;
   box-shadow: 0 0 6px rgba(100, 100, 100, 0.21);
   border-radius:14px;
   padding: 35px;
-  height: 50%;
+  height: 340px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -650,6 +650,14 @@ footer address {
 .sns ul li a{display: block; width: 100%;padding: 8px;}
 .sns ul li a img{display:inline-block; width: 100%; margin: auto; object-fit: contain;}
 
+.sns ul li.google-login > div{height: auto !important;}
+.sns ul li.google-login > div > div > div > div{
+  border:none; height: auto;padding: 0;
+overflow: unset;}
+.sns ul li.google-login > div > div > div > div div div{margin: 0 auto;width: 100%;height: auto; padding: 5px;}
+.sns ul li.google-login > div > div > div > div div div svg{width: 100%;}
+.sns ul li.google-login .nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{display: none;}
+
 .login .sns,
 .register .sns,
 .border-wrap {border-radius:14px;box-shadow: 0 0 5px rgba(0,0,0,0.13); }
@@ -871,6 +879,13 @@ max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
 /*2025-04-14 헤더 반응형 작업 - 박홍덕 - start */
 @media (max-width:1630px){
   header{padding: 12px 10px ;}
+  .chart-wrap{flex-wrap: wrap; padding: 0 10px;}
+  .chart-realtime{width: 100%;}
+  .recommendation{position: absolute;
+    top: -373px;
+    right: 10px;
+    z-index: 1;
+  width: 25%;}
 }
 /*2025-04-14 헤더 반응형 작업 - 박홍덕 - end */
 
@@ -899,6 +914,11 @@ max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
 }
 @media (max-width:900px){
   header nav ul.nav-right{gap: 20px;}
+
+  .chart-wrap{justify-content: center;}
+  .recommendation{width: 47%;  position: static; top: unset; right: unset;}
+  .recommendation,
+  .recommendation > div > div > div{height: 410px;}
   .FAQ-wrap{padding: 0 10px;}
 
   .volatility-risk{padding: 50px 20px;}
@@ -920,7 +940,7 @@ max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
   .responsive-btn{display:block;}
   nav.navbar-responsive{display: block; }
 
-
+  .recommendation{width: 70%;}
   .main-listings {flex-wrap: wrap;}
   .main-listings > div{width:100%;}
   footer > div > div{flex-wrap: wrap;width: 100%; gap:10px; width: 50%;}
@@ -950,6 +970,7 @@ max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
   .register-wrap p::before, .login .register-wrap p::after{width: 20%;}
 }
 @media (max-width:480px){
+  .recommendation{width: 90%;}
   footer > div{flex-wrap: wrap;gap:40px;}
   footer > div > nav{justify-content: flex-start;}
   footer > div > nav, footer > div > div{width: 100%;}
