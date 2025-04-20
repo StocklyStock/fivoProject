@@ -19,6 +19,7 @@ const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -71,6 +72,15 @@ const Header = () => {
       setSearchResults([]);
     }
   }, [inputValue]);
+
+  useEffect(()=>{
+    if(darkMode){
+      document.body.classList.add("dark-mode");
+    }else{
+      document.body.classList.remove("dark-mode");
+    }
+    
+  },[darkMode]);
 
   return (
     <header>
@@ -133,7 +143,7 @@ const Header = () => {
               )}
             </li>
 
-            <li className='color-mode'>
+            <li className='color-mode' onClick={() => setDarkMode((prevState) => !prevState)}>
               <Tooltip title="다크모드 토글">
                 <IconButton><Brightness4 /></IconButton>
               </Tooltip>

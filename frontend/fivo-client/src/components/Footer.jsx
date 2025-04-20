@@ -17,7 +17,7 @@ const Footer = () => {
                 </div>
                 <nav>
                     <div>   
-                        <NavLink>회사 소개</NavLink>
+                        <NavLink to="/about">회사 소개</NavLink>
                         <NavLink to="/faq">자주 묻는 질문</NavLink>
                         <NavLink>1:1 문의</NavLink>
                     </div>
