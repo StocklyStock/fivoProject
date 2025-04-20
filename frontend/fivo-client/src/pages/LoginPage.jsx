@@ -99,7 +99,7 @@ const LoginPage = () => {
         <div className="sns" style={{marginTop:'16px'}}>
           <h2>간편 로그인</h2>
           <ul>
-            <li>
+            <li className='google-login'>
             <GoogleLogin
               onSuccess={async (credentialResponse) => {
                 const idToken = credentialResponse.credential;
