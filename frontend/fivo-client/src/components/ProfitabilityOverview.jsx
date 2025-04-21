@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import {
-  RadialBarChart,
-  RadialBar,
-  PolarAngleAxis,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 
 const descriptions = {
@@ -30,7 +30,6 @@ const statusColor = {
 const ProfitabilityOverview = ({ data }) => {
   const [tooltipKey, setTooltipKey] = useState(null);
 
-  // 데이터가 없거나 score_details가 비어있는 경우 처리
   if (!data || !data.score_details || data.score_details.length === 0) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
@@ -39,30 +38,18 @@ const ProfitabilityOverview = ({ data }) => {
     );
   }
 
-  // metrics 값에 null 체크 후 0으로 처리, NaN 체크도 추가
-  const metrics = data.score_details.map((item) => ({
-    label: item.label,
-    value: item.value !== null && item.value !== undefined && !isNaN(item.value) ? item.value : 0,  // null, undefined, NaN을 0으로 처리
-    score: item.score !== null && item.score !== undefined ? item.score : 0,  // score가 null일 경우 0으로 처리
-  }));
-
-  // 차트의 value 범위 동적으로 설정
-  const maxValue = Math.max(...metrics.map(item => item.value !== 0 ? item.value : 1));  // NaN을 처리하여 최대값 계산
-
-  // maxValue가 0일 경우, 1로 처리하여 차트가 표시되도록 처리
-  const chartMaxValue = maxValue === 0 ? 1 : maxValue;
-
   return (
     <section className='profitability'>
       <h2>📋 수익성 구성 지표</h2>
       <ul>
-        {metrics.map((item, idx) => {
-          const status = getStatus(item.score);
+        {data.score_details.map((item, idx) => {
+          const value = !isNaN(item.value) && item.value !== null ? Math.abs(item.value) : 0;
+          const cappedValue = Math.min(value, 100);  // 최대 100으로 제한
+          const status = getStatus(item.score ?? 0);
           const color = statusColor[status];
 
           return (
             <li key={idx}>
-              
               <h3>
                 {item.label}
                 {tooltipKey === item.label && (
@@ -85,46 +72,44 @@ const ProfitabilityOverview = ({ data }) => {
                     {descriptions[item.label]}
                   </div>
                 )}
-                <span className='description-btn'
+                <span
+                  className='description-btn'
                   onClick={() =>
                     setTooltipKey(tooltipKey === item.label ? null : item.label)
                   }
                 >
                   ℹ️
                 </span>
-
               </h3>
 
-              <ResponsiveContainer width="100%" height={130}>
-                <RadialBarChart
-                  cx="50%"
-                  cy="50%"
-                  innerRadius="60%"
-                  outerRadius="100%"
-                  barSize={12}
-                  data={[
-                    {
-                      name: item.label,
-                      value: item.value !== 0 ? item.value : 1,  // 0일 때, 1로 처리하여 차트 표시
-                      fill: color,
-                    },
-                  ]}
-                  startAngle={180}
-                  endAngle={0}
-                >
-                  <PolarAngleAxis
-                    type="number"
-                    domain={[0, chartMaxValue]} // 동적으로 최대 값 설정
-                    angleAxisId={0}
-                    tick={false}
-                  />
-                  <RadialBar background dataKey="value" cornerRadius={6} />
-                </RadialBarChart>
-              </ResponsiveContainer>
+              <div className="profitability-chart-wrap">
+                <ResponsiveContainer width="100%" height={175}>
+                  <PieChart>
+                    <Pie
+                      dataKey="value"
+                      startAngle={90}
+                      endAngle={-270}
+                      data={[
+                        { name: item.label, value: cappedValue },
+                        { name: '빈공간', value: 100 - cappedValue }
+                      ]}
+                      innerRadius="65%"
+                      outerRadius="100%"
+                      cornerRadius={4}
+                    >
+                      {[color, '#EDEDED'].map((fill, index) => (
+                        <Cell key={`cell-${index}`} fill={fill} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
 
-              <div style={{ textAlign: 'center', marginTop: 4, fontSize: 14 }}>
-                {item.value !== 0 ? `${item.value.toFixed(2)}%` : '정보 없음'} /{' '}
-                <span style={{ color }}>{status}</span>
+                <h4>
+                  <p style={{ color }}>
+                    {value !== 0 ? `${value.toFixed(2)}%` : '정보 없음'}
+                  </p>
+                  <span style={{ color }}>{status}</span>
+                </h4>
               </div>
             </li>
           );

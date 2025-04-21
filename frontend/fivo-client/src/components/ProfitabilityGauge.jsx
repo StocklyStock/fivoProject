@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import {
-  RadialBarChart,
-  RadialBar,
-  PolarAngleAxis,
-  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer
 } from 'recharts';
 
+const getRiskLevel = (score) => {
+  if (score >= 80) return { label: '우수', color: '#2ca02c' };
+  if (score >= 50) return { label: '보통', color: '#f9c80e' };
+  return { label: '취약', color: '#d62728' };
+};
+
 const ProfitabilityGauge = ({ score }) => {
-  const color =
-    score >= 80 ? '#2ca02c' : score >= 50 ? '#f9c80e' : '#d62728';
-
-  const getRiskLevel = (score) => {
-    if (score >= 80) return '우수';
-    if (score >= 50) return '보통';
-    return '취약';
-  };
-  const riskLevel = getRiskLevel(score);
-
+  const { label: riskLevel, color } = getRiskLevel(score);
   const [showTooltip, setShowTooltip] = useState(false);
 
   const tooltipStyle = {
@@ -42,43 +39,62 @@ ROE, ROA, 영업이익률, 순이익률 각각을 가중치에 따라 점수화�
 - 50~79점 : 보통
 - 50점 미만 : 취약`;
 
+  const data = [
+    { name: 'score', value: score },
+    { name: 'rest', value: 100 - score }
+  ];
+
   return (
-    <div style={{ marginBottom: 24, maxWidth: 300, position: 'relative' }}>
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-        <h3 style={{ margin: 0 }}>📋 수익성 점수</h3>
-        <span
-          style={{ marginLeft: 6, cursor: 'pointer', fontWeight: 'bold', color: '#888' }}
-          title="수익성 점수 설명"
-          onClick={() => setShowTooltip(!showTooltip)}
-        >
-          ℹ️
-        </span>
+    <section className='profitability-gauge'>
+      <div className="profitability-gauge-wrap">
+        <h1 style={{ margin: 0 }}>
+          📋 수익성 점수
+          <span
+            style={{ marginLeft: 6, cursor: 'pointer', fontWeight: 'bold', color: '#888' }}
+            title="수익성 점수 설명"
+            onClick={() => setShowTooltip(!showTooltip)}
+          >
+            ℹ️
+          </span>
+        </h1>
+
+        {showTooltip && <div style={tooltipStyle}>{explanation}</div>}
+
+        <div className="profitability-gauge-chart-wrap" style={{ position: 'relative' }}>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                startAngle={90}
+                endAngle={-270}
+                innerRadius="65%"
+                outerRadius="100%"
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={index === 0 ? color : '#ededed'} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+
+          {/* 가운데 점수 + 텍스트 */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              textAlign: 'center',
+              color: color,
+            }}
+          >
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{`${score.toFixed(2)}%`}</div>
+            <div style={{ fontSize: '1rem', fontWeight: 'bold' }}>{riskLevel}</div>
+          </div>
+        </div>
       </div>
-
-      {showTooltip && <div style={tooltipStyle}>{explanation}</div>}
-
-      <ResponsiveContainer width="100%" height={200}>
-        <RadialBarChart
-          cx="50%"
-          cy="100%"
-          innerRadius="60%"
-          outerRadius="100%"
-          startAngle={180}
-          endAngle={0}
-          barSize={20}
-          data={[{ name: 'profitability', value: score, fill: color }]}
-        >
-          {/* @ts-ignore */}
-          <PolarAngleAxis type="number" domain={[0, 100]} tick={false} angleAxisId={0} />
-          <RadialBar background dataKey="value" cornerRadius={10} />
-        </RadialBarChart>
-      </ResponsiveContainer>
-
-      <div style={{ textAlign: 'center', marginTop: 8 }}>
-        <div style={{ fontSize: 18, fontWeight: 600, color }}>{score}</div>
-        <div style={{ fontSize: 14, fontWeight: 500, color }}>{riskLevel}</div>
-      </div>
-    </div>
+    </section>
   );
 };
 

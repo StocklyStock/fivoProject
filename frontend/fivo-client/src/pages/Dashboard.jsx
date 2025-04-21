@@ -152,7 +152,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Layout>
+    <Layout className="dashboard">
       <Box sx={{ background: '#f8f8f8', py: 4, px: 2, maxWidth: '720px', mx: 'auto' }}>
         <Card sx={{ mb: 4, p: 3 }}>
           <Box display="flex" alignItems="center" gap={2}>
@@ -175,12 +175,25 @@ const Dashboard = () => {
             </Box>
           </Box>
           <Box mt={2}>
-            <Button onClick={() => setOpenEdit(true)} variant="outlined" sx={{ mr: 1 }}>
-              회원정보 수정
-            </Button>
-            <Button onClick={() => setOpenPassword(true)} variant="outlined" color="secondary">
-              비밀번호 변경
-            </Button>
+            <div className='btn-wrap'>
+              <Button onClick={() => setOpenEdit(true)} variant="outlined" sx={{ mr: 1 }}>
+                회원정보 수정
+              </Button>
+              <Button onClick={() => setOpenPassword(true)} variant="outlined" color="secondary">
+                비밀번호 변경
+              </Button>
+            </div>
+            <button 
+              type="button"
+              className="logout-btn"
+              onClick={() => {
+                console.log('🚀 로그아웃 클릭됨');
+                dispatch(logout());
+                setTimeout(() => navigate('/', { replace: true }), 0);
+              }}
+            >
+              로그아웃
+            </button>
           </Box>
         </Card>
 
@@ -310,7 +323,7 @@ const Dashboard = () => {
         </Card>
 
         {/* 회원정보 수정 */}
-        <Dialog open={openEdit} onClose={() => setOpenEdit(false)}>
+        <Dialog className="edit-info-modal" open={openEdit} onClose={() => setOpenEdit(false)}>
           <DialogTitle>회원정보 수정</DialogTitle>
           <DialogContent>
             <TextField label="닉네임" fullWidth margin="normal" value={nickname} onChange={(e) => setNickname(e.target.value)} />
@@ -324,7 +337,7 @@ const Dashboard = () => {
         </Dialog>
 
         {/* 비밀번호 변경 */}
-        <Dialog open={openPassword} onClose={() => setOpenPassword(false)}>
+        <Dialog className="edit-pw-modal" open={openPassword} onClose={() => setOpenPassword(false)}>
           <DialogTitle>비밀번호 변경</DialogTitle>
           <DialogContent>
             <TextField label="현재 비밀번호" type="password" fullWidth margin="normal" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
@@ -335,8 +348,12 @@ const Dashboard = () => {
             <Button onClick={() => setOpenPassword(false)}>취소</Button>
             <Button variant="contained" onClick={handleChangePassword}>변경</Button>
           </DialogActions>
+      
         </Dialog>
+
+  
       </Box>
+      
     </Layout>
   );
 };

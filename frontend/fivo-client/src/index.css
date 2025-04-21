@@ -178,7 +178,7 @@ header nav ul a:hover{
 }
 
 header nav ul .login-btn,
-header nav ul .logout-btn {
+.logout-btn {
   border: 1px solid #FA7260;
   color: #FA7260;
   border-radius: 4px;
@@ -238,7 +238,8 @@ padding: 8px; width: 100%; text-align: center;}
 .chat-bot-headline button{color:#888;}
 .chat-bot-headline button:hover{color:#FA7260;}
 .chat-bot-box{border-radius: 14px; overflow: hidden; background-color: #fff;
-bottom: 2.8rem;right: 6.4rem;padding:0 20px;}
+bottom: 2.8rem;right: 6.4rem;padding:0 20px;max-width: 370px;
+width: 100%;}
 .chat-bot-body{padding: 0 0 40px 0;}
 
 .chat-bot-menus{padding: 18px 0; margin-bottom: 18px; border-bottom: 1px solid #F5F5F5;}
@@ -382,7 +383,7 @@ display: flex;
   box-shadow: 0 0 6px rgba(100, 100, 100, 0.21);
   border-radius:14px;
   padding: 35px;
-  height: 340px;
+  height: 410px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -641,6 +642,7 @@ footer address {
 /*2025-04-11 로그인, 회원가입 페이지 작업 - 박홍덕 - start */
 /*2025-04-17 마이페이지(대시보드) 페이지 작업 - 박홍덕 - start */
 .login, .register, .my-page{max-width: 498px; width: 100%; margin: 114px auto 144px auto; }
+.css-1yuhvjn{display: flex; justify-content: space-between;}
 
 .login .sns, 
 .register .sns{width: 100%; padding:  20px 0; margin: 0 auto 18px;}
@@ -836,11 +838,13 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 
 .volatility-chart-wrap,
 .supply-risk-chart-wrap,
-.stability-risk-chart-wrap{width: 100%; position: relative;}
+.stability-risk-chart-wrap,
+.profitability-chart-wrap{width: 100%; position: relative;}
 
 .volatility-chart-wrap h4,
 .supply-risk-chart-wrap h4,
-.stability-risk-chart-wrap h4{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;
+.stability-risk-chart-wrap h4,
+.profitability-chart-wrap h4{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -854,19 +858,23 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 
 .volatility-chart-wrap h4 p,
 .supply-risk-chart-wrap h4 p,
-.stability-risk-chart-wrap h4 p{font-size: 24px; line-height: 1; font-weight: 800; letter-spacing: -0.5px; margin-top: 12px;}
+.stability-risk-chart-wrap h4 p,
+.profitability-chart-wrap h4 p{font-size: 24px; line-height: 1; font-weight: 800; letter-spacing: -0.5px; margin-top: 12px;}
 .volatility-chart-wrap h4 span,
 .supply-risk-chart-wrap h4 span,
-.stability-risk-chart-wrap h4 span{font-size: 19px;}
+.stability-risk-chart-wrap h4 span,
+.profitability-chart-wrap h4 span{font-size: 19px;}
 
 .volatility-gauge,
 .supply-risk-gauge,
-.stability-gauge{ background-color: #fbfaf8;
+.stability-gauge,
+.profitability-gauge{ background-color: #fbfaf8;
   position:relative;border: 1px solid #e9e9e9; border-radius: 14px; margin: 20px auto 0 auto; padding: 50px 40px;box-shadow: 0 0 4px rgba(100, 100, 100, 0.12); }
 
   .volatility-gauge h1,
   .supply-risk-gauge h1,
-  .stability-gauge h1{margin-bottom: 46px;
+  .stability-gauge h1,
+  .profitability-gauge h1{margin-bottom: 46px;
   font-size: 21px;
   color: #222;
   font-weight: 600;
@@ -877,7 +885,9 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 
   .volatility-gauge .volatility-gauge-wrap,
   .supply-risk-gauge  .supply-risk-gauge-wrap,
-  .stability-gauge .stability-gauge-wrap{position: relative;
+  .stability-gauge .stability-gauge-wrap,
+  .profitability-gauge .profitability-gauge-wrap
+  {position: relative;
     background-color: #fff;
     border-radius:14px;
     border:1px solid #e9e9e9;
@@ -888,7 +898,8 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   
   .volatility-gauge .volatility-gauge-wrap .volatility-gauge-chart-wrap,
   .supply-risk-gauge  .supply-risk-gauge-wrap .supply-risk-gauge-chart-wrap,
-  .stability-gauge .stability-gauge-wrap .stability-gauge-chart-wrap{position: relative;}
+  .stability-gauge .stability-gauge-wrap .stability-gauge-chart-wrap,
+  .profitability-gauge .profitability-gauge-wrap  .profitability-gauge .profitability-gauge-chart-wrap{position: relative;}
   
 
 /*2025-04-21 ai추천 외국인 수급리스크 분석, 안정성 리스크 분석, 수익성 리스크 분석 페이지 작업 - 박홍덕 - end */
@@ -914,6 +925,16 @@ max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
 .text-area h1{font-size: 89px;line-height: 1.35; font-weight: 700; color: #222;letter-spacing: 3px;}
 .text-area h1 strong{color:#FA7260;font-family: "Zen Dots", sans-serif; font-size: 110px; display: block;line-height: 1.5;}
 /*2025-04-19 회사소개 페이지 작업 - 박홍덕 - end  */
+
+.terms{margin: 114px auto 124px auto; max-width: 1200px; width: 100%; border: 1px solid #e9e9e9;border-radius: 14px;
+box-shadow: 0 0 6px rgba(0,0,0,0.15);}
+.terms ul{display: flex; justify-content: space-between;align-items: center;}
+.terms ul li{width: 50%; font-size: 16px; color: #333; padding: 26px 0; text-align: center; border-bottom: 1px solid #e9e9e9; cursor: pointer;}
+.terms ul li:first-child{border-right: 1px solid #e9e9e9;}
+.terms ul li.on{border-bottom: none; }
+.terms div{width: 100%; padding: 42px;}
+.terms div p{width: 100%;  padding: 20px;
+  border: 1px solid #e9e9e9;color: #969696; font-size: 14px; font-weight: 200;}
 
 /*2025-04-11 반응형 작업 - 박홍덕 - start */
 
@@ -956,6 +977,8 @@ max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
 @media (max-width:900px){
   header nav ul.nav-right{gap: 20px;}
 
+  .about-fivo .text-area h1{font-size: 60px;}
+
   .chart-wrap{justify-content: center;}
   .recommendation{width: 47%;  position: static; top: unset; right: unset;}
   .recommendation,
@@ -980,12 +1003,21 @@ max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
   header nav ul .login-btn{display: none;}
   .responsive-btn{display:block;}
   nav.navbar-responsive{display: block; }
+  .main-banner .swiper-slide h1{font-size: 18vw;}
+  .main-banner .swiper-slide h1 p{font-size: 25vw;}
 
   .recommendation{width: 70%;}
   .main-listings {flex-wrap: wrap;}
   .main-listings > div{width:100%;}
   footer > div > div{flex-wrap: wrap;width: 100%; gap:10px; width: 50%;}
   .footer-logo{width: 100%;}
+
+  .chat-bot-btn{bottom: 80px;width: 55px;height: 55px;}
+  .chat-bot-btn img{width: 42px;}
+  .chat-bot-box{bottom: 9rem;width: 100%; right: 1rem; width: 90%;}
+  .about-fivo{flex-direction: column;}
+  .image-area, .text-area{width: 100%;}
+  .about-fivo .text-area h1{font-size: 89px;}
 
   .stock-detail-wrap .stock-summery-card{flex-wrap: wrap;}
   .stock-detail-wrap .stock-summery-card .stock-info{width: 100%;grid-template-columns: repeat(2, 50%);}
@@ -1006,6 +1038,11 @@ max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
 }
 
 @media (max-width:498px){
+  header nav ul.nav-left{width: auto;}
+  header nav ul.nav-right{width: auto;}
+  .search-box-wrapper.open{width: 89%;}
+  .about-fivo .text-area h1{font-size: 16vw;}
+  .text-area h1 strong{font-size: 26vw;}
   .login, .register{padding: 0 10px;}
   .border-wrap{padding: 66px 15px;}
   .register-wrap p::before, .login .register-wrap p::after{width: 20%;}
@@ -1016,6 +1053,10 @@ max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
   footer > div > nav{justify-content: flex-start;}
   footer > div > nav, footer > div > div{width: 100%;}
   footer address{font-size: 11px; word-break: keep-all;}
+  h1.icon-wrap{height: 24px;}
+  nav.navbar-responsive ul li svg{font-size: 20px;}
+  nav.navbar-responsive ul li.color-mode svg{font-size: 26px;}
+  nav.navbar-responsive ul li span{font-size: 9px;}
 
   .volatility-risk h2{text-align: center;}
   .volatility-risk > ul li{width: 100%;}
