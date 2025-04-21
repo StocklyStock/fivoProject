@@ -5,8 +5,8 @@ const Slider = () => {
     return (
         <section className="main-banner">
             <Swiper>
-                <SwiperSlide><img src="https://cdn.pixabay.com/photo/2019/08/21/07/04/maple-4420302_640.jpg" alt=""/></SwiperSlide>
-                <SwiperSlide><img src="https://cdn.pixabay.com/photo/2019/08/21/07/04/maple-4420302_640.jpg" alt=""/></SwiperSlide>
+                <SwiperSlide><h1>주식정보는 <p>FIVO</p></h1></SwiperSlide>
+                <SwiperSlide><h1>모든 주식이 여기에!<p>FIVO</p></h1></SwiperSlide>
             </Swiper>
         </section>
     );

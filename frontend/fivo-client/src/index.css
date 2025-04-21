@@ -137,11 +137,10 @@ header nav ul.nav-right svg {
 
 header nav ul.nav-right .lang {
   border-radius: 2px;
-  background-color: #fff;
+  background-color: transparent;
   cursor: pointer;
   padding: 8px 6px;
   border: 1px solid #E9E9E9;
-  background-color: #fff;
   position: relative;
   width: 100%;
   max-width: 78px;
@@ -165,7 +164,6 @@ header nav ul.nav-right .lang .lang-select li {
   width: 100%;
   cursor: pointer;
   border: none;
-  border-radius: 2px;
   font-size: 14px;
 }
 
@@ -299,8 +297,14 @@ width: 38px;height: 38px;border-radius: 50%; display: flex; justify-content: cen
   border-radius: 0 0 150px 150px;
   height: 796px;
 }
+.main-banner .swiper-slide{
+  background: url("https://cdn.pixabay.com/photo/2019/08/21/07/04/maple-4420302_640.jpg") no-repeat center/cover;
+  display: flex; justify-content: center;align-items: center;
+}
 
-.main-banner .swiper .swiper-wrapper .swiper-slide img {}
+.main-banner .swiper-slide h1{text-align: center; color:#fff; font-size: 100px; font-weight: 700; letter-spacing: 1px;
+transform: translateY(-30%);}
+.main-banner .swiper-slide h1 p{font-family: "Zen Dots", sans-serif; font-weight: normal;font-size: 120px; line-height: 1;}
 
 /*2025-04-15 메인 페이지 작업 - 박홍덕 - start */
 .chart-wrap{  position: relative;
@@ -378,7 +382,7 @@ display: flex;
   box-shadow: 0 0 6px rgba(100, 100, 100, 0.21);
   border-radius:14px;
   padding: 35px;
-  height: 50%;
+  height: 340px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -646,6 +650,14 @@ footer address {
 .sns ul li a{display: block; width: 100%;padding: 8px;}
 .sns ul li a img{display:inline-block; width: 100%; margin: auto; object-fit: contain;}
 
+.sns ul li.google-login > div{height: auto !important;}
+.sns ul li.google-login > div > div > div > div{
+  border:none; height: auto;padding: 0;
+overflow: unset;}
+.sns ul li.google-login > div > div > div > div div div{margin: 0 auto;width: 100%;height: auto; padding: 5px;}
+.sns ul li.google-login > div > div > div > div div div svg{width: 100%;}
+.sns ul li.google-login .nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{display: none;}
+
 .login .sns,
 .register .sns,
 .border-wrap {border-radius:14px;box-shadow: 0 0 5px rgba(0,0,0,0.13); }
@@ -853,17 +865,34 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 .faq-listings ul li > div.menu-open{height: fit-content;border-top: 1px solid #D9D9D9;padding: 20px; }
 /*2025-04-11 자주묻는 페이지 작업 - 박홍덕 - end  */
 
+/*2025-04-19 회사소개 페이지 작업 - 박홍덕 - start */
+.about-fivo{display:flex; justify-content: center; 
+max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
+.image-area, .text-area{width: 50%;}
+.image-area img{height: 100%;}
+.text-area h1{font-size: 89px;line-height: 1.35; font-weight: 700; color: #222;letter-spacing: 3px;}
+.text-area h1 strong{color:#FA7260;font-family: "Zen Dots", sans-serif; font-size: 110px; display: block;line-height: 1.5;}
+/*2025-04-19 회사소개 페이지 작업 - 박홍덕 - end  */
+
 /*2025-04-11 반응형 작업 - 박홍덕 - start */
 
 /*2025-04-14 헤더 반응형 작업 - 박홍덕 - start */
 @media (max-width:1630px){
   header{padding: 12px 10px ;}
+  .chart-wrap{flex-wrap: wrap; padding: 0 10px;}
+  .chart-realtime{width: 100%;}
+  .recommendation{position: absolute;
+    top: -373px;
+    right: 10px;
+    z-index: 1;
+  width: 25%;}
 }
 /*2025-04-14 헤더 반응형 작업 - 박홍덕 - end */
 
 @media (max-width:1200px){
   footer > div{padding:30px 10px;gap: 10px;}  
   footer > div > nav{gap: 70px;}
+  .about-fivo{padding: 0 10px;}
   .main-listings{padding: 80px 10px; gap: 30px;}
   .stock-detail-wrap{padding: 0 10px;}
 
@@ -885,6 +914,11 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 }
 @media (max-width:900px){
   header nav ul.nav-right{gap: 20px;}
+
+  .chart-wrap{justify-content: center;}
+  .recommendation{width: 47%;  position: static; top: unset; right: unset;}
+  .recommendation,
+  .recommendation > div > div > div{height: 410px;}
   .FAQ-wrap{padding: 0 10px;}
 
   .volatility-risk{padding: 50px 20px;}
@@ -906,7 +940,7 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   .responsive-btn{display:block;}
   nav.navbar-responsive{display: block; }
 
-
+  .recommendation{width: 70%;}
   .main-listings {flex-wrap: wrap;}
   .main-listings > div{width:100%;}
   footer > div > div{flex-wrap: wrap;width: 100%; gap:10px; width: 50%;}
@@ -936,6 +970,7 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   .register-wrap p::before, .login .register-wrap p::after{width: 20%;}
 }
 @media (max-width:480px){
+  .recommendation{width: 90%;}
   footer > div{flex-wrap: wrap;gap:40px;}
   footer > div > nav{justify-content: flex-start;}
   footer > div > nav, footer > div > div{width: 100%;}
