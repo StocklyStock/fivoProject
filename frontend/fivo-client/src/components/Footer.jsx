@@ -23,7 +23,7 @@ const Footer = () => {
                     </div>
                     <div>
                         <NavLink>공지사항</NavLink>
-                        <NavLink>이용약관</NavLink>
+                        <NavLink to="/terms">이용약관</NavLink>
                         <NavLink>개인정보처리방침</NavLink>
                     </div>
                 </nav>

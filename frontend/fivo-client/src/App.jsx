@@ -23,6 +23,7 @@ import FAQsPage from './pages/FAQsPage';
 import AboutPage from './pages/AboutPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import AIRecommPage from './pages/AIRcommPage';
+import TermsPage from './pages/TermsPage';
 
 // 라우터 설정
 const router = createBrowserRouter(
@@ -35,6 +36,7 @@ const router = createBrowserRouter(
       <Route path="verify" element={<VerifyEmailPage />} />
       <Route path="faq" element={<FAQsPage />} />
       <Route path="about" element={<AboutPage />} />
+      <Route path="terms" element={<TermsPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
       {/* ✅ 종목 상세 페이지 - 로그인/비로그인 모두 접근 가능 */}
