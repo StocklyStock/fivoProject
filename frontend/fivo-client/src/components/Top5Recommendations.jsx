@@ -101,39 +101,41 @@ const Top5Recommendations = ({ stocks, loading, error }) => {
       {error && <p>에러: {error}</p>}
 
       <div className="recommend-cards-container">
-        {stocks.map((stock) => {
-          const summary = summaries[stock.stock_code];
-          const isSelected = selectedStock?.stock_code === stock.stock_code;
-          const isUp = summary?.change > 0;
-          const changeColor = isUp ? "red" : "blue";
-          const symbol = isUp ? "▲" : "▼";
+  {(isAuthenticated ? stocks : stocks.slice(0, 2)).map((stock) => {
+    const summary = summaries[stock.stock_code];
+    const isSelected = selectedStock?.stock_code === stock.stock_code;
+    const isUp = summary?.change > 0;
+    const changeColor = isUp ? "red" : "blue";
+    const symbol = isUp ? "▲" : "▼";
 
-          return (
-            <div
-              key={stock.stock_code}
-              onClick={() => setSelectedStock(stock)}
-              className={`recommend-card ${isSelected ? "selected" : ""}`}
-            >
-              <div className="card-header">
-                <strong>{stock.company_name}</strong>
-                <div style={{ fontSize: "12px", color: "#888" }}>({stock.stock_code})</div>
-              </div>
-              {summary ? (
-                <>
-                  <div className="price">{Number(summary.price).toLocaleString()}원</div>
-                  <div className="change-rate" style={{ color: changeColor }}>
-                    {symbol}
-                    {Math.abs(summary.change).toLocaleString()} (
-                    {Math.abs(summary.change_rate).toFixed(2)}%)
-                  </div>
-                </>
-              ) : (
-                <div className="price">로딩 중...</div>
-              )}
+    return (
+      <div
+        key={stock.stock_code}
+        onClick={() => setSelectedStock(stock)}
+        className={`recommend-card ${isSelected ? "selected" : ""}`}
+      >
+        <div className="card-header">
+          <strong>{stock.company_name}</strong>
+          <div style={{ fontSize: "12px", color: "#888" }}>
+            ({stock.stock_code})
+          </div>
+        </div>
+        {summary ? (
+          <>
+            <div className="price">{Number(summary.price).toLocaleString()}원</div>
+            <div className="change-rate" style={{ color: changeColor }}>
+              {symbol}
+              {Math.abs(summary.change).toLocaleString()} (
+              {Math.abs(summary.change_rate).toFixed(2)}%)
             </div>
-          );
-        })}
+          </>
+        ) : (
+          <div className="price">로딩 중...</div>
+        )}
       </div>
+    );
+  })}
+</div>
 
       {selectedSummary && (
         <>
