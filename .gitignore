@@ -30,7 +30,7 @@ media/
 
 #AI 모델 (무거워서 Github에 안올라감)
 *.pth
-
+backend/fastapi-stream/app/core/token_cache.json
 # ===============================
 # ⚡️ FastAPI
 # ===============================
