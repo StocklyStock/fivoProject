@@ -31,22 +31,12 @@ const AIRecommPage = () => {
 
   return (
     <section className="ai-recomm-wrap relative">
-      <div className="tab-menus" style={{ marginBottom: 20 }}>
+      <div className="tab-menus">
         {["TOP5", "사용자맞춤추천"].map((menu) => (
           <span
             key={menu}
             className={`tab-risk ${selectedMenu === menu ? "btn-color" : ""}`}
             onClick={() => handleTabClick(menu)}
-            style={{
-              marginRight: 12,
-              padding: "8px 16px",
-              borderRadius: 8,
-              background: selectedMenu === menu ? "#f05a28" : "#fff",
-              color: selectedMenu === menu ? "#fff" : "#333",
-              cursor: "pointer",
-              fontWeight: 500,
-              border: "1px solid #ddd",
-            }}
           >
             {menu}
           </span>

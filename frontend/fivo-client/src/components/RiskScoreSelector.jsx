@@ -100,8 +100,8 @@ const RiskScoreSelector = ({ scores, companyName }) => {
   ];
 
   return (
-    <div style={{ marginTop: 40 }}>
-      <h1 style={{ marginBottom: 16, fontSize: 22, fontWeight: 700 }}>
+    <section className='total-risk-analysis'>
+      <h1>
         🎯 투자자 성향별 종합 리스크 분석
       </h1>
 
@@ -111,16 +111,6 @@ const RiskScoreSelector = ({ scores, companyName }) => {
             key={key}
             className={`tab-risk ${selectedProfile === key ? 'btn-color' : ''}`}
             onClick={() => setSelectedProfile(key)}
-            style={{
-              marginRight: 12,
-              padding: '8px 16px',
-              borderRadius: 8,
-              background: selectedProfile === key ? '#f05a28' : '#fff',
-              color: selectedProfile === key ? '#fff' : '#333',
-              cursor: 'pointer',
-              fontWeight: 500,
-              border: '1px solid #ddd',
-            }}
           >
             {label}
           </span>
@@ -128,20 +118,8 @@ const RiskScoreSelector = ({ scores, companyName }) => {
       </div>
 
       {score !== null && (
-        <div
-          style={{
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            background: '#f8f9fa',
-            border: '1px solid #ccc',
-            borderRadius: 10,
-            padding: 24,
-            marginTop: 20,
-          }}
-        >
-          <div style={{ width: '100%', height: 200, position: 'relative' }}>
+        <div className='total-risk-analysis-wrap'>
+          <div className='total-risk-analysis-chart-wrap'>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -169,28 +147,15 @@ const RiskScoreSelector = ({ scores, companyName }) => {
               color: color,
               fontWeight: 'bold',
             }}>
-              <div style={{ fontSize: 22 }}>{score.toFixed(1)}</div>
-              <div style={{ fontSize: 16 }}>{riskLevel}</div>
+              <p>{score.toFixed(1)}</p>
+              <span>{riskLevel}</span>
             </div>
           </div>
 
-          <div
-            style={{
-              marginTop: 20,
-              background: '#fff',
-              padding: '16px 18px',
-              borderRadius: 8,
-              border: '1px solid #ddd',
-              whiteSpace: 'normal',
-              width: '100%',
-              fontSize: 15,
-              lineHeight: 1.75,
-            }}
-            dangerouslySetInnerHTML={{ __html: description }}
-          />
+          <div dangerouslySetInnerHTML={{ __html: description }}/>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
