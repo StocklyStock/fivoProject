@@ -38,10 +38,10 @@ urlpatterns = [
     path('users/<int:user_id>/delete/', delete_user, name='delete_user'),
     path('users/<int:user_id>/update/', update_user, name='update_user'),
     path('health/', health_check, name='health_check'),  
-    path('admin/stats/', admin_user_stats),  # 어드민 페이지의 통계
+    path('admin/stats/', admin_user_stats, name='admin_stats'),  # 어드민 페이지의 통계
     path('admin/notifications/', notification_list_create),  # 어드민 알림 설정
-    path('notifications/public/', public_notifications),
-    path('admin/notifications/<int:notification_id>/update/', update_notification),
-    path('admin/notifications/<int:notification_id>/delete/', delete_notification),
+    path('notifications/public/', public_notifications,name='public_notifications'),
+    path('admin/notifications/<int:notification_id>/update/', update_notification, name='update_notification'),
+    path('admin/notifications/<int:notification_id>/delete/', delete_notification, name='delete_notification'),
     path('api/stocks/', include('userRecommend.urls')),
 ]

@@ -158,16 +158,17 @@ const UserRecommendations = () => {
         <>
           <h1 style={{ marginTop: "40px", display: "flex", alignItems: "center", gap: 12 }}>
             {selectedStock?.company_name} ({selectedStock?.stock_code})
-            {isAuthenticated && (
-              <>
+            {selectedStock?.company_name} ({selectedStock?.stock_code})
+            <>
+              {isAuthenticated && (
                 <button onClick={toggleFavorite} style={{ marginLeft: '10px' }}>
                   {isFavorite ? '⭐' : '☆'}
                 </button>
-                <button className="detail-button" onClick={goToDetailPage}>
-                  🔍 종목 상세
-                </button>
-              </>
-            )}
+              )}
+              <button className="detail-button" onClick={goToDetailPage}>
+                🔍 종목 상세
+              </button>
+            </>
           </h1>
 
           <StockSummaryCard data={selectedSummary} />
