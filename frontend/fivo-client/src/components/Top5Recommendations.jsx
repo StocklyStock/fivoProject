@@ -70,7 +70,7 @@ const Top5Recommendations = ({ stocks, loading, error }) => {
       }
     };
     fetchAll();
-    const interval = setInterval(fetchAll, 3000);
+    const interval = setInterval(fetchAll, 2000);
     return () => clearInterval(interval);
   }, [selectedStock?.stock_code]);
 

@@ -32,7 +32,7 @@ const AIRecommPage = () => {
   return (
     <section className="ai-recomm-wrap relative">
       <div className="tab-menus" style={{ marginBottom: 20 }}>
-        {["TOP5", "사용자맞춤추천", "커스터마이징추천", "보유종목리포트"].map((menu) => (
+        {["TOP5", "사용자맞춤추천"].map((menu) => (
           <span
             key={menu}
             className={`tab-risk ${selectedMenu === menu ? "btn-color" : ""}`}
