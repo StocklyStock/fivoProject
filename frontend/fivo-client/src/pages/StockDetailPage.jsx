@@ -148,7 +148,7 @@ const StockDetailPage = () => {
       fetchSupplyRiskData(); // 3초마다 외국인 수급 리스크 갱신
       fetchFinancialData(); // 3초마다 재무 안정성 데이터 갱신
       fetchProfitabilityData(); // 3초마다 수익성 리스크 데이터 갱신
-    }, 30000);
+    }, 1000);
 
     return () => clearInterval(interval);  // 컴포넌트 언마운트 시 타이머 클리어
   }, [stockId, timeframe]);  // stockId와 timeframe이 변경될 때마다 다시 호출

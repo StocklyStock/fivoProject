@@ -34,9 +34,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = [
-            'id', 'email', 'nickname', 'phone',
-            'investment_style', 'investment_period_months',
-            'trading_frequency', 'owned_stocks','is_staff',
+            "id",
+            "email",
+            "nickname",
+            "phone",
+            "investment_style",
+            "investment_period_months",
+            "trading_frequency",
+            "owned_stocks",
+            "is_staff",
+            "is_verified",
+            "date_joined",
         ]
 
 # 관리자용 유저 리스트 시리얼라이저

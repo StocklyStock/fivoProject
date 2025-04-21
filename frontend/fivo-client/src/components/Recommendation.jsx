@@ -44,7 +44,7 @@ const Recommendation = () => {
     fetchSummary(); // 최초 1회 실행
 
     if (stock?.stock_code) {
-      intervalId = setInterval(fetchSummary, 3000); // 5초마다 반복
+      intervalId = setInterval(fetchSummary, 2000); // 5초마다 반복
     }
 
     return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 clear

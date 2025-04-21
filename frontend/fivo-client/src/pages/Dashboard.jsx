@@ -1,106 +1,116 @@
-// 📄 src/pages/Dashboard.jsx
-// 📄 src/pages/Dashboard.jsx
+// 프로필 페이지: Dashboard.jsx
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../slices/authSlice';
+import { logout, setUser } from '../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
- /*2025-04-18 정보 갱신용 - 박홍덕 - start*/ 
-import {setUser} from "../slices/authSlice";
- /*2025-04-18 정보 갱신용 - 박홍덕 - end*/ 
 import {
   Box,
   Typography,
   Button,
   Card,
-  CardContent,
-  Grid,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
+  Chip,
+  Avatar,
 } from '@mui/material';
-import { BarChart2, Bell, UserCheck } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
-import { updateUserInfo, deleteAccount, getCurrentUser, changePassword } from '../services/user';
-import {getFavoriteStocks, deleteFavoriteByCode} from '../services/favoriteApi'
+import {
+  updateUserInfo,
+  deleteAccount,
+  getCurrentUser,
+  changePassword,
+} from '../services/user';
+import {
+  getFavoriteStocks,
+  deleteFavoriteByCode,
+} from '../services/favoriteApi';
+
+import stockList from '../../../../backend/fastapi-stream/app/data/stock_list.json';
 
 const Dashboard = () => {
-  const reduxUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [openEdit, setOpenEdit] = useState(false);
-  const [openPassword, setOpenPassword] = useState(false);
-
   const [nickname, setNickname] = useState('');
   const [phone, setPhone] = useState('');
-
+  const [dateJoined, setDateJoined] = useState('');
+  const [isVerified, setIsVerified] = useState(false);
+  const [investmentStyle, setInvestmentStyle] = useState('');
+  const [investmentPeriod, setInvestmentPeriod] = useState(0);
+  const [tradingFrequency, setTradingFrequency] = useState(0);
+  const [ownedStocks, setOwnedStocks] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openPassword, setOpenPassword] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPassword2, setNewPassword2] = useState('');
 
-  const [favorites, setFavorites] = useState([]);
+    // ✅ 종목명 → 종목코드 매핑
+  const stockNameToCode = {};
+  stockList.forEach((item) => {
+    stockNameToCode[item['회사명']] = item['종목코드'];
+  });
 
-
-  // ✅ 마이페이지 진입 시 유저 정보 직접 불러오기
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await getCurrentUser();
+        dispatch(setUser(res.data));
         setNickname(res.data.nickname || '');
         setPhone(res.data.phone || '');
+        setDateJoined(res.data.date_joined || '');
+        setIsVerified(res.data.is_verified || false);
+        setInvestmentStyle(res.data.investment_style || '');
+        setInvestmentPeriod(res.data.investment_period_months || 0);
+        setTradingFrequency(res.data.trading_frequency || 0);
+        setOwnedStocks(
+          typeof res.data.owned_stocks === 'string'
+            ? res.data.owned_stocks.split(',')
+            : res.data.owned_stocks || []
+        );
       } catch (e) {
         toast.error('유저 정보를 불러오지 못했습니다.');
-        console.error(e);
       }
     };
-
     fetchUser();
-  }, []);
-  
+  }, [dispatch]);
+
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
         const res = await getFavoriteStocks();
-        setFavorites(res.data);  // 또는 .results로 변경
+        setFavorites(res.data);
       } catch (e) {
         toast.error('즐겨찾기 정보를 불러오지 못했습니다.');
-        console.error(e);
       }
     };
-  
     fetchFavorites();
   }, []);
 
   const handleDeleteFavorite = async (stockCode) => {
     const target = favorites.find((f) => f.stock_code === stockCode);
-
     if (!window.confirm(`${target?.stock_name || stockCode} 즐겨찾기를 삭제할까요?`)) return;
-
     try {
       await deleteFavoriteByCode(stockCode);
       toast.success(`${target?.stock_name || stockCode} 삭제 완료!`);
-  
-      // 목록 갱신
       setFavorites((prev) => prev.filter((f) => f.stock_code !== stockCode));
     } catch (e) {
       toast.error(`삭제 실패: ${e.response?.data?.error || '오류 발생'}`);
-      console.error(e);
     }
   };
-  
 
   const handleUpdate = async () => {
     try {
       await updateUserInfo({ nickname, phone });
       toast.success('회원 정보가 수정되었어요!');
       setOpenEdit(false);
-/*2025-04-18 정보 갱신용 - 박홍덕 - start*/
       const res = await getCurrentUser();
       dispatch(setUser(res.data));
-/*2025-04-18 정보 갱신용 - 박홍덕 - end*/
     } catch (e) {
       toast.error('수정 실패: ' + (e.response?.data?.error || '오류 발생'));
     }
@@ -112,20 +122,17 @@ const Dashboard = () => {
         toast.error('새 비밀번호가 일치하지 않습니다.');
         return;
       }
-  
       await changePassword({
         current_password: currentPassword,
         new_password: newPassword,
         new_password2: newPassword2,
       });
-  
       toast.success('비밀번호가 성공적으로 변경됐어요!');
       setOpenPassword(false);
       setCurrentPassword('');
       setNewPassword('');
       setNewPassword2('');
     } catch (e) {
-      console.error("❌ change-password 응답:", e.response?.data);
       const data = e.response?.data || {};
       const allErrors = Object.values(data).flat().join(' ') || '오류 발생';
       toast.error('변경 실패: ' + allErrors);
@@ -146,96 +153,168 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <Box className="min-h-[calc(100vh-72px)] p-6 max-w-6xl mx-auto">
-        <Card className="p-6">
-          <Box className="flex justify-between items-center mb-6">
-            <Typography variant="h5" fontWeight="bold">
-              👋 {reduxUser?.nickname || '사용자'}님, 환영합니다!
-            </Typography>
+      <Box sx={{ background: '#f8f8f8', py: 4, px: 2, maxWidth: '720px', mx: 'auto' }}>
+        <Card sx={{ mb: 4, p: 3 }}>
+          <Box display="flex" alignItems="center" gap={2}>
+            <Avatar sx={{ width: 56, height: 56 }} />
             <Box>
-              <Button onClick={() => setOpenEdit(true)} variant="outlined" sx={{ mr: 1 }}>
-                회원정보 수정
-              </Button>
-              <Button onClick={() => setOpenPassword(true)} variant="outlined" color="secondary">
-                비밀번호 변경
-              </Button>
+              <Typography variant="h6" fontWeight="bold">
+                {nickname || '사용자'} 님 안녕하세요
+              </Typography>
+              <Box mt={1}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  전화번호: {phone || '미입력'}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  가입일: {dateJoined ? dateJoined.slice(0, 10) : '미입력'}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  인증 여부: {isVerified ? '인증됨' : '미인증'}
+                </Typography>
+              </Box>
             </Box>
           </Box>
-
-          <Typography variant="h6" gutterBottom>
-            📊 대시보드 내용
-          </Typography>
-
-          <Typography variant="h6" fontWeight="bold" gutterBottom>
-            📌 나의 투자 프로필
-          </Typography>
-
-          <Typography>👤 투자자 성향: <strong>{reduxUser?.investment_style || '미지정'}</strong></Typography>
-          <Typography>
-            ⏳ 투자 기간: <strong>
-              약 {Math.round((reduxUser?.investment_period_months || 0) / 30)}개월
-            </strong>
-          </Typography>
-          <Typography>📈 매매 빈도: <strong>{reduxUser?.trading_frequency}회/월</strong></Typography>
-
-          <Typography sx={{ mt: 1 }}>📦 보유 종목:</Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-            {(typeof reduxUser?.owned_stocks === 'string'
-              ? JSON.parse(reduxUser.owned_stocks)
-              : reduxUser.owned_stocks || []
-            ).map((stock, idx) => (
-              <span key={idx} className="bg-gray-200 dark:bg-gray-700 text-sm rounded-xl px-2 py-1">
-                {stock}
-              </span>
-            ))}
+          <Box mt={2}>
+            <Button onClick={() => setOpenEdit(true)} variant="outlined" sx={{ mr: 1 }}>
+              회원정보 수정
+            </Button>
+            <Button onClick={() => setOpenPassword(true)} variant="outlined" color="secondary">
+              비밀번호 변경
+            </Button>
           </Box>
-          <Typography sx={{ mt: 2 }}>⭐ 즐겨찾기 종목:</Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-            {(favorites || []).map((item, idx) => (
+        </Card>
+
+        <Box sx={{ mb: 4, backgroundColor: '#fff', borderRadius: 3, px: 3, py: 4, boxShadow: 1 }}>
+          <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
+            📌 나의 투자 성향 및 활동
+          </Typography>
+          <Box display="flex" justifyContent="space-around" textAlign="center">
+            <Box>
+              <Typography fontSize="1.5rem" fontWeight="bold" color="primary.main">
+                {investmentStyle || '미지정'}
+              </Typography>
+              <Typography variant="body2">투자자 성향</Typography>
+            </Box>
+            <Box>
+              <Typography fontSize="1.3rem" fontWeight="medium">
+                약 {Math.round(investmentPeriod / 30)}개월
+              </Typography>
+              <Typography variant="body2">투자 기간</Typography>
+            </Box>
+            <Box>
+              <Typography fontSize="1.3rem" fontWeight="medium">
+                {tradingFrequency}회/월
+              </Typography>
+              <Typography variant="body2">매매 빈도</Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        <Card sx={{ mb: 4, p: 3 }}>
+          <Typography fontWeight="bold" gutterBottom>
+            📦 보유 종목
+          </Typography>
+          <Box display="flex" gap={2} flexWrap="wrap" justifyContent="start">
+            {ownedStocks.map((name, idx) => {
+              const stockCode = stockNameToCode[name];
+              return (
+                <Box
+                  key={idx}
+                  onClick={() => stockCode && navigate(`/stock/${stockCode}`)}
+                  sx={{
+                    border: '1px solid #ccc',
+                    borderRadius: '12px',
+                    padding: '1rem 1.5rem',
+                    minWidth: '180px',
+                    textAlign: 'center',
+                    cursor: stockCode ? 'pointer' : 'default',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                    '&:hover': {
+                      backgroundColor: '#f5f5f5',
+                    },
+                  }}
+                >
+                  <Typography fontWeight="bold" fontSize="1.1rem">
+                    {name}
+                  </Typography>
+                  {stockCode && (
+                    <Typography color="text.secondary" fontSize="0.9rem">
+                      ({stockCode})
+                    </Typography>
+                  )}
+                </Box>
+              );
+            })}
+          </Box>
+        </Card>
+
+        <Card sx={{ mb: 4, p: 3 }}>
+          <Typography fontWeight="bold" gutterBottom>
+            ⭐ 즐겨찾기 종목
+          </Typography>
+          <Box display="flex" gap={2} flexWrap="wrap" justifyContent="start">
+            {favorites.map((item, idx) => (
               <Box
                 key={idx}
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  backgroundColor: 'lightyellow',
-                  px: 1,
-                  py: 0.5,
-                  borderRadius: '16px',
-                  gap: 0.5,
+                  border: '1px solid #f28c28',
+                  backgroundColor: '#fff6ed',
+                  borderRadius: '12px',
+                  padding: '1rem 1.5rem',
+                  minWidth: '180px',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  position: 'relative',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                  '&:hover': {
+                    backgroundColor: '#fff0e0',
+                  },
                 }}
+                onClick={() => navigate(`/stock/${item.stock_code}`)}
               >
-                <span>{item.stock_name} ({item.stock_code})</span>
-                <Button
-                  size="small"
-                  variant="text"
-                  color="error"
-                  onClick={() => handleDeleteFavorite(item.stock_code)}
+                <Typography fontWeight="bold" fontSize="1.1rem">
+                  {item.stock_name}
+                </Typography>
+                <Typography color="text.secondary" fontSize="0.9rem">
+                  ({item.stock_code})
+                </Typography>
+
+                {/* 삭제 버튼 (X) */}
+                <Box
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteFavorite(item.stock_code);
+                  }}
+                  sx={{
+                    position: 'absolute',
+                    top: 6,
+                    right: 6,
+                    width: 20,
+                    height: 20,
+                    fontSize: '0.8rem',
+                    borderRadius: '50%',
+                    backgroundColor: '#f28c28',
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                  }}
                 >
-                  ✕
-                </Button>
+                  ×
+                </Box>
               </Box>
             ))}
-          </Box>       
+          </Box>
         </Card>
-        
-        {/* ✏️ 회원정보 수정 Dialog */}
+
+        {/* 회원정보 수정 */}
         <Dialog open={openEdit} onClose={() => setOpenEdit(false)}>
           <DialogTitle>회원정보 수정</DialogTitle>
           <DialogContent>
-            <TextField
-              label="닉네임"
-              fullWidth
-              margin="normal"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-            />
-            <TextField
-              label="전화번호"
-              fullWidth
-              margin="normal"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
+            <TextField label="닉네임" fullWidth margin="normal" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+            <TextField label="전화번호" fullWidth margin="normal" value={phone} onChange={(e) => setPhone(e.target.value)} />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setOpenEdit(false)}>취소</Button>
@@ -244,40 +323,17 @@ const Dashboard = () => {
           </DialogActions>
         </Dialog>
 
-        {/* 🔐 비밀번호 변경 Dialog */}
+        {/* 비밀번호 변경 */}
         <Dialog open={openPassword} onClose={() => setOpenPassword(false)}>
           <DialogTitle>비밀번호 변경</DialogTitle>
           <DialogContent>
-            <TextField
-              label="현재 비밀번호"
-              type="password"
-              fullWidth
-              margin="normal"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-            />
-            <TextField
-              label="새 비밀번호"
-              type="password"
-              fullWidth
-              margin="normal"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <TextField
-              label="새 비밀번호 확인"
-              type="password"
-              fullWidth
-              margin="normal"
-              value={newPassword2}
-              onChange={(e) => setNewPassword2(e.target.value)}
-            />
+            <TextField label="현재 비밀번호" type="password" fullWidth margin="normal" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+            <TextField label="새 비밀번호" type="password" fullWidth margin="normal" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+            <TextField label="새 비밀번호 확인" type="password" fullWidth margin="normal" value={newPassword2} onChange={(e) => setNewPassword2(e.target.value)} />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setOpenPassword(false)}>취소</Button>
-            <Button variant="contained" onClick={handleChangePassword}>
-              변경
-            </Button>
+            <Button variant="contained" onClick={handleChangePassword}>변경</Button>
           </DialogActions>
         </Dialog>
       </Box>
