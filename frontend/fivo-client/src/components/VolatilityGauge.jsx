@@ -66,7 +66,7 @@ const VolatilityGauge = ({ score }) => {
           </span>
         </h1>
         {showTooltip && <div style={tooltipStyle}>{explanation}</div>}
-        <div className="volatility-gauge-chart-wrap" style={{ position: 'relative', textAlign: 'center' }}>
+        <div className="volatility-gauge-chart-wrap">
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie

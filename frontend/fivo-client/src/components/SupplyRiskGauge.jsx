@@ -4,13 +4,16 @@ import {
   RadialBar,
   PolarAngleAxis,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 
 const getStatus = (score) => {
   if (score === null || isNaN(score)) return { label: '정보 없음', color: '#999' };
   if (score >= 70) return { label: '위험', color: '#FF4E42' };
   if (score >= 40) return { label: '보통', color: '#F9C80E' };
-  return { label: '좋음', color: '#69B34C' };
+  return { label: '좋음', color: 'rgb(29, 196, 101)' };
 };
 
 const SupplyRiskGauge = ({ score }) => {
@@ -26,6 +29,11 @@ const SupplyRiskGauge = ({ score }) => {
 - 40~69점: 보통 (주의 필요)
 - 70~100점: 위험 (매수 신중 필요)
 `;
+
+  const data = [
+    { name: 'score', value: score ?? 0 },
+    { name: 'rest', value: 100 - (score ?? 0) }
+  ];
 
   const tooltipStyle = {
     position: 'absolute',
@@ -43,49 +51,54 @@ const SupplyRiskGauge = ({ score }) => {
   };
 
   return (
-    <div style={{ marginBottom: 24, maxWidth: 300, position: 'relative' }}>
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-        <h3 style={{ margin: 0 }}>📊 수급 리스크 점수</h3>
-        <span
-          style={{
-            marginLeft: 6,
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            color: '#888',
-          }}
-          title="수급 리스크 설명"
-          onClick={() => setShowTooltip(!showTooltip)}
-        >
-          ℹ️
-        </span>
-      </div>
+    <section className='supply-risk-gauge'>
+      <div className="supply-risk-gauge-wrap">
+        <h1 style={{ margin: 0 }}>📊 수급 리스크 점수
+          <span style={{ marginLeft: 6, cursor: 'pointer', fontWeight: 'bold', color: '#888' }}
+            title="수급 리스크 설명"
+            onClick={() => setShowTooltip(!showTooltip)}
+          >
+            ℹ️
+          </span>
+        </h1>
+        {showTooltip && <div style={tooltipStyle}>{explanation}</div>}
+        <div className="supply-risk-gauge-chart-wrap">
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie
+                startAngle={90}
+                endAngle={-270}
+                innerRadius="65%"
+                outerRadius="100%"
+                data={data}
+              >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={index === 0 ? color : '#ededed'} />
+              ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
 
-      {showTooltip && <div style={tooltipStyle}>{explanation}</div>}
-
-      <ResponsiveContainer width="100%" height={200}>
-        <RadialBarChart
-          cx="50%"
-          cy="100%"
-          innerRadius="60%"
-          outerRadius="100%"
-          startAngle={180}
-          endAngle={0}
-          barSize={20}
-          data={[{ name: 'risk', value: score ?? 0, fill: color }]}
-        >
-          {/* @ts-ignore */}
-          <PolarAngleAxis type="number" domain={[0, 100]} tick={false} angleAxisId={0} />
-          <RadialBar background dataKey="value" cornerRadius={10} />
-        </RadialBarChart>
-      </ResponsiveContainer>
-
-      <div style={{ textAlign: 'center', marginTop: 8 }}>
-        <div style={{ fontSize: 18, fontWeight: 600, color }}>
-          {score !== null ? score.toFixed(2) : '–'}
-        </div>
-        <div style={{ fontSize: 14, marginTop: 4, color }}>{label}</div>
-      </div>
-    </div>
+          {/* 가운데 점수 + 텍스트 */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              textAlign: 'center',
+              color: color,
+            }}
+          >
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+              {score !== null ? `${score.toFixed(2)}%` : '–'}
+            </div>
+            <div style={{ fontSize: '1rem', fontWeight: 'bold' }}>{label}</div>
+          </div>
+        
+        </div>{/*.supply-risk-gauge-chart-wrap 닫음*/}
+      </div>{/*.supply-risk-gauge-wrap 닫음*/}
+    </section>
   );
 };
 

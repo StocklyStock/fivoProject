@@ -4,6 +4,9 @@ import {
   RadialBar,
   PolarAngleAxis,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 
 const descriptions = {
@@ -21,63 +24,28 @@ const getStatus = (score) => {
 };
 
 const statusColor = {
-  안정: '#2ca02c',
-  보통: '#f9c80e',
-  위험: '#d62728',
+  안정: 'rgb(29, 196, 101)',
+  보통: 'rgb(247, 182, 42)',
+  위험: '#FF6E6E',
 };
 
 const StabilityRiskOverview = ({ data }) => {
   const [tooltipKey, setTooltipKey] = useState(null);
 
   return (
-    <div
-      style={{
-        marginBottom: 24,
-        maxWidth: 1000,
-        padding: 20,
-        borderRadius: 12,
-        background: '#f6f9fb',
-        fontFamily: 'sans-serif',
-      }}
-    >
-      <h3 style={{ marginBottom: 16 }}>📋 안정성 구성 지표</h3>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 16,
-        }}
-      >
+    <section className='stability-risk'>
+      <h2>📋 안정성 구성 지표</h2>
+      <ul>
         {data.map((item, i) => {
           const status = getStatus(item.score);
           const color = statusColor[status];
+          const cappedValue = Math.min(Math.abs(item.value), 100);
 
           return (
-            <div
-              key={i}
-              style={{
-                position: 'relative',
-                padding: '12px 16px',
-                borderRadius: 8,
-                background: '#fff',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-              }}
-            >
-              <div style={{ fontWeight: 'bold', marginBottom: 4 }}>
+            <li key={i}>
+              <h3>
                 {item.label}
-                <span
-                  style={{
-                    marginLeft: 6,
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    color: '#888',
-                  }}
-                  onClick={() =>
-                    setTooltipKey(tooltipKey === item.label ? null : item.label)
-                  }
-                >
-                  ℹ️
-                </span>
+
                 {tooltipKey === item.label && (
                   <div
                     style={{
@@ -98,44 +66,48 @@ const StabilityRiskOverview = ({ data }) => {
                     {descriptions[item.label]}
                   </div>
                 )}
-              </div>
-
-              <ResponsiveContainer width="100%" height={130}>
-                <RadialBarChart
-                  cx="50%"
-                  cy="50%"
-                  innerRadius="60%"
-                  outerRadius="100%"
-                  barSize={12}
-                  data={[
-                    {
-                      name: item.label,
-                      value: Math.min(item.value, 300),
-                      fill: color,
-                    },
-                  ]}
-                  startAngle={180}
-                  endAngle={0}
+                <span className='description-btn'
+                  onClick={() =>
+                    setTooltipKey(tooltipKey === item.label ? null : item.label)
+                  }
                 >
-                  <PolarAngleAxis
-                    type="number"
-                    domain={[0, 300]}
-                    angleAxisId={0}
-                    tick={false}
-                  />
-                  <RadialBar background dataKey="value" cornerRadius={6} />
-                </RadialBarChart>
-              </ResponsiveContainer>
+                  ℹ️
+                </span>
 
-              <div style={{ textAlign: 'center', marginTop: 4, fontSize: 14 }}>
-                {item.value?.toFixed(2)}% /{' '}
-                <span style={{ color }}>{status}</span>
-              </div>
-            </div>
+              </h3>
+              <div className="stability-risk-chart-wrap">
+                <ResponsiveContainer width="100%" height={175}>
+                  <PieChart>
+                    <Pie
+                    dataKey="value"
+                    startAngle={90}
+                    endAngle={-270}
+                    data={[
+                      {name: item.label, value: cappedValue},
+                      {name: "빈공간", value: 100 - cappedValue}
+                    ]}
+                    innerRadius="65%"
+                    outerRadius="100%"
+                    cornerRadius={4}
+                    >
+                      
+                      {[statusColor[status], '#EDEDED'].map((fill, index) => (
+                        <Cell key={`cell-${index}`} fill={fill} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+
+                <h4>
+                  <p style={{color}}>{item.value?.toFixed(2)}%{' '}</p>
+                  <span style={{ color }}>{status}</span>
+                </h4>
+              </div>{/*.stability-risk-chart-wrap 닫음*/}
+            </li>
           );
         })}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 };
 

@@ -4,6 +4,9 @@ import {
   RadialBar,
   PolarAngleAxis,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 
 const descriptions = {
@@ -38,9 +41,9 @@ const getStatusByValue = (label, value) => {
 };
 
 const statusColor = {
-  좋음: '#2ca02c',
-  보통: '#ff9800',
-  위험: '#d62728',
+  좋음: 'rgb(29, 196, 101)',
+  보통: 'rgb(247, 182, 42)',
+  위험: '#FF6E6E',
 };
 
 const SupplyRiskOverview = ({ data }) => {
@@ -49,53 +52,25 @@ const SupplyRiskOverview = ({ data }) => {
   if (!data || data.length === 0) return null;
 
   return (
-    <div
-      style={{
-        marginBottom: 24,
-        maxWidth: 1000,
-        padding: 20,
-        borderRadius: 12,
-        background: '#f6f9fb',
-        fontFamily: 'sans-serif',
-      }}
-    >
-      <h3 style={{ marginBottom: 16 }}>📊 외국인·기관 수급 리스크 지표</h3>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 16,
-        }}
-      >
+    <section className='supply-risk'>
+      <h2>📊 외국인·기관 수급 리스크 지표</h2>
+      <ul>
         {data.map((item, i) => {
           const status = getStatusByValue(item.label, item.value);
           const color = statusColor[status];
 
           return (
-            <div
-              key={i}
-              style={{
-                position: 'relative',
-                padding: '12px 16px',
-                borderRadius: 8,
-                background: '#fff',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-              }}
-            >
+            <li key={i}>
+
+
               {/* 제목 + 툴팁 */}
-              <div style={{ fontWeight: 'bold', marginBottom: 4 }}>
+              <h3>
                 {item.label}
-                <span
-                  style={{
-                    marginLeft: 6,
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    color: '#888',
-                  }}
+                <span className='decription-btn'
                   onClick={() =>
                     setTooltipKey(tooltipKey === item.label ? null : item.label)
                   }
-                  title="설명 보기"
+                  title="지표 설명 보기"
                 >
                   ℹ️
                 </span>
@@ -119,49 +94,43 @@ const SupplyRiskOverview = ({ data }) => {
                     {descriptions[item.label]}
                   </div>
                 )}
-              </div>
+              </h3>
+              <div className='supply-risk-chart-wrap'>
+                {/* 도넛 차트 */}
+                <ResponsiveContainer width="100%" height={175}>
+                  <PieChart>
+                    <Pie
+                    dataKey="value"
+                    startAngle={90}
+                    endAngle={-270}
+                    data={[
+                      {name: item.label, value: item.score},
+                      {name: '빈공간', value: (item.max || 30) - item.score}
+                    ]}
+                    innerRadius="65%"
+                    outerRadius="100%"
+                    cornerRadius={4}
+                    >
+                      {[color, '#EDEDED'].map((fill, index) => (
+                        <Cell key={`cell-${index}`} fill={fill}/>
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
 
-              {/* 도넛 차트 */}
-              <ResponsiveContainer width="100%" height={130}>
-                <RadialBarChart
-                  cx="50%"
-                  cy="50%"
-                  innerRadius="60%"
-                  outerRadius="100%"
-                  barSize={12}
-                  data={[
-                    {
-                      name: item.label,
-                      value: item.score,
-                      fill: color,
-                    },
-                  ]}
-                  startAngle={180}
-                  endAngle={0}
-                >
-                  {/* @ts-ignore */}
-                  <PolarAngleAxis
-                    type="number"
-                    domain={[0, item.max || 30]}
-                    angleAxisId={0}
-                    tick={false}
-                  />
-                  <RadialBar background dataKey="value" cornerRadius={6} />
-                </RadialBarChart>
-              </ResponsiveContainer>
-
-              {/* 수치 + 상태 출력 */}
-              <div style={{ textAlign: 'center', marginTop: 4, fontSize: 14 }}>
-                {typeof item.value === 'number'
-                  ? `${item.value.toLocaleString()}`
-                  : '정보 없음'}{' '}
-                / <span style={{ color }}>{status}</span>
-              </div>
-            </div>
+                {/* 수치 + 상태 출력 */}
+                <h4>
+                  {typeof item.value === 'number'
+                    ? <p style={{color}}>{item.value.toLocaleString()}</p>
+                    : '정보 없음'}{' '}
+                   <span style={{ color }}>{status}</span>
+                </h4>
+              </div>{/*.supply-risk-chart-wrap 닫음*/}
+            </li>
           );
         })}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 };
 
