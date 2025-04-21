@@ -40,11 +40,9 @@ const VolatilityRiskOverview = ({ data }) => {
         {data.map((item, i) => {
           const status = getStatus(item.label, item.value);
           const color = statusColor[status];
-
+          const cappedValue = Math.min(Math.abs(item.value), 100); // 또는 maxValue로 바꿔도 OK
           return (
             <li key={i}>
-            
-
             <h3>
               {item.label}
 
@@ -79,24 +77,24 @@ const VolatilityRiskOverview = ({ data }) => {
             </h3>
             <div className='volatility-chart-wrap'>
               <ResponsiveContainer width="100%" height={175} >
-              <PieChart>
-                <Pie
-                  dataKey="value"
-                  startAngle={90}
-                  endAngle={-270} // 시계방향으로 360도
-                  data={[
-                    { name: item.label, value: Math.abs(item.value) },
-                    { name: '빈공간', value: 100 - Math.abs(item.value) },
-                  ]}
-                  innerRadius="65%"
-                  outerRadius="100%"
-                  cornerRadius={4}
-                >
-                  {[statusColor[status], '#EDEDED'].map((fill, index) => (
-                    <Cell key={`cell-${index}`} fill={fill} />
-                  ))}
-                </Pie>
-              </PieChart>
+                <PieChart>
+                  <Pie
+                    dataKey="value"
+                    startAngle={90}
+                    endAngle={-270}
+                    data={[
+                      { name: item.label, value: cappedValue },
+                      { name: '빈공간', value: 100 - cappedValue },
+                    ]}
+                    innerRadius="65%"
+                    outerRadius="100%"
+                    cornerRadius={4}
+                  >
+                    {[statusColor[status], '#EDEDED'].map((fill, index) => (
+                      <Cell key={`cell-${index}`} fill={fill} />
+                    ))}
+                  </Pie>
+                </PieChart>
                       {/* <RadialBarChart
                         cx="50%"
                         cy="60%"

@@ -775,7 +775,12 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 .graph-wrap .scroll-wrap{width: 100%; }
 
 .graph-wrap svg{margin: auto;}
-.volatility-risk{
+
+/*2025-04-21 ai추천 외국인 수급리스크 분석, 안정성 리스크 분석, 수익성 리스크 분석 페이지 작업 - 박홍덕 - start */
+.volatility-risk,
+.supply-risk,
+.stability-risk,
+.profitability{
   margin: 16px auto 0 auto;
   background-color: #FBFAF8;
   max-width: 1500px;
@@ -786,8 +791,15 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   box-shadow: 0 0 4px rgba(100, 100, 100, 0.12);
 }
 
-.volatility-risk h2{color: #222; font-weight: 600; font-size: 22px; margin-bottom: 13px;}
-.volatility-risk >ul{        
+.volatility-risk h2,
+.supply-risk h2,
+.stability-risk h2,
+.profitability h2{color: #222; font-weight: 600; font-size: 22px; margin-bottom: 13px;}
+
+.volatility-risk >ul,
+.supply-risk > ul,
+.stability-risk  > ul,
+.profitability > ul{        
   display: flex;
   width:100%;
   gap: 16px;
@@ -795,7 +807,10 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   justify-content: space-between;
 }
 
-.volatility-risk >ul li{             
+.volatility-risk >ul li,
+.supply-risk > ul li,
+.stability-risk > ul li,
+.profitability  > ul li{             
   position: relative;
   max-width: 320px;
   width: 100%;
@@ -809,11 +824,23 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   align-items: center;
   flex-direction: column;
 }
-.volatility-risk >ul li span.decription-btn{cursor: pointer; font-size: 12px;} 
-.volatility-risk >ul li h3{margin-bottom: 5px;font-size: 21px; color: #222; font-weight: 600; display: flex; justify-content: space-between; align-items: center; width: 100%;}
-.volatility-chart-wrap{width: 100%; position: relative;}
+.volatility-risk >ul li span.decription-btn,
+.supply-risk >ul li span.decription-btn,
+.stability-risk > ul li span.description-btn,
+.profitability  > ul li span.description-btn{cursor: pointer; font-size: 12px;} 
+
+.volatility-risk >ul li h3,
+.supply-risk > ul li h3,
+.stability-risk > ul li h3,
+.profitability  > ul li h3{margin-bottom: 5px;font-size: 21px; color: #222; font-weight: 600; display: flex; justify-content: space-between; align-items: center; width: 100%;}
+
+.volatility-chart-wrap,
+.supply-risk-chart-wrap,
+.stability-risk-chart-wrap{width: 100%; position: relative;}
+
 .volatility-chart-wrap h4,
-.volatility-gauge .volatility-gauge-wrap h2{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;
+.supply-risk-chart-wrap h4,
+.stability-risk-chart-wrap h4{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -824,12 +851,22 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   background-color: #fff;
   border:1px solid #E9E9E9;
   box-shadow: 0 0 4px rgba(100, 100, 100, 0.12);}
-.volatility-chart-wrap h4 p{font-size: 24px; line-height: 1; font-weight: 800; letter-spacing: -0.5px; margin-top: 12px;}
-.volatility-chart-wrap h4 span{font-size: 19px;}
 
-.volatility-gauge{ background-color: #fbfaf8;
+.volatility-chart-wrap h4 p,
+.supply-risk-chart-wrap h4 p,
+.stability-risk-chart-wrap h4 p{font-size: 24px; line-height: 1; font-weight: 800; letter-spacing: -0.5px; margin-top: 12px;}
+.volatility-chart-wrap h4 span,
+.supply-risk-chart-wrap h4 span,
+.stability-risk-chart-wrap h4 span{font-size: 19px;}
+
+.volatility-gauge,
+.supply-risk-gauge,
+.stability-gauge{ background-color: #fbfaf8;
   position:relative;border: 1px solid #e9e9e9; border-radius: 14px; margin: 20px auto 0 auto; padding: 50px 40px;box-shadow: 0 0 4px rgba(100, 100, 100, 0.12); }
-.volatility-gauge h1{margin-bottom: 46px;
+
+  .volatility-gauge h1,
+  .supply-risk-gauge h1,
+  .stability-gauge h1{margin-bottom: 46px;
   font-size: 21px;
   color: #222;
   font-weight: 600;
@@ -837,7 +874,10 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
   justify-content: space-between;
   align-items: center;
   width: 100%; position: relative;}
-  .volatility-gauge .volatility-gauge-wrap{position: relative;
+
+  .volatility-gauge .volatility-gauge-wrap,
+  .supply-risk-gauge  .supply-risk-gauge-wrap,
+  .stability-gauge .stability-gauge-wrap{position: relative;
     background-color: #fff;
     border-radius:14px;
     border:1px solid #e9e9e9;
@@ -846,12 +886,13 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
     margin: auto;
     box-shadow: 0 0 4px rgba(100, 100, 100, 0.12);}
   
-    .volatility-gauge .volatility-gauge-wrap .volatility-gauge-chart-wrap{position: relative;}
-  .volatility-gauge .volatility-gauge-wrap h2{width: 130px; height: 130px;}
-  .volatility-gauge .volatility-gauge-wrap h2 p{font-size: 50px; font-weight: 800;} 
+  .volatility-gauge .volatility-gauge-wrap .volatility-gauge-chart-wrap,
+  .supply-risk-gauge  .supply-risk-gauge-wrap .supply-risk-gauge-chart-wrap,
+  .stability-gauge .stability-gauge-wrap .stability-gauge-chart-wrap{position: relative;}
+  
 
+/*2025-04-21 ai추천 외국인 수급리스크 분석, 안정성 리스크 분석, 수익성 리스크 분석 페이지 작업 - 박홍덕 - end */
 /*2025-04-16 ai추천 페이지 작업 - 박홍덕 - end */
-
 
 /*2025-04-15 주식 상세종목 페이지 작업 - 박홍덕 - end */
 

@@ -21,10 +21,10 @@ const getStatus = (score) => {
 };
 
 const statusColor = {
-  우수: '#2ca02c',
-  양호: '#4caf50',
-  보통: '#f9c80e',
-  위험: '#d62728',
+  우수: 'rgb(23, 151, 79)',
+  양호: 'rgb(29, 196, 101)',
+  보통: 'rgb(247, 182, 42)',
+  위험: '#FF6E6E',
 };
 
 const ProfitabilityOverview = ({ data }) => {
@@ -53,54 +53,18 @@ const ProfitabilityOverview = ({ data }) => {
   const chartMaxValue = maxValue === 0 ? 1 : maxValue;
 
   return (
-    <div
-      style={{
-        background: '#f6f9fb',
-        padding: 20,
-        borderRadius: 12,
-        marginBottom: 24,
-        maxWidth: 1000,
-        fontFamily: 'sans-serif',
-      }}
-    >
-      <h3 style={{ marginBottom: 16 }}>📋 수익성 구성 지표</h3>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 16,
-        }}
-      >
+    <section className='profitability'>
+      <h2>📋 수익성 구성 지표</h2>
+      <ul>
         {metrics.map((item, idx) => {
           const status = getStatus(item.score);
           const color = statusColor[status];
 
           return (
-            <div
-              key={idx}
-              style={{
-                padding: '12px 16px',
-                borderRadius: 8,
-                background: '#fff',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-                position: 'relative',
-              }}
-            >
-              <div style={{ fontWeight: 'bold', marginBottom: 4 }}>
+            <li key={idx}>
+              
+              <h3>
                 {item.label}
-                <span
-                  style={{
-                    marginLeft: 6,
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    color: '#888',
-                  }}
-                  onClick={() =>
-                    setTooltipKey(tooltipKey === item.label ? null : item.label)
-                  }
-                >
-                  ℹ️
-                </span>
                 {tooltipKey === item.label && (
                   <div
                     style={{
@@ -121,7 +85,15 @@ const ProfitabilityOverview = ({ data }) => {
                     {descriptions[item.label]}
                   </div>
                 )}
-              </div>
+                <span className='description-btn'
+                  onClick={() =>
+                    setTooltipKey(tooltipKey === item.label ? null : item.label)
+                  }
+                >
+                  ℹ️
+                </span>
+
+              </h3>
 
               <ResponsiveContainer width="100%" height={130}>
                 <RadialBarChart
@@ -154,11 +126,11 @@ const ProfitabilityOverview = ({ data }) => {
                 {item.value !== 0 ? `${item.value.toFixed(2)}%` : '정보 없음'} /{' '}
                 <span style={{ color }}>{status}</span>
               </div>
-            </div>
+            </li>
           );
         })}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 };
 
