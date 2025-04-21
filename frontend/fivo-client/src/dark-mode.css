@@ -18,8 +18,7 @@ body.dark-mode h4,
 body.dark-mode h5,
 body.dark-mode div,
 body.dark-mode a,
-body.dark-mode p,
-body.dark-mode span,
+
 body.dark-mode .login form label input, 
 body.dark-mode header nav ul.nav-right svg,
 body.dark-mode .register form label input, .my-page label input,
@@ -43,8 +42,7 @@ body.dark-mode .stock-detail-wrap .tab-menus span,
 body.dark-mode .ai-recomm-wrap .tab-menus span,
 body.dark-mode .main-listings > div .list-wrap ul li:hover{background-color: transparent !important;}
 
-body.dark-mode .stock-detail-wrap .tab-menus span.btn-color, 
-body.dark-mode .ai-recomm-wrap .tab-menus span.btn-color{color:#FF9987 !important;border:1px solid #FF9987;}
+
 
 body.dark-mode .chart-realtime,
 body.dark-mode .recommendation > div > div > div{background-color: #2d384c;}
@@ -67,3 +65,47 @@ body.dark-mode .user-chat{background-color: #FB8773;}
 
 body.dark-mode .chat-bot-body form input,
 body.dark-mode .chat-bot-menus button{background-color: #273142; color: #fff;}
+
+
+
+body.dark-mode .stock-detail-wrap .tab-menus span.btn-color, 
+body.dark-mode .ai-recomm-wrap .tab-menus span.btn-color{color:#fff !important;border:1px solid #FA7260;
+background-color: #FA7260 !important;}
+
+body.dark-mode .ai-recomm-wrap .tab-menus span.btn-color{}
+
+body.dark-mode .stock-detail-wrap .tab-menus > span, 
+body.dark-mode .ai-recomm-wrap .tab-menus > span, 
+body.dark-mode .stock-detail-wrap .tab-sub-menus span{border: 1px solid #fff; color: #fff;}
+
+body.dark-mode .stock-detail-wrap .tab-sub-menus span.btn-color{border: 1px solid #FA7260;}
+
+body.dark-mode .price{color: #fff;}
+body.dark-mode .stock-detail-wrap .stock-summery-card .stock-info h1 strong, 
+body.dark-mode .ai-recomm-wrap .stock-summery-card .stock-info h1 strong{color: #fff;}
+
+body.dark-mode .volatility-risk, 
+body.dark-mode .supply-risk, 
+body.dark-mode .stability-risk, 
+body.dark-mode .profitability{background-color: transparent;}
+
+body.dark-mode .volatility-risk > ul li, 
+body.dark-mode .supply-risk > ul li, 
+body.dark-mode .stability-risk > ul li, 
+body.dark-mode .profitability > ul li{background-color: transparent;}
+
+body.dark-mode .volatility-chart-wrap h4, 
+body.dark-mode .supply-risk-chart-wrap h4, 
+body.dark-mode .stability-risk-chart-wrap h4, 
+body.dark-mode .profitability-chart-wrap h4{background-color: transparent;}
+
+body.dark-mode .volatility-gauge, 
+body.dark-mode .supply-risk-gauge, 
+body.dark-mode .stability-gauge, 
+body.dark-mode .profitability-gauge{background-color: transparent;}
+
+body.dark-mode .volatility-gauge .volatility-gauge-wrap, 
+body.dark-mode .supply-risk-gauge 
+body.dark-mode .supply-risk-gauge-wrap, 
+body.dark-mode .stability-gauge .stability-gauge-wrap, 
+body.dark-mode .profitability-gauge .profitability-gauge-wrap{background-color: transparent;}

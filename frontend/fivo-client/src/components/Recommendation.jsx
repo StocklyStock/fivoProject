@@ -56,7 +56,7 @@ const Recommendation = () => {
   const changeRate = summary?.change_rate ?? null;
 
   const isUp = change > 0;
-  const rateColor = isUp ? "red" : "blue";
+  const rateColor = isUp ? "#fd3117" : "#303df9";
   const symbol = isUp ? "▲" : "▼";
 
   return (

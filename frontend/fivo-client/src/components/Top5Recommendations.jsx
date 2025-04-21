@@ -12,6 +12,7 @@ import RiskScoreSelector from "./RiskScoreSelector";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavorite, removeFavorite } from "../slices/favoriteSlice";
 import { useNavigate } from "react-router-dom";
+import arrowRight from "../assets/arrow-right-icon.png";
 
 const Top5Recommendations = ({ stocks, loading, error }) => {
   const dispatch = useDispatch();
@@ -105,7 +106,7 @@ const Top5Recommendations = ({ stocks, loading, error }) => {
     const summary = summaries[stock.stock_code];
     const isSelected = selectedStock?.stock_code === stock.stock_code;
     const isUp = summary?.change > 0;
-    const changeColor = isUp ? "red" : "blue";
+    const changeColor = isUp ? "#F92E5A" : "#3E92F3";
     const symbol = isUp ? "▲" : "▼";
 
     return (
@@ -147,7 +148,7 @@ const Top5Recommendations = ({ stocks, loading, error }) => {
                   {isFavorite ? '⭐' : '☆'}
                 </button>
                 <button className="detail-button" onClick={goToDetailPage}>
-                  🔍 종목 상세
+                  종목 상세 <img src={arrowRight} alt="ㅁ" />
                 </button>
               </>
             )}
