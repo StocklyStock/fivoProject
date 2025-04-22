@@ -82,10 +82,7 @@ const ChartRealtime = () => {
 
   return (
     <section className="chart-realtime ">
-      <div
-        className="realtime-wrapper"
-
-      >
+      <div className="realtime-wrapper">
         <h2 className="text-xl font-bold mb-4">📈 실시간 테마주 트리맵</h2>
 
         <div style={{ width: "100%", overflowX: "auto" }}>
