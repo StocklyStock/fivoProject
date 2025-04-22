@@ -238,7 +238,7 @@ padding: 8px; width: 100%; text-align: center;}
 .chat-bot-headline button{color:#888;}
 .chat-bot-headline button:hover{color:#FA7260;}
 .chat-bot-box{border-radius: 14px; overflow: hidden; background-color: #fff;
-bottom: 2.8rem;right: 6.4rem;padding:0 20px;max-width: 370px;
+bottom: 2.8rem;right: 6.4rem;padding:0 20px;max-width: 400px;
 width: 100%;}
 .chat-bot-body{padding: 0 0 40px 0;}
 
@@ -641,6 +641,7 @@ footer address {
 .login, .register, .my-page{max-width: 498px; width: 100%; margin: 114px auto 144px auto; }
 .css-1yuhvjn{display: flex; justify-content: space-between;}
 
+
 .login .sns, 
 .register .sns{width: 100%; padding:  20px 0; margin: 0 auto 18px;}
 .sns h2{color:#1F1F1F; font-size: 18px;text-align: center; font-weight: bold; margin-bottom: 12px;}
@@ -948,14 +949,24 @@ max-width: 1200px; width: 100%; margin: 114px auto 124px auto; gap: 20px;}
 .text-area h1 strong{color:#FA7260;font-family: "Zen Dots", sans-serif; font-size: 110px; display: block;line-height: 1.5;}
 /*2025-04-19 회사소개 페이지 작업 - 박홍덕 - end  */
 
-.terms{margin: 114px auto 124px auto; max-width: 1200px; width: 100%; border: 1px solid #e9e9e9;border-radius: 14px;
+.terms, .policy{margin: 114px auto 124px auto; max-width: 1200px; width: 100%; border: 1px solid #e9e9e9;border-radius: 14px;
 box-shadow: 0 0 6px rgba(0,0,0,0.15);}
-.terms ul{display: flex; justify-content: space-between;align-items: center;}
-.terms ul li{width: 50%; font-size: 16px; color: #333; padding: 26px 0; text-align: center; border-bottom: 1px solid #e9e9e9; cursor: pointer;}
-.terms ul li:first-child{border-right: 1px solid #e9e9e9;}
-.terms ul li.on{border-bottom: none; }
-.terms div{width: 100%; padding: 42px;}
-.terms div p{width: 100%;  padding: 20px;
+.terms ul,
+.policy ul{display: flex; justify-content: space-between;align-items: center;}
+.terms ul li,
+.policy ul li{width: 50%; font-size: 16px; color: #333;  text-align: center; border-bottom: 1px solid #e9e9e9; cursor: pointer;}
+.terms ul li:first-child,
+.policy ul li:first-child{border-right: 1px solid #e9e9e9;}
+
+.terms ul li a,
+.policy ul li a{display: block;padding: 26px 0;}
+
+.terms ul li.on,
+.policy ul li.on{border-bottom: none; }
+.terms div,
+.policy div{width: 100%; padding: 42px;}
+.terms div p,
+.policy div p{width: 100%;  padding: 20px;
   border: 1px solid #e9e9e9;color: #969696; font-size: 14px; font-weight: 200;}
 
 /*2025-04-11 반응형 작업 - 박홍덕 - start */
@@ -981,6 +992,8 @@ box-shadow: 0 0 6px rgba(0,0,0,0.15);}
   .current-recomm h3{flex-direction: column;}
   .current-recomm h3 > span{margin-top: 14px;}
   .stock-detail-wrap, .ai-recomm-wrap{padding: 0 10px;}
+
+  .terms, .policy{width: 98%;}
 
   
 }
@@ -1033,9 +1046,8 @@ box-shadow: 0 0 6px rgba(0,0,0,0.15);}
   .profitability-chart-wrap h4 p{font-size: 18px;}
 }
 @media (max-width:768px){
-  header nav ul.nav-right{width: 88%;}
-  header nav ul.nav-left{width: 12%;}
-  .search-box-wrapper.open{width: 94%;}
+  header nav ul.nav-right{width: 100%;}
+  .search-box-wrapper.open{width: 98%;}
   header nav ul.nav-left li{display: none;}
   header nav ul.nav-left li.header-logo{display: block;}
   header nav ul.nav-right .lang,
@@ -1107,7 +1119,6 @@ box-shadow: 0 0 6px rgba(0,0,0,0.15);}
 @media (max-width:498px){
   header nav ul.nav-left{width: auto;}
   header nav ul.nav-right{width: auto;}
-  .search-box-wrapper.open{width: 89%;}
   .about-fivo .text-area h1{font-size: 16vw;}
   .text-area h1 strong{font-size: 26vw;}
   .login, .register{padding: 0 10px;}

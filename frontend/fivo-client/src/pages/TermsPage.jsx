@@ -1,9 +1,11 @@
+import { Link } from "react-router-dom";
+
 const TermsPage =() => {
     return (
         <section className="terms">
             <ul>
-                <li className="on">이용약관</li>
-                <li>개인정보처리방침</li>
+                <li className="on"><Link to="/terms">이용약관</Link></li>
+                <li><Link to="/policy">개인정보처리방침</Link></li>
             </ul>
             <div>
                 <p>
