@@ -23,7 +23,7 @@ body.dark-mode .login form label input,
 body.dark-mode header nav ul.nav-right svg,
 body.dark-mode .register form label input, .my-page label input,
 body.dark-mode nav.navbar-responsive ul li svg,
-body.dark-mode header nav ul.nav-right .lang > div{color: #fff !important;}
+body.dark-mode header nav ul.nav-right .lang > div{color: #fff ;}
 
 
 body.dark-mode header nav ul.nav-left li.header-logo a{ color :#FF9987 !important;}
@@ -58,8 +58,7 @@ body.dark-mode .edit-info-modal div div label,
 body.dark-mode .edit-pw-modal div div label{color:#fff;}
 
 body.dark-mode .chat-bot-box{background-color: #2b3951;border: 1px solid #e9e9e9;}
-body.dark-mode .chat-bot-menus,
-body.dark-mode div{background-color: transparent;}
+body.dark-mode .chat-bot-menus{background-color: transparent;}
 body.dark-mode .bot-chat{background-color: #1B222E;}
 body.dark-mode .user-chat{background-color: #FB8773;}
 
@@ -109,3 +108,14 @@ body.dark-mode .supply-risk-gauge
 body.dark-mode .supply-risk-gauge-wrap, 
 body.dark-mode .stability-gauge .stability-gauge-wrap, 
 body.dark-mode .profitability-gauge .profitability-gauge-wrap{background-color: transparent;}
+
+body.dark-mode .recommend-cards-container .recommend-card{background-color: transparent;}
+body.dark-mode .news-top3 .news-card{background-color:  transparent !important;}
+body.dark-mode .total-risk-analysis-wrap{background-color: #2b3951; border: 1px solid #2b3951;}
+body.dark-mode .total-risk-analysis .total-risk-analysis-wrap > div{background-color:#273142; border: 1px solid #273142;}
+
+body.dark-mode .MuiBox-root p{color:#fff}
+
+
+body.dark-mode .news-modal-container{background-color: #1B222E;}
+body.dark-mode .news-modal-header{background-color: #2d384c;}

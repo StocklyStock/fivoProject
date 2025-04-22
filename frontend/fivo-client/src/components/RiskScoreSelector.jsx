@@ -138,7 +138,7 @@ const RiskScoreSelector = ({ scores, companyName }) => {
               </PieChart>
             </ResponsiveContainer>
 
-            <div style={{
+            <h2 style={{
               position: 'absolute',
               top: '50%',
               left: '50%',
@@ -149,7 +149,7 @@ const RiskScoreSelector = ({ scores, companyName }) => {
             }}>
               <p>{score.toFixed(1)}</p>
               <span>{riskLevel}</span>
-            </div>
+            </h2>
           </div>
 
           <div dangerouslySetInnerHTML={{ __html: description }}/>

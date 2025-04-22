@@ -169,7 +169,7 @@ const Top5Recommendations = ({ stocks, loading, error }) => {
           )}
 
           {selectedStock?.positive_news?.length > 0 && (
-            <div style={{ marginTop: "32px" }}>
+            <div style={{ marginTop: "32px" }} className="news-top3">
               <h1 style={{ marginBottom: 16, fontSize: 22, fontWeight: 700 }}>
                 📈 상승 확률 높은 뉴스 TOP 3
               </h1>

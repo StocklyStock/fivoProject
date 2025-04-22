@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import 'react-toastify/dist/ReactToastify.css';
+import { GoogleLogin } from '@react-oauth/google';
+import { useDispatch } from 'react-redux';
 
 import googleLogo from '../assets/google-brand.svg'
 import naverLogo from '../assets/naver-brand.svg'
@@ -21,6 +23,7 @@ const ERROR_TRANSLATIONS = {
 const translateError = (msg) => ERROR_TRANSLATIONS[msg] || msg
 
 const RegisterPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate()
 
   const [form, setForm] = useState({
@@ -109,15 +112,84 @@ const RegisterPage = () => {
      
       <h2 className="text-2xl font-bold mb-6 text-center">회원가입</h2>
 
-      {/* SNS 로그인
-      <div className="sns">
+      <div className="sns" style={{marginTop:'16px'}}>
         <h2>간편 회원가입</h2>
         <ul>
-          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={googleLogo} alt="구글 회원가입" /></a></li>
-          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={naverLogo} alt="네이버 회원가입" /></a></li>
-          <li><a href="#" onClick={(e) =>{e.preventDefault(); console.log("SNS로그인 구현 예정!")}}><img src={kakaoLogo} alt="카카오 회원가입" /></a></li>
+          <li className='google-login'>
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              const idToken = credentialResponse.credential;
+              try {
+                // 1️⃣ 구글 로그인 요청
+                const res = await api.post('/api/accounts/google-login/', {
+                  id_token: idToken,
+                });
+
+                const { access, refresh } = res.data;
+
+                // 2️⃣ 토큰 저장
+                localStorage.setItem('accessToken', access);
+                localStorage.setItem('refreshToken', refresh);
+
+                // 3️⃣ 유저 정보 가져오기 (Authorization 수동 설정)
+                const meRes = await api.get('/api/accounts/me/', {
+                  headers: {
+                    Authorization: `Bearer ${access}`,
+                  },
+                });
+
+                // 4️⃣ Redux 저장
+                dispatch(loginSuccess({
+                  user: meRes.data,
+                  access,
+                  refresh,
+                }));
+
+                toast.success('✅ 구글 로그인 성공!');
+
+                // 5️⃣ 이동
+                if (meRes.data.role === 'admin' || meRes.data.is_staff) {
+                  navigate('/admin');
+                } else {
+                  navigate('/dashboard');
+                }
+
+              } catch (err) {
+                console.error('❌ 구글 로그인 실패:', err);
+                toast.error('❌ 구글 로그인 실패!');
+              }
+            }}
+            onError={() => {
+              toast.error('❌ 구글 로그인에 실패했습니다.');
+            }}
+          />
+
+          </li>
+          <li>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                console.log('SNS로그인 구현 예정!');
+              }}
+            >
+              <img src={naverLogo} alt="네이버 회원가입" />
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                console.log('SNS로그인 구현 예정!');
+              }}
+            >
+              <img src={kakaoLogo} alt="카카오 회원가입" />
+            </a>
+          </li>
         </ul>
-      </div> */}
+      </div>{/*SNS로그인 닫음*/}
+
       <div className='border-wrap'>
           <form className="">
             <label htmlFor="nickname" className={`floating-label ${form.nickname ? 'active':''}`}>
