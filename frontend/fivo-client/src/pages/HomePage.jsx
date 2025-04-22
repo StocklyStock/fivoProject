@@ -16,7 +16,7 @@ const HomePage = () => {
     stocks,
   } = useSelector((state) => state.theme);
     return (
-      <main>
+      <>
         {/* <h1 className="text-2xl p-10">🏠 홈 화면 - 누구나 접근 가능</h1> */}
         <Slider />
         <div className="chart-wrap">
@@ -34,7 +34,7 @@ const HomePage = () => {
             news={news}
           />
         </div>
-      </main>
+      </>
     )
   };
   export default HomePage;

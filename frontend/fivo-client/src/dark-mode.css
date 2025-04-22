@@ -23,8 +23,11 @@ body.dark-mode .login form label input,
 body.dark-mode header nav ul.nav-right svg,
 body.dark-mode .register form label input, .my-page label input,
 body.dark-mode nav.navbar-responsive ul li svg,
-body.dark-mode header nav ul.nav-right .lang > div{color: #fff ;}
+body.dark-mode header nav ul.nav-right .lang > div,
+body.dark-mode header nav ul.nav-right .lang > div svg.fa-caret-down{color: #fff ;}
 
+body.dark-mode .notification-dropdown{background-color: #3d5370;}
+body.dark-mode .notification-dropdown p{color:#ededed;}
 
 body.dark-mode header nav ul.nav-left li.header-logo a{ color :#FF9987 !important;}
 body.dark-mode header nav ul .login-btn,
@@ -116,6 +119,9 @@ body.dark-mode .total-risk-analysis .total-risk-analysis-wrap > div{background-c
 
 body.dark-mode .MuiBox-root p{color:#fff}
 
+body.dark-mode .faq-listings ul li h1{color:#fff;}
 
 body.dark-mode .news-modal-container{background-color: #1B222E;}
 body.dark-mode .news-modal-header{background-color: #2d384c;}
+
+
