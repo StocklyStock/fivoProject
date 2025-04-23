@@ -22,7 +22,7 @@ const Footer = () => {
                         <NavLink>1:1 문의</NavLink>
                     </div>
                     <div>
-                        <NavLink>공지사항</NavLink>
+                        <NavLink to="/notices">공지사항</NavLink>
                         <NavLink to="/terms">이용약관</NavLink>
                         <NavLink to="/policy">개인정보처리방침</NavLink>
                     </div>
