@@ -943,13 +943,15 @@ padding: 5px 0; max-width: 80px; width: 100%; display: inline-block; text-align:
 /*2025-04-11 자주묻는 페이지 작업 - 박홍덕 - end  */
 
 /*2025-04-23 공지사항 페이지 작업 - 박홍덕 -start */
-.notices-wrap{max-width: 900px; width: 100%; margin: 114px auto 124px auto; }
-.notices-wrap ul{width: 100%;border:1px solid  #D9D9D9;}
+.notices-wrap, .notice-detail{max-width: 900px; width: 100%; margin: 114px auto 124px auto; }
+.notices-wrap ul,  .notice-detail > div{width: 100%;border:1px solid  #D9D9D9; box-shadow: 0 0 6px rgba(100, 100, 100, 0.15);}
 .notices-wrap ul li{width: 100%; border-top: 1px solid #D9D9D9;
 display: flex; justify-content: space-between; cursor: pointer;
 padding: 20px 30px; }
 .notices-wrap ul li:first-child{border-top:none;}
 .notices-wrap ul li p{font-size: 18px; color:#222;}
+
+.notice-detail > div{padding: 20px;}
 
 /*2025-04-23 공지사항 페이지 작업 - 박홍덕 -end */
 
