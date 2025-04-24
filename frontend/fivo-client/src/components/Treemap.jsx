@@ -1,18 +1,40 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
 const Treemap = ({ data, onThemeClick }) => {
   const svgRef = useRef();
 
+  /* 20250423 - 반응형을 위한 코드 추가 - 박홍덕 - start */
+  const containerRef = useRef();
+  const [containerWidth, setContainerWidth] = useState(1000);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (!entries || entries.length === 0) return;
+      const newWidth = entries[0].contentRect.width;
+      setContainerWidth(newWidth);
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, []);
+  /* 20250423 - 반응형을 위한 코드 추가 - 박홍덕 - end */
+
   useEffect(() => {
     if (!data || !data.children) return;
 
-    const width = 1000;
+  /* 20250423 - 반응형을 위한 코드 추가 - 박홍덕 - start */
+    const isVertical = containerWidth <= 768;
+    const width = containerWidth;
     const height = 500;
+  /* 20250423 - 반응형을 위한 코드 추가 - 박홍덕 - end */
 
     const svg = d3
       .select(svgRef.current)
-      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("viewBox", `0 0 ${width} ${isVertical ? height * 2 : height}`) // 20250423 - 반응형을 위한 코드 추가 - 박홍덕
       .attr("preserveAspectRatio", "xMidYMid meet")
       .style("width", "100%")
       .style("height", "auto");
@@ -39,22 +61,39 @@ const Treemap = ({ data, onThemeClick }) => {
       .sum((d) => Math.abs(d.value))
       .sort((a, b) => a.value - b.value);
 
+  /* 20250423 - 반응형을 위한 코드 추가 - 박홍덕 - start */
+    const layoutWidth = isVertical ? width : width / 2;
+    const layoutHeight = height;
+  /* 20250423 - 반응형을 위한 코드 추가 - 박홍덕 - end */
+
     const posRoot = d3
       .treemap()
-      .size([width / 2, height])
+      .size([layoutWidth, layoutHeight]) // 20250423 - 반응형을 위한 코드 추가 - 박홍덕
       .padding(0)(posHierarchy);
 
     const negRoot = d3
       .treemap()
-      .size([width / 2, height])
+      .size([layoutWidth, layoutHeight]) // 20250423 - 반응형을 위한 코드 추가 - 박홍덕
       .padding(0)(negHierarchy);
 
-    negRoot.eachBefore((node) => {
-      if (node.parent) {
-        node.x0 = width / 2 + node.x0;
-        node.x1 = width / 2 + node.x1;
-      }
-    });
+    /* 20250423 - 반응형을 위한 코드 추가 - 박홍덕 - start */
+    if(isVertical){
+      negRoot.eachBefore((node) => {
+        if(node.parent){
+          node.y0 += layoutHeight;
+          node.y1 += layoutHeight;
+        }
+      });
+    } else {
+      negRoot.eachBefore((node) => {
+        if(node.parent){
+          node.x0 += layoutWidth;
+          node.x1 += layoutWidth;
+        }
+      });
+    }
+
+    /* 20250423 - 반응형을 위한 코드 추가 - 박홍덕 - end */  
 
     const minNeg = d3.min(negativeData.children, (d) => d.value);
     const maxPos = d3.max(positiveData.children, (d) => d.value);
@@ -139,9 +178,13 @@ const Treemap = ({ data, onThemeClick }) => {
 
     renderGroup(posRoot, "pos");
     renderGroup(negRoot, "neg");
-  }, [data, onThemeClick]);
+  }, [data, onThemeClick, containerWidth]); // 20250423 - 반응형을 위한 코드 추가 - 박홍덕
 
-  return <svg ref={svgRef}></svg>;
+  return (
+    <div ref={containerRef}>
+      <svg ref={svgRef}></svg>
+    </div>
+  );
 };
 
 export default Treemap;
