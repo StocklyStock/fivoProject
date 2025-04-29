@@ -1,19 +1,28 @@
-import { useParams, useLoaderData, Link, useNavigate } from "react-router-dom";
+import {useLoaderData, Link} from "react-router-dom";
 
 
 const NoticeDetailPage = () => {
-    const navigate = useNavigate();
-    const {id} = useParams();
-    const {value} = useParams();
     const notice = useLoaderData();
 
     return (
         <section className="notice-detail">
-            <div>
+            <div className="content-wrap">
                 <h1>{notice.email} {notice.location.country}</h1>
-                <div><p>{notice.name.last}</p></div>
+                <div>
+                    <p>
+                        {notice.name.last}<br/>
+                        {notice.login.md5}<br/>
+                        {notice.login.password}<br/>
+                        {notice.login.salt}<br/>
+                        {notice.login.sha}<br/>
+                        {notice.login.username}<br/>
+                        {notice.login.uuid}<br/>
+                    </p>
+                </div>
             </div>
-            <Link to="/notices">뒤로 가기</Link>
+            <div className="btn-wrap">
+                <Link to="/notices">목 록</Link>
+            </div>
         </section>
     );
 }
