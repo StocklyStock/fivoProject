@@ -27,6 +27,7 @@ import TermsPage from './pages/TermsPage';
 import PolicyPage from './pages/PolicyPage';
 import NoticesPage from './pages/NoticesPage';
 import NoticeDetailPage, {noticeLoader} from './pages/NoticeDetailPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 // 라우터 설정
 const router = createBrowserRouter(
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
       <Route path="terms" element={<TermsPage />} />
       <Route path="policy" element={<PolicyPage />} />
       <Route path="notices" element={<NoticesPage />} />
+      <Route path="*" element={<NotFoundPage />} />
       <Route 
       path="/notices/:id" 
       element={<NoticeDetailPage />}

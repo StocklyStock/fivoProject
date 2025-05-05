@@ -34,6 +34,7 @@ body.dark-mode header nav ul .login-btn,
 body.dark-mode .login .register-wrap a{color:#FF9987 !important; border:1px solid #FF9987;}
 body.dark-mode header nav ul .login-btn:hover{color:#fff !important;}
 body.dark-mode .logout-btn{color:#FF9987;}
+body.dark-mode .find-account a{color: #fff;}
 
 body.dark-mode header nav ul a,
 body.dark-mode .search-input{color: #fff;}

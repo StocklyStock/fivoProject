@@ -238,7 +238,7 @@ padding: 8px; width: 100%; text-align: center;}
 .chat-bot-headline button{color:#888;}
 .chat-bot-headline button:hover{color:#FA7260;}
 .chat-bot-box{border-radius: 14px; overflow: hidden; background-color: #fff;
-bottom: 2.8rem;right: 6.4rem;padding:0 20px;max-width: 400px;
+bottom: 2.8rem;right: 7.5rem;padding:0 20px;max-width: 410px;
 width: 100%;}
 .chat-bot-body{padding: 0 0 40px 0;}
 
@@ -247,7 +247,7 @@ width: 100%;}
 .chat-bot-menus button{background-color:#FBFBFB; border:1px solid #E8E8E8;color:#333;
 padding: 10px; border-radius: 5px;width: 75%; margin: auto;}
 
-.chat-area{padding-top: 18px;  /* Firefox 스타일 */
+.chat-area{padding: 18px 20px 0 20px;  /* Firefox 스타일 */
 scrollbar-width: thin;
 scrollbar-color: #FEC5C6 #F6F6F6;
 }
@@ -496,10 +496,10 @@ color: #fff;}
   width: 0;
   padding:0;
   border-bottom:0px solid transparent;
-  border-left:18px solid #FF9987;
+  border-left:17px solid #FF9987;
   border-right:0px solid transparent;
   position: absolute;
-  right: -18px;
+  right: -17px;
   border-top:41px solid transparent;
   bottom: 0;
 }
@@ -986,8 +986,14 @@ box-shadow: 0 0 6px rgba(0,0,0,0.15);}
 .terms div,
 .policy div{width: 100%; padding: 42px;}
 .terms div p,
-.policy div p{width: 100%;  padding: 20px;
+.policy div p{width: 100%;  padding: 20px; 
   border: 1px solid #e9e9e9;color: #969696; font-size: 14px; font-weight: 200;}
+
+
+.not-found{margin: 114px auto 0 auto; padding:0 0 154px 0;}
+.not-found h1{width: 100%; margin: auto; text-align: center;}
+.not-found h1 img{display: block; margin: auto;}
+.not-found h1 p{font-size: 60px; color:#222; font-weight: 600;margin-top: 30px;word-break: keep-all;}
 
 /*2025-04-11 반응형 작업 - 박홍덕 - start */
 
@@ -1042,7 +1048,7 @@ box-shadow: 0 0 6px rgba(0,0,0,0.15);}
   .recommendation > div > div > div{height: 410px;}
   .current-recomm h3{flex-direction: unset;}
   .current-recomm h3 > span{margin-top: 0;}
-  .FAQ-wrap, .notices-wrap{padding: 0 10px;}
+  .FAQ-wrap, .notices-wrap, .notice-detail{padding: 0 10px;}
 
   .volatility-risk,
   .supply-risk,
@@ -1077,7 +1083,7 @@ box-shadow: 0 0 6px rgba(0,0,0,0.15);}
   nav.navbar-responsive{display: block; }
 
   
-  .main-banner .swiper-slide h1{font-size: 18vw;}
+  .main-banner .swiper-slide h1{font-size: 18vw; line-height: 1.1;}
   .main-banner .swiper-slide h1 p{font-size: 25vw;}
 
   .recommendation{width: 70%;}
@@ -1087,9 +1093,10 @@ box-shadow: 0 0 6px rgba(0,0,0,0.15);}
   footer > div > div{flex-wrap: wrap;width: 100%; gap:10px; width: 50%;}
   .footer-logo{width: 100%;}
 
-  .chat-bot-btn{bottom: 80px;width: 55px;height: 55px;}
+  .chat-bot-btn{bottom: 70px;width: 55px;height: 55px;}
   .chat-bot-btn img{width: 42px;}
-  .chat-bot-box{bottom: 9rem;width: 100%; right: 1rem; width: 90%;}
+
+  .chat-bot-box{width: 100%;left:1rem;top: 1rem; width: 90%; height: fit-content;}
   .about-fivo{flex-direction: column;}
   .image-area, .text-area{width: 100%;}
   .about-fivo .text-area h1{font-size: 89px;}
@@ -1144,6 +1151,8 @@ box-shadow: 0 0 6px rgba(0,0,0,0.15);}
   .login, .register{padding: 0 10px;}
   .border-wrap{padding: 66px 15px;}
   .register-wrap p::before, .login .register-wrap p::after{width: 20%;}
+
+  .chat-bot-menus > div{flex-direction: unset;}
 }
 @media (max-width:480px){
   .recommendation{width: 90%;}
@@ -1161,6 +1170,9 @@ box-shadow: 0 0 6px rgba(0,0,0,0.15);}
   .supply-risk > ul li,
   .stability-risk > ul li,
   .profitability > ul li{width: 100%;}
+
+  .not-found{padding: 0 10px 154px 10px;}
+  .not-found h1 p{font-size: 50px;}
 }
 @media (max-width:360px){
   .login .register-wrap p::before, .login .register-wrap p::after{width: 15%;}
