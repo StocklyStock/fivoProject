@@ -133,7 +133,7 @@ export default function Chatbot() {
       <Card className="chat-bot-menus">
         <CardContent>
           <Button onClick={handleUsageClick}>
-            Fivo의 사용법
+            FIVO 사용법
           </Button>
           <Button onClick={handleClearChat}>
             💬 대화 초기화
