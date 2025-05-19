@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchStockSummary } from '../services/stockapi';  // 이미 정의된 API 함수 (주식 요약 정보)
+import upPrice from "../assets/up-price.svg";
+import downPrice from "../assets/down-price.svg";
 
 const ThemeListings = ({ stock_list = [], themeName }) => {
   const [stockDetails, setStockDetails] = useState({});
@@ -75,20 +77,24 @@ const ThemeListings = ({ stock_list = [], themeName }) => {
                   </a>
                   {/* 가격과 등락률을 추가 */}
                   {stockCode && stockDetails[stockCode] && (
-                    <div style={{ display: 'inline-block', textAlign: 'right', flex: 1 }}>
+                    <div style={{ display: 'flex', textAlign: 'right', justifyContent:'space-between', alignItems:'center',gap: '15px' }}>
                       <span style={{ fontSize: '16px', fontWeight: 'bold' }}>
                         {stockDetails[stockCode].price.toLocaleString()}
                       </span>
                       <span 
                         style={{
-                          color: stockDetails[stockCode].change > 0 ? 'red' : 'blue', 
-                          fontSize: '14px', 
-                          marginLeft: '8px'
+                          color: stockDetails[stockCode].change > 0 ? '#F92E5A' : '#3E92F3', 
+                          fontSize: '14px',
+                          display:'flex',
+                          justifyContent:'space-between',
+                          alignItems:'center',
+                          gap:'5px'
                         }}
                       >
-                        {stockDetails[stockCode].change > 0 ? '▲' : '▼'} 
+                        {stockDetails[stockCode].change > 0 ? (<img src={upPrice} alt='▲'/>) : (<img src={downPrice} alt='▼' />)} 
                         {Math.abs(stockDetails[stockCode].change).toLocaleString()} ({Math.abs(stockDetails[stockCode].change_rate).toFixed(2)}%)
                       </span>
+
                     </div>
                   )}
                 </li>

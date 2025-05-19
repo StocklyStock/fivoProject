@@ -55,18 +55,17 @@ const NewsListings = ({ news = [] ,themeName}) => {
           }}
           onClick={() => setSelectedUrl(null)}
         >
-          <div
+          <div className="news-modal"
             onClick={(e) => e.stopPropagation()}
             style={{
               width: "90%",
               height: "80%",
               background: "#fff",
-              borderRadius: "8px",
-              overflow: "hidden",
               position: "relative",
               boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
             }}
           >
+            
             <div
               style={{
                 textAlign: "right",
@@ -75,15 +74,14 @@ const NewsListings = ({ news = [] ,themeName}) => {
                 backgroundColor: "#f5f5f5",
               }}
             >
-              <button onClick={() => setSelectedUrl(null)}>✖️ 닫기</button>
+              <button onClick={() => setSelectedUrl(null)}>✖</button>
             </div>
-            <iframe
-              src={selectedUrl}
-              title="뉴스 상세"
-              width="100%"
-              height="100%"
-              style={{ border: "none" }}
-            />
+            <section>
+              <iframe
+                src={selectedUrl}
+                title="뉴스 상세"
+              ></iframe>
+            </section>
           </div>
         </div>
       )}
